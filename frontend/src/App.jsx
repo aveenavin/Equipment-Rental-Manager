@@ -12,6 +12,8 @@ import Register from './pages/public/Register';
 
 // Customer pages
 import CustomerDashboard from './pages/customer/Dashboard';
+import EquipmentCatalog from './pages/customer/EquipmentCatalog';
+import MyRentals from './pages/customer/MyRentals';
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -19,6 +21,10 @@ import EquipmentList from './pages/admin/EquipmentList';
 import EquipmentDetail from './pages/admin/EquipmentDetail';
 import CustomerList from './pages/admin/CustomerList';
 import CustomerDetail from './pages/admin/CustomerDetail';
+import AdminRentals from './pages/admin/AdminRentals';
+
+// Shared pages
+import RentalDetail from './pages/shared/RentalDetail';
 
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -57,12 +63,29 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
 
-          {/* Customer protected routes */}
+          {/* Customer dashboard + protected pages */}
           <Route
             path="/dashboard"
             element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
           >
             <Route index element={<CustomerDashboard />} />
+          </Route>
+
+          {/* Equipment catalog — any authenticated user */}
+          <Route
+            path="/catalog"
+            element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
+          >
+            <Route index element={<EquipmentCatalog />} />
+          </Route>
+
+          {/* Customer rental routes */}
+          <Route
+            path="/my-rentals"
+            element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
+          >
+            <Route index element={<MyRentals />} />
+            <Route path=":id" element={<RentalDetail />} />
           </Route>
 
           {/* Admin & Staff protected routes */}
@@ -75,6 +98,8 @@ function App() {
             <Route path="equipment/:id" element={<EquipmentDetail />} />
             <Route path="customers" element={<CustomerList />} />
             <Route path="customers/:id" element={<CustomerDetail />} />
+            <Route path="rentals" element={<AdminRentals />} />
+            <Route path="rentals/:id" element={<RentalDetail />} />
           </Route>
         </Routes>
       </Router>

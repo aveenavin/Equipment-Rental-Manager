@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { BarChart3, Users, Package, Wrench, LogOut, ArrowRight } from 'lucide-react';
+import { BarChart3, Users, Package, Wrench, LogOut, ClipboardList } from 'lucide-react';
 import Button from '../../components/ui/Button';
 
 const NavCard = ({ icon: Icon, label, description, href, color, comingSoon }) => {
   const colorMap = {
     primary: 'bg-primary-500/10 text-primary-400 border-primary-800/50',
-    accent: 'bg-accent-500/10 text-accent-400 border-accent-800/50',
+    accent: 'bg-cyan-500/10 text-cyan-400 border-cyan-800/50',
     emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-800/50',
     yellow: 'bg-yellow-500/10 text-yellow-400 border-yellow-800/50',
+    indigo: 'bg-indigo-500/10 text-indigo-400 border-indigo-800/50',
   };
 
   const card = (
@@ -67,13 +68,20 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <NavCard
             icon={Package}
             label="Equipment Inventory"
             description="Add, edit, and manage all rental equipment with images and pricing."
             href="/admin/equipment"
             color="accent"
+          />
+          <NavCard
+            icon={ClipboardList}
+            label="Rental Management"
+            description="View and manage all bookings. Confirm, check out, and process returns."
+            href="/admin/rentals"
+            color="indigo"
           />
           <NavCard
             icon={Users}
