@@ -74,6 +74,13 @@ const rentalSchema = new mongoose.Schema(
       ref: 'User',
       default: null,
     },
+
+    // Reference to the Return record (set when equipment is returned)
+    returnRecord: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Return',
+      default: null,
+    },
   },
   { timestamps: true }
 );

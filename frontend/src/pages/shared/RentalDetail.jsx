@@ -3,11 +3,12 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   ArrowLeft, Package, Calendar, DollarSign, User,
-  CheckCircle, Truck, RotateCcw, XCircle, ChevronDown,
+  CheckCircle, Truck, RotateCcw, XCircle, ChevronDown, ExternalLink,
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
+import ProcessReturnModal from '../../components/rental/ProcessReturnModal';
 import { fetchRentalById, updateRentalStatus, cancelRental } from '../../services/rentalService';
 import { useAuth } from '../../context/AuthContext';
 
@@ -24,10 +25,11 @@ const InfoRow = ({ label, value }) => (
   </div>
 );
 
+// Only pending → confirmed and confirmed → checked_out use the simple transition.
+// checked_out → returned uses the dedicated ProcessReturnModal.
 const STATUS_TRANSITIONS = {
   pending: { label: 'Confirm Booking', nextStatus: 'confirmed', icon: CheckCircle, variant: 'primary' },
   confirmed: { label: 'Mark Checked Out', nextStatus: 'checked_out', icon: Truck, variant: 'primary' },
-  checked_out: { label: 'Mark Returned', nextStatus: 'returned', icon: RotateCcw, variant: 'secondary' },
 };
 
 const RentalDetail = () => {
@@ -44,6 +46,7 @@ const RentalDetail = () => {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showCancelAdmin, setShowCancelAdmin] = useState(false);
   const [cancelNote, setCancelNote] = useState('');
+  const [showReturnModal, setShowReturnModal] = useState(false);
 
   const backPath = isCustomer ? '/my-rentals' : '/admin/rentals';
 
@@ -107,6 +110,7 @@ const RentalDetail = () => {
   const nextAction = STATUS_TRANSITIONS[rental.status];
   const canCancelSelf = isCustomer && rental.status === 'pending';
   const canCancelAdmin = canManage && ['pending', 'confirmed'].includes(rental.status);
+  const canProcessReturn = canManage && rental.status === 'checked_out';
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -127,10 +131,9 @@ const RentalDetail = () => {
               <p className="text-xs text-slate-500">Booked on {fmtTime(rental.createdAt)}</p>
             </div>
 
-            {/* Admin status transition buttons */}
-            {canManage && nextAction && (
-              <div className="flex items-center gap-2">
-                {React.createElement(nextAction.icon, { className: 'h-4 w-4 text-slate-400' })}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Simple status transitions (pending → confirmed, confirmed → checked_out) */}
+              {canManage && nextAction && (
                 <Button
                   variant={nextAction.variant}
                   size="sm"
@@ -138,31 +141,62 @@ const RentalDetail = () => {
                   onClick={() => handleStatusUpdate(nextAction.nextStatus)}
                   className="flex items-center gap-2"
                 >
+                  {React.createElement(nextAction.icon, { className: 'h-4 w-4' })}
                   {nextAction.label}
                 </Button>
-              </div>
-            )}
+              )}
 
-            {/* Customer cancel */}
-            {canCancelSelf && !showCancelConfirm && (
-              <Button variant="ghost" size="sm" className="text-red-400" onClick={() => setShowCancelConfirm(true)}>
-                <XCircle className="h-4 w-4 mr-1" /> Cancel Rental
-              </Button>
-            )}
+              {/* Process Return button — opens rich return modal */}
+              {canProcessReturn && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setShowReturnModal(true)}
+                  className="flex items-center gap-2 border-emerald-800 text-emerald-400 hover:bg-emerald-900/30"
+                >
+                  <RotateCcw className="h-4 w-4" /> Process Return
+                </Button>
+              )}
+
+              {/* Customer cancel */}
+              {canCancelSelf && !showCancelConfirm && (
+                <Button variant="ghost" size="sm" className="text-red-400" onClick={() => setShowCancelConfirm(true)}>
+                  <XCircle className="h-4 w-4 mr-1" /> Cancel Rental
+                </Button>
+              )}
+            </div>
           </div>
+
+          {/* View return record link (admin, returned status) */}
+          {canManage && rental.status === 'returned' && rental.returnRecord && (
+            <div className="mt-4 pt-4 border-t border-slate-800">
+              <Link
+                to={`/admin/returns/${rental.returnRecord}`}
+                className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+              >
+                <ExternalLink className="h-3.5 w-3.5" /> View detailed return record
+              </Link>
+            </div>
+          )}
 
           {/* Admin cancel accordion */}
           {canCancelAdmin && !nextAction && !['returned', 'cancelled'].includes(rental.status) && (
-            <button onClick={() => setShowCancelAdmin(!showCancelAdmin)}
-              className="mt-4 text-xs text-red-400 hover:text-red-300 flex items-center gap-1">
+            <button
+              onClick={() => setShowCancelAdmin(!showCancelAdmin)}
+              className="mt-4 text-xs text-red-400 hover:text-red-300 flex items-center gap-1"
+            >
               Cancel this rental <ChevronDown className={`h-3 w-3 transition-transform ${showCancelAdmin ? 'rotate-180' : ''}`} />
             </button>
           )}
           {canCancelAdmin && showCancelAdmin && (
             <div className="mt-3 space-y-3 pt-3 border-t border-slate-800">
-              <textarea rows={2} value={cancelNote} onChange={(e) => setCancelNote(e.target.value)}
+              <textarea
+                rows={2}
+                value={cancelNote}
+                onChange={(e) => setCancelNote(e.target.value)}
                 placeholder="Reason for cancellation (optional)..."
-                className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-red-500" />
+                className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
               <div className="flex gap-2">
                 <Button variant="secondary" size="sm" onClick={() => setShowCancelAdmin(false)}>Back</Button>
                 <Button variant="danger" size="sm" isLoading={isUpdating} onClick={handleAdminCancel}>Confirm Cancellation</Button>
@@ -257,6 +291,18 @@ const RentalDetail = () => {
           )}
         </div>
       </div>
+
+      {/* Process Return Modal */}
+      {showReturnModal && rental && (
+        <ProcessReturnModal
+          rental={rental}
+          onClose={() => setShowReturnModal(false)}
+          onProcessed={() => {
+            setShowReturnModal(false);
+            loadRental(); // Refresh rental to show returned status + returnRecord link
+          }}
+        />
+      )}
     </div>
   );
 };

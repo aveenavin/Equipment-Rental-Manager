@@ -22,6 +22,8 @@ import EquipmentDetail from './pages/admin/EquipmentDetail';
 import CustomerList from './pages/admin/CustomerList';
 import CustomerDetail from './pages/admin/CustomerDetail';
 import AdminRentals from './pages/admin/AdminRentals';
+import AdminReturns from './pages/admin/AdminReturns';
+import ReturnDetail from './pages/admin/ReturnDetail';
 
 // Shared pages
 import RentalDetail from './pages/shared/RentalDetail';
@@ -100,6 +102,8 @@ function App() {
             <Route path="customers/:id" element={<CustomerDetail />} />
             <Route path="rentals" element={<AdminRentals />} />
             <Route path="rentals/:id" element={<RentalDetail />} />
+            <Route path="returns" element={<AdminReturns />} />
+            <Route path="returns/:id" element={<ReturnDetail />} />
           </Route>
         </Routes>
       </Router>
