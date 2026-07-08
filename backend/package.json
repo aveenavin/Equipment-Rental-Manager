@@ -7,7 +7,12 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": ["equipment", "rental", "mern", "api"],
+  "keywords": [
+    "equipment",
+    "rental",
+    "mern",
+    "api"
+  ],
   "author": "",
   "license": "MIT",
   "type": "commonjs",
@@ -18,7 +23,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
-    "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.5.0",
     "express-validator": "^7.2.1",
     "helmet": "^8.0.0",
