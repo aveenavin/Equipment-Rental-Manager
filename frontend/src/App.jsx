@@ -4,11 +4,21 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import PublicLayout from './layouts/PublicLayout';
 import ProtectedLayout from './layouts/ProtectedLayout';
+
+// Public pages
 import Home from './pages/public/Home';
 import Login from './pages/public/Login';
 import Register from './pages/public/Register';
+
+// Customer pages
 import CustomerDashboard from './pages/customer/Dashboard';
+
+// Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard';
+import EquipmentList from './pages/admin/EquipmentList';
+import EquipmentDetail from './pages/admin/EquipmentDetail';
+import CustomerList from './pages/admin/CustomerList';
+import CustomerDetail from './pages/admin/CustomerDetail';
 
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -33,17 +43,13 @@ function App() {
               borderRadius: '0.75rem',
               fontSize: '0.875rem',
             },
-            success: {
-              iconTheme: { primary: '#3b82f6', secondary: '#f1f5f9' },
-            },
-            error: {
-              iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' },
-            },
+            success: { iconTheme: { primary: '#3b82f6', secondary: '#f1f5f9' } },
+            error: { iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' } },
           }}
         />
 
         <Routes>
-          {/* Public routes — accessible to everyone */}
+          {/* Public routes */}
           <Route path="/" element={<PublicLayout />}>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
@@ -65,6 +71,10 @@ function App() {
             element={<ProtectedLayout allowedRoles={['admin', 'staff']} />}
           >
             <Route index element={<AdminDashboard />} />
+            <Route path="equipment" element={<EquipmentList />} />
+            <Route path="equipment/:id" element={<EquipmentDetail />} />
+            <Route path="customers" element={<CustomerList />} />
+            <Route path="customers/:id" element={<CustomerDetail />} />
           </Route>
         </Routes>
       </Router>
