@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   ArrowLeft, Package, Calendar, DollarSign, User,
   CheckCircle, Truck, RotateCcw, XCircle, ChevronDown, ExternalLink,
+  FileText, PlusCircle, ArrowDownLeft, ArrowUpRight,
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import ProcessReturnModal from '../../components/rental/ProcessReturnModal';
+import RecordPaymentModal from '../../components/payment/RecordPaymentModal';
 import { fetchRentalById, updateRentalStatus, cancelRental } from '../../services/rentalService';
+import { fetchPaymentsByRental } from '../../services/paymentService';
 import { useAuth } from '../../context/AuthContext';
 
 const fmt = (d) =>
@@ -47,10 +50,13 @@ const RentalDetail = () => {
   const [showCancelAdmin, setShowCancelAdmin] = useState(false);
   const [cancelNote, setCancelNote] = useState('');
   const [showReturnModal, setShowReturnModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentData, setPaymentData] = useState({ payments: [], summary: null });
+  const [paymentsLoading, setPaymentsLoading] = useState(false);
 
   const backPath = isCustomer ? '/my-rentals' : '/admin/rentals';
 
-  const loadRental = async () => {
+  const loadRental = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await fetchRentalById(id);
@@ -61,9 +67,23 @@ const RentalDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
 
-  useEffect(() => { loadRental(); }, [id]);
+  const loadPayments = useCallback(async () => {
+    if (!id) return;
+    setPaymentsLoading(true);
+    try {
+      const res = await fetchPaymentsByRental(id);
+      setPaymentData({ payments: res.data.data.payments, summary: res.data.data.summary });
+    } catch {
+      // Payments may not exist yet — silent fail
+    } finally {
+      setPaymentsLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => { loadRental(); }, [loadRental]);
+  useEffect(() => { loadPayments(); }, [loadPayments]);
 
   const handleStatusUpdate = async (nextStatus) => {
     setIsUpdating(true);
@@ -289,6 +309,73 @@ const RentalDetail = () => {
               <p className="text-sm text-slate-400 leading-relaxed">{rental.notes}</p>
             </div>
           )}
+
+          {/* Payment Summary Panel */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:col-span-2">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4 text-slate-400" />
+                <h3 className="text-sm font-semibold text-slate-300">Payments</h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  to={`/invoice/${rental._id}`}
+                  className="inline-flex items-center gap-1.5 text-xs text-primary-400 hover:text-primary-300 transition-colors"
+                >
+                  <FileText className="h-3.5 w-3.5" /> View Invoice
+                </Link>
+                {canManage && !['cancelled'].includes(rental.status) && (
+                  <Button size="sm" variant="secondary" onClick={() => setShowPaymentModal(true)} className="flex items-center gap-1.5 text-xs">
+                    <PlusCircle className="h-3.5 w-3.5" /> Record Payment
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {paymentsLoading ? (
+              <div className="flex justify-center py-4"><Spinner size="sm" /></div>
+            ) : (
+              <>
+                {/* Payment summary bar */}
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  <div className="bg-slate-800/60 rounded-lg p-3">
+                    <p className="text-xs text-slate-500 mb-1">Total Paid</p>
+                    <p className="text-sm font-bold text-emerald-400">${(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
+                  </div>
+                  <div className="bg-slate-800/60 rounded-lg p-3">
+                    <p className="text-xs text-slate-500 mb-1">Total Due</p>
+                    <p className="text-sm font-bold text-slate-200">${(rental.totalAmount || 0).toFixed(2)}</p>
+                  </div>
+                  <div className="bg-slate-800/60 rounded-lg p-3">
+                    <p className="text-xs text-slate-500 mb-1">Balance</p>
+                    <p className={`text-sm font-bold ${(paymentData.summary?.balance || 0) > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      ${(paymentData.summary?.balance || 0).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Payment list */}
+                {paymentData.payments.length === 0 ? (
+                  <p className="text-sm text-slate-500 italic text-center py-3">No payments recorded yet.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {paymentData.payments.map((p) => (
+                      <div key={p._id} className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
+                        <div>
+                          <p className="text-sm text-slate-300 capitalize">{p.paymentType.replace('_', ' ')} · <span className="text-slate-500 text-xs">{p.paymentMethod}</span></p>
+                          <p className="text-xs text-slate-600">{new Date(p.paidAt).toLocaleDateString()}</p>
+                        </div>
+                        <span className={`flex items-center gap-1 text-sm font-semibold ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
+                          {p.direction === 'outbound' ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownLeft className="h-3.5 w-3.5" />}
+                          ${p.amount.toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
 
@@ -299,7 +386,20 @@ const RentalDetail = () => {
           onClose={() => setShowReturnModal(false)}
           onProcessed={() => {
             setShowReturnModal(false);
-            loadRental(); // Refresh rental to show returned status + returnRecord link
+            loadRental();
+          }}
+        />
+      )}
+
+      {/* Record Payment Modal */}
+      {showPaymentModal && rental && (
+        <RecordPaymentModal
+          rental={rental}
+          summary={paymentData.summary}
+          onClose={() => setShowPaymentModal(false)}
+          onRecorded={() => {
+            setShowPaymentModal(false);
+            loadPayments();
           }}
         />
       )}

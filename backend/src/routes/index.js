@@ -4,6 +4,7 @@ const equipmentRoutes = require('./equipmentRoutes');
 const customerRoutes = require('./customerRoutes');
 const rentalRoutes = require('./rentalRoutes');
 const returnRoutes = require('./returnRoutes');
+const paymentRoutes = require('./paymentRoutes');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/equipment', equipmentRoutes);
 router.use('/customers', customerRoutes);
 router.use('/rentals', rentalRoutes);
 router.use('/returns', returnRoutes);
+router.use('/payments', paymentRoutes);
 
 module.exports = router;

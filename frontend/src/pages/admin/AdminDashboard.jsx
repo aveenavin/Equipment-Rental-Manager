@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { BarChart3, Users, Package, Wrench, LogOut, ClipboardList, RotateCcw } from 'lucide-react';
+import { BarChart3, Users, Package, Wrench, LogOut, ClipboardList, RotateCcw, DollarSign } from 'lucide-react';
 import Button from '../../components/ui/Button';
 
 const NavCard = ({ icon: Icon, label, description, href, color, comingSoon }) => {
@@ -96,6 +96,13 @@ const AdminDashboard = () => {
             description="Review all equipment returns, damage reports, and deposit settlements."
             href="/admin/returns"
             color="primary"
+          />
+          <NavCard
+            icon={DollarSign}
+            label="Payment Ledger"
+            description="Track advance payments, balances, refunds, and generate invoices."
+            href="/admin/payments"
+            color="emerald"
           />
           <NavCard
             icon={Wrench}

@@ -24,9 +24,11 @@ import CustomerDetail from './pages/admin/CustomerDetail';
 import AdminRentals from './pages/admin/AdminRentals';
 import AdminReturns from './pages/admin/AdminReturns';
 import ReturnDetail from './pages/admin/ReturnDetail';
+import AdminPayments from './pages/admin/AdminPayments';
 
 // Shared pages
 import RentalDetail from './pages/shared/RentalDetail';
+import InvoicePage from './pages/shared/InvoicePage';
 
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -104,6 +106,15 @@ function App() {
             <Route path="rentals/:id" element={<RentalDetail />} />
             <Route path="returns" element={<AdminReturns />} />
             <Route path="returns/:id" element={<ReturnDetail />} />
+            <Route path="payments" element={<AdminPayments />} />
+          </Route>
+
+          {/* Invoice — any authenticated user */}
+          <Route
+            path="/invoice/:rentalId"
+            element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
+          >
+            <Route index element={<InvoicePage />} />
           </Route>
         </Routes>
       </Router>
