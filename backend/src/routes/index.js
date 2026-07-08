@@ -1,4 +1,5 @@
 const express = require('express');
+const AppError = require('../utils/AppError');
 const authRoutes = require('./authRoutes');
 const equipmentRoutes = require('./equipmentRoutes');
 const customerRoutes = require('./customerRoutes');
@@ -24,5 +25,10 @@ router.use('/rentals', rentalRoutes);
 router.use('/returns', returnRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/dashboard', dashboardRoutes);
+
+// Catch-all for unknown /api/v1/* routes — must be last
+router.all('*', (req, res, next) => {
+  next(new AppError(`Route ${req.originalUrl} not found on this server.`, 404));
+});
 
 module.exports = router;
