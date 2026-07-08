@@ -60,6 +60,9 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+// Text index for customer search (name + email)
+userSchema.index({ name: 'text', email: 'text' });
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

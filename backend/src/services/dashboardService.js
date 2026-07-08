@@ -89,7 +89,7 @@ const getDashboardData = async () => {
     ]),
 
     // Customers count
-    User.countDocuments({ role: 'customer', isActive: true }),
+    User.countDocuments({ role: 'customer', status: 'active' }),
 
     // Rentals grouped by status
     Rental.aggregate([

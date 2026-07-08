@@ -100,6 +100,12 @@ equipmentSchema.pre('save', function (next) {
   next();
 });
 
+// Text index for fast full-text search across name, description, serialNumber
+equipmentSchema.index({ name: 'text', description: 'text', serialNumber: 'text' });
+
+// Sparse unique index — allows multiple null serialNumbers but enforces uniqueness when set
+equipmentSchema.index({ serialNumber: 1 }, { unique: true, sparse: true });
+
 const Equipment = mongoose.model('Equipment', equipmentSchema);
 
 module.exports = Equipment;

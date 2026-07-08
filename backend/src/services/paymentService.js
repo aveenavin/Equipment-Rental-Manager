@@ -32,8 +32,9 @@ const recordPayment = async ({
   // Guard against inbound overpayment
   if (direction === 'inbound') {
     const existing = await Payment.find({ rental: rentalId, direction: 'inbound', status: 'completed' });
-    const alreadyPaid = existing.reduce((sum, p) => sum + p.amount, 0);
-    if (alreadyPaid + parsedAmount > rental.totalAmount + 0.01) {
+    const alreadyPaid = parseFloat(existing.reduce((sum, p) => sum + p.amount, 0).toFixed(2));
+    const afterPayment = parseFloat((alreadyPaid + parsedAmount).toFixed(2));
+    if (afterPayment > rental.totalAmount + 0.01) {
       throw new AppError(
         `Payment of $${parsedAmount} would exceed the total amount due ($${rental.totalAmount}). Already paid: $${alreadyPaid.toFixed(2)}.`,
         400
@@ -109,8 +110,8 @@ const listAllPayments = async ({ page = 1, limit = 20, paymentType, direction, r
   if (direction) filter.direction = direction;
   if (rentalId) filter.rental = rentalId;
 
-  const pageNum = parseInt(page, 10);
-  const limitNum = parseInt(limit, 10);
+  const pageNum = Math.max(1, parseInt(page, 10));
+  const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10)));
   const skip = (pageNum - 1) * limitNum;
 
   const [payments, total] = await Promise.all([

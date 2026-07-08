@@ -18,6 +18,7 @@ const clearCookieOptions = () => ({
   httpOnly: true,
   secure: isProduction(),
   sameSite: isProduction() ? 'strict' : 'lax',
+  expires: new Date(0),
 });
 
 module.exports = {

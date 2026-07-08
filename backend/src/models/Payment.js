@@ -76,9 +76,15 @@ const paymentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Compound index for per-rental payment lookup
+// Compound index for per-rental payment lookup and type filtering
 paymentSchema.index({ rental: 1, paymentType: 1 });
 paymentSchema.index({ customer: 1, createdAt: -1 });
+
+// Compound index for admin list — filtered by type, sorted by date
+paymentSchema.index({ paymentType: 1, paidAt: -1 });
+
+// Compound index for dashboard revenue aggregation — filtered by direction + date range
+paymentSchema.index({ direction: 1, status: 1, paidAt: -1 });
 
 const Payment = mongoose.model('Payment', paymentSchema);
 

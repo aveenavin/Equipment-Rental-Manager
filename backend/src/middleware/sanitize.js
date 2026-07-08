@@ -9,7 +9,7 @@
  * and req.query to prevent NoSQL injection attacks.
  */
 
-const DANGEROUS_KEY = /^\$|\.|\$/;
+const DANGEROUS_KEY = /^\$|\./;
 
 const sanitizeObject = (obj) => {
   if (!obj || typeof obj !== 'object') return;

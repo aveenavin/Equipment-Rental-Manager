@@ -10,11 +10,7 @@ const listCustomers = async ({ page = 1, limit = 15, search, status }) => {
   if (status) filter.status = status;
 
   if (search) {
-    filter.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { email: { $regex: search, $options: 'i' } },
-      { phone: { $regex: search, $options: 'i' } },
-    ];
+    filter.$text = { $search: search };
   }
 
   const pageNum = parseInt(page, 10);

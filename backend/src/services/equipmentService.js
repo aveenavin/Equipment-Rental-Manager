@@ -1,4 +1,5 @@
 const Equipment = require('../models/Equipment');
+const Rental = require('../models/Rental');
 const AppError = require('../utils/AppError');
 
 /**
@@ -10,11 +11,7 @@ const listEquipment = async ({ page = 1, limit = 12, category, status, search, s
   if (category) filter.category = category;
   if (status) filter.status = status;
   if (search) {
-    filter.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { description: { $regex: search, $options: 'i' } },
-      { serialNumber: { $regex: search, $options: 'i' } },
-    ];
+    filter.$text = { $search: search };
   }
 
   const sortOptions = {
@@ -138,6 +135,19 @@ const deleteEquipment = async (id) => {
   if (!equipment) {
     throw new AppError('Equipment not found.', 404);
   }
+
+  // Prevent deletion if active rentals exist — would orphan rental records
+  const activeRentalCount = await Rental.countDocuments({
+    equipment: id,
+    status: { $in: ['pending', 'confirmed', 'checked_out'] },
+  });
+  if (activeRentalCount > 0) {
+    throw new AppError(
+      `Cannot delete equipment with ${activeRentalCount} active rental(s). Resolve all active rentals first.`,
+      400
+    );
+  }
+
   const imagesToDelete = equipment.images.map((img) => img.publicId);
   await equipment.deleteOne();
   return imagesToDelete;

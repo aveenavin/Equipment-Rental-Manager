@@ -1,6 +1,11 @@
 const { body, query } = require('express-validator');
 
 const processReturnValidation = [
+  body('rentalId')
+    .trim()
+    .notEmpty().withMessage('Rental ID is required')
+    .isMongoId().withMessage('Invalid rental ID'),
+
   body('conditionAtReturn')
     .notEmpty().withMessage('Condition at return is required')
     .isIn(['excellent', 'good', 'fair', 'poor'])
