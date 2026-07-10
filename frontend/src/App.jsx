@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import PublicLayout from './layouts/PublicLayout';
 import ProtectedLayout from './layouts/ProtectedLayout';
+import AdminLayout from './layouts/AdminLayout';
 
 // Public pages
 import Home from './pages/public/Home';
@@ -53,8 +54,9 @@ function App() {
               borderRadius: '0.75rem',
               fontSize: '0.875rem',
             },
-            success: { iconTheme: { primary: '#3b82f6', secondary: '#f1f5f9' } },
+            success: { iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' } },
             error: { iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' } },
+            
           }}
         />
 
@@ -97,16 +99,18 @@ function App() {
             path="/admin"
             element={<ProtectedLayout allowedRoles={['admin', 'staff']} />}
           >
-            <Route index element={<AdminDashboard />} />
-            <Route path="equipment" element={<EquipmentList />} />
-            <Route path="equipment/:id" element={<EquipmentDetail />} />
-            <Route path="customers" element={<CustomerList />} />
-            <Route path="customers/:id" element={<CustomerDetail />} />
-            <Route path="rentals" element={<AdminRentals />} />
-            <Route path="rentals/:id" element={<RentalDetail />} />
-            <Route path="returns" element={<AdminReturns />} />
-            <Route path="returns/:id" element={<ReturnDetail />} />
-            <Route path="payments" element={<AdminPayments />} />
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="equipment" element={<EquipmentList />} />
+              <Route path="equipment/:id" element={<EquipmentDetail />} />
+              <Route path="customers" element={<CustomerList />} />
+              <Route path="customers/:id" element={<CustomerDetail />} />
+              <Route path="rentals" element={<AdminRentals />} />
+              <Route path="rentals/:id" element={<RentalDetail />} />
+              <Route path="returns" element={<AdminReturns />} />
+              <Route path="returns/:id" element={<ReturnDetail />} />
+              <Route path="payments" element={<AdminPayments />} />
+            </Route>
           </Route>
 
           {/* Invoice — any authenticated user */}

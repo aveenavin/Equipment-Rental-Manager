@@ -2,26 +2,64 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Brand Colors ── */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
-  --color-primary-950: #172554;
+  /* ──────────────────────────────────────────────────────────────
+     PRIMARY — Orange palette (was blue)
+     All primary-* classes now use warm orange tones
+  ────────────────────────────────────────────────────────────── */
+  --color-primary-50:  #fff7ed;
+  --color-primary-100: #ffedd5;
+  --color-primary-200: #fed7aa;
+  --color-primary-300: #fdba74;
+  --color-primary-400: #fb923c;
+  --color-primary-500: #f97316;
+  --color-primary-600: #ea580c;
+  --color-primary-700: #c2410c;
+  --color-primary-800: #9a3412;
+  --color-primary-900: #7c2d12;
+  --color-primary-950: #431407;
 
+  /* ──────────────────────────────────────────────────────────────
+     SLATE — remapped from dark navy to warm light orange neutrals.
+     All existing bg-slate-* / text-slate-* / border-slate-* classes
+     across the entire app automatically adopt these new values.
+     Scale is INVERTED relative to the old dark theme:
+       slate-950 (was body bg #020617) → orange-200  (new body bg)
+       slate-900 (was card bg)         → white        (new card bg)
+       slate-800 (was panel)           → orange-50    (new panel)
+       slate-700 (was border)          → orange-200   (new border)
+       slate-600 (was dim)             → orange-300   (dim accent)
+       slate-500 (was muted text)      → gray-400     (muted text)
+       slate-400 (was secondary text)  → gray-500     (secondary text)
+       slate-300 (was label text)      → gray-600     (label text)
+       slate-200 (was body text)       → gray-700     (body text)
+       slate-100 (was heading text)    → gray-800     (heading text)
+       slate-50  (was hover surface)   → orange-50    (hover surface)
+  ────────────────────────────────────────────────────────────── */
+  --color-slate-950: #fed7aa;   /* orange-200 — body background */
+  --color-slate-900: #ffffff;   /* white — card / panel background */
+  --color-slate-800: #fff7ed;   /* orange-50 — secondary bg / hover */
+  --color-slate-700: #fed7aa;   /* orange-200 — border default */
+  --color-slate-600: #fdba74;   /* orange-300 — dim accent border */
+  --color-slate-500: #9ca3af;   /* gray-400 — muted / placeholder text */
+  --color-slate-400: #6b7280;   /* gray-500 — secondary text */
+  --color-slate-300: #4b5563;   /* gray-600 — label / caption text */
+  --color-slate-200: #374151;   /* gray-700 — body text */
+  --color-slate-100: #1f2937;   /* gray-800 — heading / primary text */
+  --color-slate-50:  #fff7ed;   /* orange-50 — subtle hover surface */
+
+  /* ──────────────────────────────────────────────────────────────
+     SURFACE — warm light equivalents (used in dashboard/cards)
+  ────────────────────────────────────────────────────────────── */
+  --color-surface-800: #ffedd5;   /* orange-100 */
+  --color-surface-900: #fff7ed;   /* orange-50 */
+  --color-surface-950: #fed7aa;   /* orange-200 — matches body */
+
+  /* ──────────────────────────────────────────────────────────────
+     ACCENT — kept as warm orange (was already orange)
+  ────────────────────────────────────────────────────────────── */
   --color-accent-400: #fb923c;
   --color-accent-500: #f97316;
   --color-accent-600: #ea580c;
-
-  --color-surface-800: #1e293b;
-  --color-surface-900: #0f172a;
-  --color-surface-950: #080d18;
 
   /* ── Typography ── */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -46,8 +84,8 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-surface-950);
-  color: #f1f5f9;
+  background-color: #fed7aa;   /* orange-200 */
+  color: #1f2937;               /* gray-800 */
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -55,33 +93,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Scrollbar Styling ── */
+/* ── Scrollbar Styling — warm orange tones ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-surface-900);
+  background: #ffedd5;   /* orange-100 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #fdba74;   /* orange-300 */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #fb923c;   /* orange-400 */
 }
 
 /* ── Focus Visible ── */
 :focus-visible {
-  outline: 2px solid var(--color-primary-500);
+  outline: 2px solid #ea580c;   /* orange-600 */
   outline-offset: 2px;
 }
 
 /* ── Selection ── */
 ::selection {
-  background-color: var(--color-primary-600);
+  background-color: #fb923c;   /* orange-400 */
   color: #ffffff;
 }

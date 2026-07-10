@@ -111,14 +111,14 @@ const EquipmentList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
-            <h1 className="text-3xl font-bold text-slate-100">Equipment Inventory</h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <h1 className="text-2xl font-bold text-slate-100">Equipment Inventory</h1>
+            <p className="text-slate-400 text-xs mt-1">
               {pagination.total} item{pagination.total !== 1 ? 's' : ''} total
             </p>
           </div>
@@ -130,33 +130,38 @@ const EquipmentList = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-3 mb-6">
+        <div className="flex flex-col md:flex-row gap-2.5 mb-5">
           <form onSubmit={handleSearch} className="flex gap-2 flex-1">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Search by name, description..."
-                className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
-                <button type="button" onClick={clearSearch} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                <button type="button" onClick={clearSearch} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200">
                   <X className="h-3.5 w-3.5" />
                 </button>
               )}
             </div>
-            <Button type="submit" variant="secondary" size="md">Search</Button>
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
+            >
+              Search
+            </button>
           </form>
 
           <div className="flex gap-2">
             <div className="flex items-center gap-1.5">
-              <Filter className="h-4 w-4 text-slate-400 shrink-0" />
+              <Filter className="h-3.5 w-3.5 text-slate-400 shrink-0" />
               <select
                 value={category}
                 onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-                className="px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+                className="px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-[13px] focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
               >
                 {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
@@ -164,7 +169,7 @@ const EquipmentList = () => {
             <select
               value={status}
               onChange={(e) => { setStatus(e.target.value); setPage(1); }}
-              className="px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+              className="px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-[13px] focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
             >
               {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
@@ -186,58 +191,58 @@ const EquipmentList = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {equipment.map((item) => (
                 <div key={item._id} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-slate-600 transition-colors group">
                   {/* Image */}
-                  <div className="h-44 bg-slate-800 relative overflow-hidden">
+                  <div className="h-36 bg-slate-800 relative overflow-hidden">
                     {item.images?.[0] ? (
                       <img src={item.images[0].url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <Package className="h-12 w-12 text-slate-600" />
+                        <Package className="h-10 w-10 text-slate-600" />
                       </div>
                     )}
-                    <div className="absolute top-2 right-2">
+                    <div className="absolute top-2 right-2 scale-90 origin-top-right">
                       <StatusBadge status={item.status} />
                     </div>
                   </div>
 
                   {/* Info */}
-                  <div className="p-4 flex flex-col flex-1">
-                    <h3 className="font-semibold text-slate-100 text-sm leading-snug line-clamp-2 mb-1">{item.name}</h3>
-                    <p className="text-xs text-slate-500 capitalize mb-2">{item.category?.replace('-', ' ')}</p>
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="p-3.5 flex flex-col flex-1">
+                    <h3 className="font-semibold text-slate-100 text-[13px] leading-snug line-clamp-2 mb-1">{item.name}</h3>
+                    <p className="text-[11px] text-slate-500 capitalize mb-2">{item.category?.replace('-', ' ')}</p>
+                    <div className="flex items-center gap-2 mb-3 scale-90 origin-left">
                       <ConditionBadge condition={item.condition} />
                     </div>
-                    <div className="mt-auto pt-3 border-t border-slate-800 flex items-center justify-between">
+                    <div className="mt-auto pt-2.5 border-t border-slate-800 flex items-center justify-between">
                       <div>
-                        <p className="text-lg font-bold text-primary-400">${item.dailyRate}<span className="text-xs font-normal text-slate-500">/day</span></p>
-                        <p className="text-xs text-slate-500">Deposit: ${item.securityDeposit}</p>
+                        <p className="text-base font-bold text-primary-400">${item.dailyRate}<span className="text-[10px] font-normal text-slate-500">/day</span></p>
+                        <p className="text-[10px] text-slate-500">Dep: ${item.securityDeposit}</p>
                       </div>
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-1">
                         <Link
                           to={`/admin/equipment/${item._id}`}
-                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
+                          className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
                           title="View details"
                         >
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-3.5 w-3.5" />
                         </Link>
                         {canManage && (
                           <>
                             <button
                               onClick={() => setEditTarget(item)}
-                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors"
+                              className="p-1.5 rounded-md bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors"
                               title="Edit"
                             >
-                              <Pencil className="h-4 w-4" />
+                              <Pencil className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={() => setDeleteTarget(item)}
-                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors"
+                              className="p-1.5 rounded-md bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors"
                               title="Delete"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-3.5 w-3.5" />
                             </button>
                           </>
                         )}

@@ -14,10 +14,11 @@ const fmt = (d) =>
   new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
 const QUICK_ACTIONS = {
-  pending: { label: 'Confirm', icon: CheckCircle, next: 'confirmed', variant: 'text-blue-400 hover:text-blue-300' },
-  confirmed: { label: 'Check Out', icon: Truck, next: 'checked_out', variant: 'text-primary-400 hover:text-primary-300' },
-  checked_out: { label: 'Return', icon: RotateCcw, next: 'returned', variant: 'text-emerald-400 hover:text-emerald-300' },
+  pending: { label: 'Confirm', icon: CheckCircle, next: 'confirmed', variant: 'text-blue-600 hover:text-blue-700' },
+  confirmed: { label: 'Check Out', icon: Truck, next: 'checked_out', variant: 'text-orange-600 hover:text-orange-700' },
+  checked_out: { label: 'Return', icon: RotateCcw, next: 'returned', variant: 'text-emerald-600 hover:text-emerald-700' },
 };
+
 
 const STATUS_TABS = ['', 'pending', 'confirmed', 'checked_out', 'returned', 'cancelled'];
 
@@ -58,28 +59,27 @@ const AdminRentals = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-100">Rental Management</h1>
-          <p className="text-slate-400 text-sm mt-1">
+        <div className="mb-5">
+          <h1 className="text-2xl font-bold text-slate-100">Rental Management</h1>
+          <p className="text-slate-400 text-xs mt-1">
             {pagination.total} total rental{pagination.total !== 1 ? 's' : ''}
           </p>
         </div>
 
         {/* Status filter tabs */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2.5 mb-6">
           {STATUS_TABS.map((s) => (
             <button
               key={s}
               onClick={() => { setStatusFilter(s); setPage(1); }}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                statusFilter === s
-                  ? 'bg-primary-900/50 text-primary-400 border border-primary-800'
-                  : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-600'
-              }`}
+              className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 transform ${statusFilter === s
+                ? 'bg-gradient-to-r from-[#4558be] to-indigo-500 text-white font-bold shadow-md shadow-indigo-500/30 border border-indigo-400/50 -translate-y-0.5'
+                : 'bg-white text-gray-600 font-semibold border border-gray-200 shadow-sm hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md hover:-translate-y-0.5'
+                }`}
             >
               {s === '' ? 'All' : s.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
             </button>
@@ -104,12 +104,12 @@ const AdminRentals = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Dates</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                      <th className="text-right px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Dates</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                      <th className="text-right px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
@@ -120,76 +120,76 @@ const AdminRentals = () => {
                       return (
                         <tr key={rental._id} className="hover:bg-slate-800/40 transition-colors">
                           {/* Equipment */}
-                          <td className="px-5 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="h-10 w-12 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2.5">
+                              <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
                                 {rental.equipment?.images?.[0] ? (
                                   <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-slate-600 text-xs">N/A</div>
+                                  <div className="w-full h-full flex items-center justify-center text-slate-600 text-[10px]">N/A</div>
                                 )}
                               </div>
                               <div>
-                                <p className="text-sm font-medium text-slate-200 max-w-[160px] truncate">{rental.equipment?.name}</p>
-                                <p className="text-xs text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
+                                <p className="text-[13px] font-medium text-slate-200 max-w-[150px] truncate">{rental.equipment?.name}</p>
+                                <p className="text-[11px] text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
                               </div>
                             </div>
                           </td>
 
                           {/* Customer */}
-                          <td className="px-5 py-4">
+                          <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
-                              <div className="h-7 w-7 rounded-full bg-primary-900/40 border border-primary-800 flex items-center justify-center shrink-0">
-                                <span className="text-xs font-semibold text-primary-400">
+                              <div className="h-8 w-8 rounded-full bg-[#4558be]/10 border border-[#4558be]/20 text-[#4558be] font-bold flex items-center justify-center shrink-0">
+                                <span className="text-[13px]">
                                   {rental.customer?.name?.charAt(0).toUpperCase()}
                                 </span>
                               </div>
                               <div>
-                                <p className="text-sm text-slate-300">{rental.customer?.name}</p>
-                                <p className="text-xs text-slate-500">{rental.customer?.email}</p>
+                                <p className="text-[13px] text-slate-300 truncate max-w-[120px]">{rental.customer?.name}</p>
+                                <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{rental.customer?.email}</p>
                               </div>
                             </div>
                           </td>
 
                           {/* Dates */}
-                          <td className="px-5 py-4">
-                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                              <Calendar className="h-3.5 w-3.5 shrink-0" />
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                              <Calendar className="h-3 w-3 shrink-0" />
                               <span>{fmt(rental.startDate)}</span>
                               <span className="text-slate-600">→</span>
                               <span>{fmt(rental.endDate)}</span>
                             </div>
-                            <p className="text-xs text-slate-500 mt-0.5 ml-5">
+                            <p className="text-[11px] text-slate-500 mt-0.5 ml-4">
                               {rental.totalDays} day{rental.totalDays !== 1 ? 's' : ''}
                             </p>
                           </td>
 
                           {/* Amount */}
-                          <td className="px-5 py-4">
-                            <p className="text-sm font-semibold text-primary-400">${rental.totalAmount.toFixed(2)}</p>
-                            <p className="text-xs text-slate-500">+${rental.securityDeposit} dep.</p>
+                          <td className="px-4 py-3">
+                            <p className="text-[13px] font-semibold text-primary-400">${rental.totalAmount.toFixed(2)}</p>
+                            <p className="text-[11px] text-slate-500">+${rental.securityDeposit} dep.</p>
                           </td>
 
                           {/* Status */}
-                          <td className="px-5 py-4">
-                            <RentalStatusBadge status={rental.status} />
+                          <td className="px-4 py-3">
+                            <div className="scale-90 origin-left"><RentalStatusBadge status={rental.status} /></div>
                           </td>
 
                           {/* Actions */}
-                          <td className="px-5 py-4">
-                            <div className="flex items-center justify-end gap-3">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center justify-end gap-2">
                               {/* Quick status action */}
                               {action && (
                                 <button
                                   onClick={() => handleQuickAction(rental, action.next)}
                                   disabled={isUpdating}
-                                  className={`flex items-center gap-1 text-xs font-medium transition-colors ${action.variant} disabled:opacity-40`}
+                                  className={`flex items-center gap-1 text-[11px] font-medium transition-colors ${action.variant} disabled:opacity-40`}
                                   title={action.label}
                                 >
                                   {isUpdating ? (
-                                    <span className="h-3.5 w-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                    <span className="h-3 w-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
                                   ) : (
-                                    React.createElement(action.icon, { className: 'h-3.5 w-3.5' })
+                                    React.createElement(action.icon, { className: 'h-3 w-3' })
                                   )}
                                   {action.label}
                                 </button>
@@ -197,10 +197,10 @@ const AdminRentals = () => {
 
                               <Link
                                 to={`/admin/rentals/${rental._id}`}
-                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
+                                className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors ml-1"
                                 title="View details"
                               >
-                                <Eye className="h-4 w-4" />
+                                <Eye className="h-3.5 w-3.5" />
                               </Link>
                             </div>
                           </td>

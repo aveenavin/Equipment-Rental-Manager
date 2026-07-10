@@ -56,7 +56,7 @@ const EquipmentDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#d8d9e0] flex items-center justify-center">
         <Spinner size="lg" />
       </div>
     );
@@ -67,18 +67,18 @@ const EquipmentDetail = () => {
   const images = equipment.images || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Back */}
         <Link
           to="/admin/equipment"
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-[13px] text-slate-400 hover:text-slate-200 transition-colors mb-5"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to Inventory
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Inventory
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Image Gallery */}
           <div>
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-800 border border-slate-700">
@@ -139,48 +139,48 @@ const EquipmentDetail = () => {
           </div>
 
           {/* Details */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <div>
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <h1 className="text-2xl font-bold text-slate-100 leading-snug">{equipment.name}</h1>
-                <div className="flex gap-2 shrink-0">
+              <div className="flex items-start justify-between gap-3 mb-1.5">
+                <h1 className="text-xl font-bold text-slate-100 leading-snug">{equipment.name}</h1>
+                <div className="flex gap-2 shrink-0 scale-90 origin-right">
                   <StatusBadge status={equipment.status} />
                 </div>
               </div>
-              <p className="text-sm text-slate-500 capitalize">{equipment.category?.replace(/-/g, ' ')}</p>
+              <p className="text-[13px] text-slate-500 capitalize">{equipment.category?.replace(/-/g, ' ')}</p>
             </div>
 
-            <p className="text-slate-400 text-sm leading-relaxed">{equipment.description}</p>
+            <p className="text-slate-400 text-[13px] leading-relaxed">{equipment.description}</p>
 
             {/* Pricing */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-                <p className="text-xs text-slate-500 mb-1">Daily Rate</p>
-                <p className="text-2xl font-bold text-primary-400">${equipment.dailyRate}</p>
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                <p className="text-[11px] text-slate-500 mb-0.5">Daily Rate</p>
+                <p className="text-xl font-bold text-primary-400">${equipment.dailyRate}</p>
               </div>
-              <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
-                <p className="text-xs text-slate-500 mb-1">Security Deposit</p>
-                <p className="text-2xl font-bold text-slate-200">${equipment.securityDeposit}</p>
+              <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                <p className="text-[11px] text-slate-500 mb-0.5">Security Deposit</p>
+                <p className="text-xl font-bold text-slate-200">${equipment.securityDeposit}</p>
               </div>
             </div>
 
             {/* Meta */}
-            <div className="space-y-3 p-4 rounded-xl bg-slate-900 border border-slate-800">
-              <div className="flex justify-between items-center text-sm">
+            <div className="space-y-2.5 p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="flex justify-between items-center text-[13px]">
                 <span className="text-slate-500">Condition</span>
-                <ConditionBadge condition={equipment.condition} />
+                <div className="scale-90 origin-right"><ConditionBadge condition={equipment.condition} /></div>
               </div>
               {equipment.serialNumber && (
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex justify-between items-center text-[13px]">
                   <span className="text-slate-500">Serial Number</span>
-                  <span className="text-slate-300 font-mono text-xs">{equipment.serialNumber}</span>
+                  <span className="text-slate-300 font-mono text-[11px]">{equipment.serialNumber}</span>
                 </div>
               )}
-              <div className="flex justify-between items-center text-sm">
+              <div className="flex justify-between items-center text-[13px]">
                 <span className="text-slate-500">Added by</span>
                 <span className="text-slate-300">{equipment.createdBy?.name || 'N/A'}</span>
               </div>
-              <div className="flex justify-between items-center text-sm">
+              <div className="flex justify-between items-center text-[13px]">
                 <span className="text-slate-500">Created</span>
                 <span className="text-slate-300">{new Date(equipment.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
               </div>
@@ -188,20 +188,22 @@ const EquipmentDetail = () => {
 
             {/* Actions */}
             {canManage && (
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <Button
                   variant="secondary"
-                  className="flex-1 flex items-center justify-center gap-2"
+                  size="sm"
+                  className="flex-1 flex items-center justify-center gap-1.5"
                   onClick={() => setShowEditModal(true)}
                 >
-                  <Pencil className="h-4 w-4" /> Edit
+                  <Pencil className="h-3.5 w-3.5" /> Edit
                 </Button>
                 <Button
                   variant="danger"
-                  className="flex-1 flex items-center justify-center gap-2"
+                  size="sm"
+                  className="flex-1 flex items-center justify-center gap-1.5"
                   onClick={() => setShowDeleteConfirm(true)}
                 >
-                  <Trash2 className="h-4 w-4" /> Delete
+                  <Trash2 className="h-3.5 w-3.5" /> Delete
                 </Button>
               </div>
             )}

@@ -86,7 +86,7 @@ const Register = () => {
               id="name"
               label="Full name"
               type="text"
-              placeholder="John Doe"
+              placeholder="Avinash Sharma"
               required
               error={errors.name?.message}
               {...register('name')}

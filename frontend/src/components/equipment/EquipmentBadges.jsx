@@ -1,32 +1,32 @@
 import React from 'react';
 
 const statusConfig = {
-  available: { label: 'Available', className: 'bg-emerald-900/40 text-emerald-400 border-emerald-800' },
-  rented: { label: 'Rented', className: 'bg-blue-900/40 text-blue-400 border-blue-800' },
-  maintenance: { label: 'Maintenance', className: 'bg-yellow-900/40 text-yellow-400 border-yellow-800' },
-  retired: { label: 'Retired', className: 'bg-slate-800 text-slate-500 border-slate-700' },
+  available: { label: 'Available', cls: 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md shadow-emerald-500/20 border border-white/20' },
+  rented: { label: 'Rented', cls: 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-md shadow-blue-500/20 border border-white/20' },
+  maintenance: { label: 'Maintenance', cls: 'bg-gradient-to-r from-orange-500 to-amber-400 text-white shadow-md shadow-orange-500/20 border border-white/20' },
+  retired: { label: 'Retired', cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' },
 };
 
 const conditionConfig = {
-  excellent: { label: 'Excellent', className: 'bg-emerald-900/40 text-emerald-400 border-emerald-800' },
-  good: { label: 'Good', className: 'bg-blue-900/40 text-blue-400 border-blue-800' },
-  fair: { label: 'Fair', className: 'bg-yellow-900/40 text-yellow-400 border-yellow-800' },
-  poor: { label: 'Poor', className: 'bg-red-900/40 text-red-400 border-red-800' },
+  excellent: { label: 'Excellent', cls: 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md shadow-emerald-500/20 border border-white/20' },
+  good: { label: 'Good', cls: 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-md shadow-blue-500/20 border border-white/20' },
+  fair: { label: 'Fair', cls: 'bg-gradient-to-r from-orange-500 to-amber-400 text-white shadow-md shadow-orange-500/20 border border-white/20' },
+  poor: { label: 'Poor', cls: 'bg-gradient-to-r from-red-500 to-rose-400 text-white shadow-md shadow-red-500/20 border border-white/20' },
 };
 
 export const StatusBadge = ({ status }) => {
-  const config = statusConfig[status] || { label: status, className: 'bg-slate-800 text-slate-400 border-slate-700' };
+  const config = statusConfig[status] || { label: status, cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' };
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${config.className}`}>
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${config.cls}`}>
       {config.label}
     </span>
   );
 };
 
 export const ConditionBadge = ({ condition }) => {
-  const config = conditionConfig[condition] || { label: condition, className: 'bg-slate-800 text-slate-400 border-slate-700' };
+  const config = conditionConfig[condition] || { label: condition, cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' };
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${config.className}`}>
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${config.cls}`}>
       {config.label}
     </span>
   );

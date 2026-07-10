@@ -11,11 +11,10 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchCustomers, deleteCustomer, updateCustomer } from '../../services/customerService';
 
 const StatusPill = ({ status }) => (
-  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-    status === 'active'
-      ? 'bg-emerald-900/40 text-emerald-400 border-emerald-800'
-      : 'bg-red-900/40 text-red-400 border-red-800'
-  }`}>
+  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${status === 'active'
+    ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md shadow-emerald-500/20 border border-white/20'
+    : 'bg-gradient-to-r from-red-500 to-rose-400 text-white shadow-md shadow-red-500/20 border border-white/20'
+    }`}>
     {status === 'active' ? <UserCheck className="h-3 w-3" /> : <UserX className="h-3 w-3" />}
     {status === 'active' ? 'Active' : 'Suspended'}
   </span>
@@ -166,38 +165,43 @@ const CustomerList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h1 className="text-3xl font-bold text-slate-100">Customer Directory</h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <h1 className="text-2xl font-bold text-slate-100">Customer Directory</h1>
+            <p className="text-slate-400 text-xs mt-1">
               {pagination.total} registered customer{pagination.total !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-3 mb-6">
+        <div className="flex flex-col md:flex-row gap-3 mb-5">
           <form onSubmit={handleSearch} className="flex gap-2 flex-1">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Search by name, email, or phone..."
-                className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
-                <button type="button" onClick={clearSearch} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                <button type="button" onClick={clearSearch} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200">
                   <X className="h-3.5 w-3.5" />
                 </button>
               )}
             </div>
-            <Button type="submit" variant="secondary" size="md">Search</Button>
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
+            >
+              Search
+            </button>
           </form>
 
           <select
@@ -231,66 +235,66 @@ const CustomerList = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Contact</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Joined</th>
-                      <th className="text-right px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Contact</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Joined</th>
+                      <th className="text-right px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
                     {customers.map((customer) => (
                       <tr key={customer._id} className="hover:bg-slate-800/50 transition-colors">
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-full bg-primary-900/50 border border-primary-800 flex items-center justify-center shrink-0">
-                              <span className="text-sm font-semibold text-primary-400">
+                            <div className="h-8 w-8 rounded-full bg-[#4558be]/10 border border-[#4558be]/20 text-[#4558be] font-bold flex items-center justify-center shrink-0">
+                              <span className="text-[13px]">
                                 {customer.name.charAt(0).toUpperCase()}
                               </span>
                             </div>
                             <div>
-                              <p className="font-medium text-slate-200 text-sm">{customer.name}</p>
-                              <p className="text-xs text-slate-500 font-mono">{customer._id.slice(-8)}</p>
+                              <p className="font-medium text-slate-200 text-[13px] truncate max-w-[150px]">{customer.name}</p>
+                              <p className="text-[11px] text-slate-500 font-mono">{customer._id.slice(-8)}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-5 py-4">
-                          <p className="text-sm text-slate-300">{customer.email}</p>
-                          <p className="text-xs text-slate-500 mt-0.5">{customer.phone || '—'}</p>
+                        <td className="px-4 py-3">
+                          <p className="text-[13px] text-slate-300 truncate max-w-[150px]">{customer.email}</p>
+                          <p className="text-[11px] text-slate-500 mt-0.5">{customer.phone || '—'}</p>
                         </td>
-                        <td className="px-5 py-4">
-                          <StatusPill status={customer.status} />
+                        <td className="px-4 py-3">
+                          <div className="scale-90 origin-left"><StatusPill status={customer.status} /></div>
                         </td>
-                        <td className="px-5 py-4">
-                          <p className="text-sm text-slate-400">
+                        <td className="px-4 py-3">
+                          <p className="text-[13px] text-slate-400">
                             {new Date(customer.createdAt).toLocaleDateString('en-US', {
                               year: 'numeric', month: 'short', day: 'numeric',
                             })}
                           </p>
                         </td>
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-center justify-end gap-1.5">
                             <Link
                               to={`/admin/customers/${customer._id}`}
-                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
+                              className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
                               title="View details"
                             >
-                              <Eye className="h-4 w-4" />
+                              <Eye className="h-3.5 w-3.5" />
                             </Link>
                             <button
                               onClick={() => setEditTarget(customer)}
-                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors"
+                              className="p-1.5 rounded-md bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors"
                               title="Edit"
                             >
-                              <Pencil className="h-4 w-4" />
+                              <Pencil className="h-3.5 w-3.5" />
                             </button>
                             {isAdmin && (
                               <button
                                 onClick={() => setDeleteTarget(customer)}
-                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors"
+                                className="p-1.5 rounded-md bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors"
                                 title="Delete"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-3.5 w-3.5" />
                               </button>
                             )}
                           </div>

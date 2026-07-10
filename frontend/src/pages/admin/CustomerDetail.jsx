@@ -11,13 +11,13 @@ import { useAuth } from '../../context/AuthContext';
 import { fetchCustomerById, updateCustomer, deleteCustomer } from '../../services/customerService';
 
 const DetailRow = ({ icon: Icon, label, value }) => (
-  <div className="flex items-center gap-3 py-3 border-b border-slate-800 last:border-0">
+  <div className="flex items-center gap-3 py-2 border-b border-slate-800 last:border-0">
     <div className="p-1.5 rounded-lg bg-slate-800">
       <Icon className="h-4 w-4 text-slate-400" />
     </div>
     <div className="flex-1 flex justify-between items-center">
-      <span className="text-sm text-slate-500">{label}</span>
-      <span className="text-sm text-slate-200 font-medium">{value || '—'}</span>
+      <span className="text-[13px] text-slate-500">{label}</span>
+      <span className="text-[13px] text-slate-200 font-medium">{value || '—'}</span>
     </div>
   </div>
 );
@@ -77,7 +77,7 @@ const CustomerDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#d8d9e0] flex items-center justify-center">
         <Spinner size="lg" />
       </div>
     );
@@ -88,33 +88,32 @@ const CustomerDetail = () => {
   const isActive = customer.status === 'active';
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         <Link
           to="/admin/customers"
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-[13px] text-slate-400 hover:text-slate-200 transition-colors mb-5"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to Customers
+          <ArrowLeft className="h-3.5 w-3.5" /> Back to Customers
         </Link>
 
         {/* Profile Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-            <div className="flex items-center gap-5">
-              <div className="h-20 w-20 rounded-2xl bg-primary-900/50 border border-primary-800 flex items-center justify-center shrink-0">
-                <span className="text-3xl font-bold text-primary-400">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-5">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-2xl bg-[#4558be]/10 border border-[#4558be]/20 text-[#4558be] font-bold flex items-center justify-center shrink-0">
+                <span className="text-3xl">
                   {customer.name.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-slate-100">{customer.name}</h1>
-                <p className="text-slate-400 text-sm mt-0.5">{customer.email}</p>
-                <span className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
-                  isActive
-                    ? 'bg-emerald-900/40 text-emerald-400 border-emerald-800'
-                    : 'bg-red-900/40 text-red-400 border-red-800'
-                }`}>
+                <h1 className="text-xl font-bold text-slate-100">{customer.name}</h1>
+                <p className="text-slate-400 text-[13px] mt-0.5">{customer.email}</p>
+                <span className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${isActive
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md shadow-emerald-500/20 border border-white/20'
+                    : 'bg-gradient-to-r from-red-500 to-rose-400 text-white shadow-md shadow-red-500/20 border border-white/20'
+                  }`}>
                   {isActive ? <ShieldCheck className="h-3 w-3" /> : <ShieldOff className="h-3 w-3" />}
                   {isActive ? 'Active' : 'Suspended'}
                 </span>
@@ -122,16 +121,16 @@ const CustomerDetail = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col gap-2 sm:items-end">
+            <div className="flex flex-col gap-1.5 sm:items-end">
               {isAdmin && (
                 <Button
                   variant={isActive ? 'danger' : 'secondary'}
                   size="sm"
                   isLoading={isTogglingStatus}
                   onClick={handleToggleStatus}
-                  className="flex items-center gap-2 whitespace-nowrap"
+                  className="flex items-center gap-1.5 whitespace-nowrap !px-3 !py-1.5 !text-[13px]"
                 >
-                  {isActive ? <ShieldOff className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                  {isActive ? <ShieldOff className="h-3.5 w-3.5" /> : <ShieldCheck className="h-3.5 w-3.5" />}
                   {isActive ? 'Suspend Account' : 'Activate Account'}
                 </Button>
               )}
@@ -140,9 +139,9 @@ const CustomerDetail = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="flex items-center gap-2 text-red-400 hover:text-red-300"
+                  className="flex items-center gap-1.5 text-red-400 hover:text-red-300 !px-3 !py-1.5 !text-[13px]"
                 >
-                  <Trash2 className="h-4 w-4" /> Delete Account
+                  <Trash2 className="h-3.5 w-3.5" /> Delete Account
                 </Button>
               )}
             </div>
@@ -150,8 +149,8 @@ const CustomerDetail = () => {
         </div>
 
         {/* Details */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-          <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">Account Information</h2>
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+          <h2 className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider mb-1">Account Information</h2>
           <DetailRow icon={User} label="Full Name" value={customer.name} />
           <DetailRow icon={Mail} label="Email Address" value={customer.email} />
           <DetailRow icon={Phone} label="Phone Number" value={customer.phone} />

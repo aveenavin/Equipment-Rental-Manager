@@ -5,9 +5,9 @@ const Select = React.forwardRef(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={id} className="text-sm font-medium text-slate-300">
+          <label htmlFor={id} className="text-sm font-medium text-gray-700">
             {label}
-            {required && <span className="text-red-400 ml-1">*</span>}
+            {required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
 
@@ -15,10 +15,10 @@ const Select = React.forwardRef(
           ref={ref}
           id={id}
           className={`
-            w-full px-4 py-2.5 rounded-lg bg-slate-900 border text-slate-100 text-sm
+            w-full px-4 py-2.5 rounded-lg bg-white border text-gray-800 text-sm
             transition-colors duration-200 cursor-pointer
-            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-            ${error ? 'border-red-500' : 'border-slate-700 hover:border-slate-600'}
+            focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent
+            ${error ? 'border-red-400' : 'border-orange-300 hover:border-orange-400'}
             ${className}
           `}
           {...props}
@@ -27,7 +27,7 @@ const Select = React.forwardRef(
         </select>
 
         {error && (
-          <p className="text-xs text-red-400">{error}</p>
+          <p className="text-xs text-red-500">{error}</p>
         )}
       </div>
     );

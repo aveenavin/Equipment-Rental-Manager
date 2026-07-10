@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -20,28 +20,28 @@ import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 const fmtCurrency = (v) => `$${Number(v || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 const fmtDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-// Tailwind-safe chart colors
+// Chart colors — warm orange-forward palette on light background
 const CHART_COLORS = {
-  primary: '#3b82f6',
-  emerald: '#10b981',
-  violet: '#8b5cf6',
-  amber: '#f59e0b',
-  rose: '#f43f5e',
-  slate: '#64748b',
+  primary: '#ea580c',   // orange-600
+  emerald: '#059669',   // emerald-600 (readable on white)
+  violet: '#7c3aed',   // violet-600
+  amber: '#d97706',   // amber-600
+  rose: '#e11d48',   // rose-600
+  slate: '#6b7280',   // gray-500
 };
 
-const PIE_COLORS = ['#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#6b7280'];
+const PIE_COLORS = ['#ea580c', '#f97316', '#fb923c', '#fdba74', '#9ca3af'];
 
 const CustomTooltip = ({ active, payload, label, prefix = '' }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 shadow-xl">
-      <p className="text-xs text-slate-400 mb-2">{label}</p>
+    <div className="bg-white border border-orange-200 rounded-xl px-4 py-3 shadow-lg">
+      <p className="text-xs text-gray-500 mb-2">{label}</p>
       {payload.map((p) => (
         <div key={p.name} className="flex items-center gap-2 text-sm">
           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color || p.fill }} />
-          <span className="text-slate-300">{p.name}:</span>
-          <span className="font-bold text-white">{prefix}{typeof p.value === 'number' ? p.value.toLocaleString() : p.value}</span>
+          <span className="text-gray-600">{p.name}:</span>
+          <span className="font-bold text-gray-800">{prefix}{typeof p.value === 'number' ? p.value.toLocaleString() : p.value}</span>
         </div>
       ))}
     </div>
@@ -49,7 +49,7 @@ const CustomTooltip = ({ active, payload, label, prefix = '' }) => {
 };
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
+  const { setLastUpdated: setHeaderLastUpdated } = useOutletContext() || {};
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -59,7 +59,9 @@ const AdminDashboard = () => {
     try {
       const res = await fetchDashboard();
       setData(res.data.data);
-      setLastUpdated(new Date());
+      const now = new Date();
+      setLastUpdated(now);
+      if (setHeaderLastUpdated) setHeaderLastUpdated(now);
     } catch {
       if (!silent) toast.error('Failed to load dashboard data.');
     } finally {
@@ -75,10 +77,10 @@ const AdminDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#d8d9e0] flex items-center justify-center">
         <div className="text-center">
           <Spinner size="lg" />
-          <p className="text-slate-400 text-sm mt-3">Loading dashboard…</p>
+          <p className="text-gray-500 text-sm mt-3">Loading dashboard…</p>
         </div>
       </div>
     );
@@ -88,56 +90,15 @@ const AdminDashboard = () => {
   const { equipment = {}, customers = {}, rentals = {}, revenue = {}, returnsToday = 0 } = stats || {};
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      {/* Top navigation bar */}
-      <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-lg bg-primary-900/30 border border-primary-800">
-              <BarChart3 className="h-5 w-5 text-primary-400" />
-            </div>
-            <span className="font-bold text-slate-100">EquipRental</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">Admin</span>
-          </div>
-          <div className="flex items-center gap-4">
-            {lastUpdated && (
-              <span className="text-xs text-slate-600 hidden sm:block">
-                Updated {lastUpdated.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            )}
-            <span className="text-sm text-slate-400 hidden sm:block">{user?.name}</span>
-            <Button variant="ghost" size="sm" onClick={logout} className="flex items-center gap-1.5">
-              <LogOut className="h-4 w-4" /> Logout
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="min-h-screen bg-[#d8d9e0] text-gray-800">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
         {/* Page heading */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-100">Dashboard</h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <h1 className="text-2xl font-extrabold text-gray-800">Dashboard</h1>
+            <p className="text-gray-500 text-xs mt-1">
               {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {[
-              { label: 'Equipment', href: '/admin/equipment' },
-              { label: 'Rentals', href: '/admin/rentals' },
-              { label: 'Returns', href: '/admin/returns' },
-              { label: 'Payments', href: '/admin/payments' },
-              { label: 'Customers', href: '/admin/customers' },
-            ].map((l) => (
-              <Link
-                key={l.href}
-                to={l.href}
-                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-600 transition-colors"
-              >
-                {l.label}
-              </Link>
-            ))}
           </div>
         </div>
 
@@ -147,40 +108,40 @@ const AdminDashboard = () => {
             label="Total Equipment"
             value={equipment.total || 0}
             icon={Package}
-            iconColor="text-cyan-400"
-            iconBg="bg-cyan-900/30 border-cyan-800/50"
+            iconColor="text-teal-600"
+            iconBg="bg-teal-100 border-teal-200"
             sub={`${equipment.available || 0} available`}
           />
           <StatCard
             label="Rented Now"
             value={equipment.rented || 0}
             icon={Wrench}
-            iconColor="text-violet-400"
-            iconBg="bg-violet-900/30 border-violet-800/50"
+            iconColor="text-violet-600"
+            iconBg="bg-violet-100 border-violet-200"
             sub={`${equipment.maintenance || 0} in maintenance`}
           />
           <StatCard
             label="Customers"
             value={customers.total || 0}
             icon={Users}
-            iconColor="text-emerald-400"
-            iconBg="bg-emerald-900/30 border-emerald-800/50"
+            iconColor="text-emerald-600"
+            iconBg="bg-emerald-100 border-emerald-200"
             sub="Active accounts"
           />
           <StatCard
             label="Active Rentals"
             value={rentals.active || 0}
             icon={ClipboardList}
-            iconColor="text-amber-400"
-            iconBg="bg-amber-900/30 border-amber-800/50"
+            iconColor="text-amber-600"
+            iconBg="bg-amber-100 border-amber-200"
             sub={`${rentals.total || 0} total all-time`}
           />
           <StatCard
             label="Revenue This Month"
             value={fmtCurrency(revenue.thisMonth)}
             icon={DollarSign}
-            iconColor="text-primary-400"
-            iconBg="bg-primary-900/30 border-primary-800/50"
+            iconColor="text-orange-600"
+            iconBg="bg-orange-100 border-orange-200"
             trend={revenue.growthPercent}
             trendLabel={`vs $${(revenue.lastMonth || 0).toLocaleString()} last month`}
           />
@@ -188,20 +149,20 @@ const AdminDashboard = () => {
             label="Returns Today"
             value={returnsToday}
             icon={RotateCcw}
-            iconColor="text-rose-400"
-            iconBg="bg-rose-900/30 border-rose-800/50"
+            iconColor="text-rose-600"
+            iconBg="bg-rose-100 border-rose-200"
             sub={`Total revenue: ${fmtCurrency(revenue.total)}`}
           />
         </div>
 
         {/* ── Equipment status mini-bar ────────────────────────────────────── */}
         {equipment.total > 0 && (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold text-slate-300">Equipment Utilization</p>
-              <p className="text-xs text-slate-500">{equipment.total} total units</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-[13px] font-semibold text-gray-700">Equipment Utilization</p>
+              <p className="text-[11px] text-gray-400">{equipment.total} total units</p>
             </div>
-            <div className="flex h-3 rounded-full overflow-hidden gap-0.5">
+            <div className="flex h-2.5 rounded-full overflow-hidden gap-0.5">
               {equipment.rented > 0 && (
                 <div
                   className="bg-violet-500 transition-all"
@@ -226,13 +187,13 @@ const AdminDashboard = () => {
             </div>
             <div className="flex gap-5 mt-2.5">
               {[
-                { label: 'Available', val: equipment.available, color: 'bg-emerald-400' },
-                { label: 'Rented', val: equipment.rented, color: 'bg-violet-400' },
-                { label: 'Maintenance', val: equipment.maintenance, color: 'bg-amber-400' },
+                { label: 'Available', val: equipment.available, color: 'bg-emerald-500' },
+                { label: 'Rented', val: equipment.rented, color: 'bg-violet-500' },
+                { label: 'Maintenance', val: equipment.maintenance, color: 'bg-amber-500' },
               ].map((s) => (
-                <div key={s.label} className="flex items-center gap-1.5 text-xs text-slate-400">
+                <div key={s.label} className="flex items-center gap-1.5 text-xs text-gray-500">
                   <div className={`w-2 h-2 rounded-full ${s.color}`} />
-                  {s.label}: <span className="text-slate-300 font-medium">{s.val}</span>
+                  {s.label}: <span className="text-gray-700 font-medium">{s.val}</span>
                 </div>
               ))}
             </div>
@@ -240,58 +201,58 @@ const AdminDashboard = () => {
         )}
 
         {/* ── Charts row ───────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Revenue Trend — 2/3 width */}
-          <div className="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-6">
+          <div className="xl:col-span-2 bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-sm font-semibold text-slate-200">Revenue Trend</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Monthly inbound payments (12 months)</p>
+                <h3 className="text-[13px] font-semibold text-gray-700">Revenue Trend</h3>
+                <p className="text-[11px] text-gray-400 mt-0.5">Monthly inbound payments (12 months)</p>
               </div>
               <div className="text-right">
-                <p className="text-lg font-bold text-primary-400">{fmtCurrency(revenue.total)}</p>
-                <p className="text-xs text-slate-500">All-time total</p>
+                <p className="text-lg font-bold text-orange-600 tracking-tight">{fmtCurrency(revenue.total)}</p>
+                <p className="text-[11px] text-gray-400">All-time total</p>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={180}>
               <BarChart data={charts?.revenueTrend || []} barSize={18}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#fed7aa" vertical={false} />
                 <XAxis
                   dataKey="label"
-                  tick={{ fill: '#64748b', fontSize: 11 }}
+                  tick={{ fill: '#9ca3af', fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: '#64748b', fontSize: 11 }}
+                  tick={{ fill: '#9ca3af', fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(v) => `$${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
                 />
-                <Tooltip content={<CustomTooltip prefix="$" />} cursor={{ fill: '#1e293b' }} />
+                <Tooltip content={<CustomTooltip prefix="$" />} cursor={{ fill: '#fff7ed' }} />
                 <Bar dataKey="value" name="Revenue" fill={CHART_COLORS.primary} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* Rental Status Donut — 1/3 width */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-slate-200">Rental Status</h3>
-              <p className="text-xs text-slate-500 mt-0.5">Distribution across all rentals</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div className="mb-4">
+              <h3 className="text-[13px] font-semibold text-gray-700">Rental Status</h3>
+              <p className="text-[11px] text-gray-400 mt-0.5">Distribution across all rentals</p>
             </div>
             {(charts?.rentalStatusChart?.length || 0) === 0 ? (
-              <div className="flex items-center justify-center h-[220px] text-slate-600 text-sm">No rental data yet</div>
+              <div className="flex items-center justify-center h-[180px] text-gray-400 text-sm">No rental data yet</div>
             ) : (
               <>
-                <ResponsiveContainer width="100%" height={160}>
+                <ResponsiveContainer width="100%" height={130}>
                   <PieChart>
                     <Pie
                       data={charts.rentalStatusChart}
                       cx="50%"
                       cy="50%"
-                      innerRadius={45}
-                      outerRadius={70}
+                      innerRadius={35}
+                      outerRadius={55}
                       paddingAngle={3}
                       dataKey="value"
                     >
@@ -307,9 +268,9 @@ const AdminDashboard = () => {
                     <div key={s.name} className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
-                        <span className="text-slate-400">{s.name}</span>
+                        <span className="text-gray-500">{s.name}</span>
                       </div>
-                      <span className="text-slate-300 font-semibold">{s.value}</span>
+                      <span className="text-gray-700 font-semibold">{s.value}</span>
                     </div>
                   ))}
                 </div>
@@ -319,18 +280,18 @@ const AdminDashboard = () => {
         </div>
 
         {/* ── Second charts row ─────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {/* Rental Trend Line Chart */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-slate-200">Rental Volume</h3>
-              <p className="text-xs text-slate-500 mt-0.5">New rentals created per month</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div className="mb-4">
+              <h3 className="text-[13px] font-semibold text-gray-700">Rental Volume</h3>
+              <p className="text-[11px] text-gray-400 mt-0.5">New rentals created per month</p>
             </div>
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={160}>
               <LineChart data={charts?.rentalTrend || []}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                <XAxis dataKey="label" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#fed7aa" vertical={false} />
+                <XAxis dataKey="label" tick={{ fill: '#9ca3af', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#9ca3af', fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
                 <Tooltip content={<CustomTooltip />} />
                 <Line
                   type="monotone"
@@ -339,35 +300,35 @@ const AdminDashboard = () => {
                   stroke={CHART_COLORS.emerald}
                   strokeWidth={2.5}
                   dot={{ fill: CHART_COLORS.emerald, r: 3, strokeWidth: 0 }}
-                  activeDot={{ r: 5, fill: CHART_COLORS.emerald, strokeWidth: 2, stroke: '#0f172a' }}
+                  activeDot={{ r: 5, fill: CHART_COLORS.emerald, strokeWidth: 2, stroke: '#fff7ed' }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
           {/* Equipment by Category Bar */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <div className="mb-6">
-              <h3 className="text-sm font-semibold text-slate-200">Fleet by Category</h3>
-              <p className="text-xs text-slate-500 mt-0.5">Equipment availability across categories</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div className="mb-4">
+              <h3 className="text-[13px] font-semibold text-gray-700">Fleet by Category</h3>
+              <p className="text-[11px] text-gray-400 mt-0.5">Equipment availability across categories</p>
             </div>
             {(charts?.categoryChart?.length || 0) === 0 ? (
-              <div className="flex items-center justify-center h-[200px] text-slate-600 text-sm">No equipment data yet</div>
+              <div className="flex items-center justify-center h-[160px] text-gray-400 text-sm">No equipment data yet</div>
             ) : (
-              <ResponsiveContainer width="100%" height={200}>
+              <ResponsiveContainer width="100%" height={160}>
                 <BarChart data={charts.categoryChart} layout="vertical" barSize={10}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-                  <XAxis type="number" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#fed7aa" horizontal={false} />
+                  <XAxis type="number" tick={{ fill: '#9ca3af', fontSize: 11 }} axisLine={false} tickLine={false} />
                   <YAxis
                     type="category"
                     dataKey="name"
-                    tick={{ fill: '#64748b', fontSize: 10 }}
+                    tick={{ fill: '#9ca3af', fontSize: 10 }}
                     axisLine={false}
                     tickLine={false}
                     width={90}
                   />
-                  <Tooltip content={<CustomTooltip />} cursor={{ fill: '#1e293b' }} />
-                  <Legend wrapperStyle={{ fontSize: '11px', color: '#64748b' }} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: '#fff7ed' }} />
+                  <Legend wrapperStyle={{ fontSize: '11px', color: '#6b7280' }} />
                   <Bar dataKey="available" name="Available" fill={CHART_COLORS.emerald} radius={[0, 3, 3, 0]} stackId="a" />
                   <Bar dataKey="rented" name="Rented" fill={CHART_COLORS.violet} radius={[0, 3, 3, 0]} stackId="a" />
                   <Bar dataKey="maintenance" name="Maintenance" fill={CHART_COLORS.amber} radius={[0, 3, 3, 0]} stackId="a" />
@@ -378,41 +339,41 @@ const AdminDashboard = () => {
         </div>
 
         {/* ── Recent Activity ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Recent Rentals */}
-          <div className="xl:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="text-sm font-semibold text-slate-200">Recent Rentals</h3>
-              <Link to="/admin/rentals" className="text-xs text-primary-400 hover:text-primary-300 flex items-center gap-1">
+          <div className="xl:col-span-2 bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-[13px] font-semibold text-gray-700">Recent Rentals</h3>
+              <Link to="/admin/rentals" className="text-[11px] text-orange-600 hover:text-orange-700 flex items-center gap-1 font-medium">
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             {(recentActivity?.rentals?.length || 0) === 0 ? (
-              <p className="text-sm text-slate-600 text-center py-8">No rentals yet</p>
+              <p className="text-[13px] text-gray-400 text-center py-6">No rentals yet</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {recentActivity.rentals.map((r) => (
                   <Link
                     key={r._id}
                     to={`/admin/rentals/${r._id}`}
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/60 transition-colors group"
+                    className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-orange-50 transition-colors group"
                   >
-                    <div className="h-9 w-11 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+                    <div className="h-8 w-10 rounded-lg bg-orange-100 overflow-hidden shrink-0">
                       {r.equipment?.images?.[0] ? (
                         <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="h-4 w-4 text-slate-600" />
+                          <Package className="h-3.5 w-3.5 text-orange-400" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-200 truncate">{r.equipment?.name}</p>
-                      <p className="text-xs text-slate-500 truncate">{r.customer?.name} · {fmtDate(r.createdAt)}</p>
+                      <p className="text-[13px] font-medium text-gray-700 truncate">{r.equipment?.name}</p>
+                      <p className="text-[11px] text-gray-400 truncate">{r.customer?.name} · {fmtDate(r.createdAt)}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <RentalStatusBadge status={r.status} />
-                      <span className="text-xs font-semibold text-primary-400">${r.totalAmount?.toLocaleString()}</span>
+                      <span className="text-xs font-semibold text-orange-600">${r.totalAmount?.toLocaleString()}</span>
                     </div>
                   </Link>
                 ))}
@@ -421,24 +382,24 @@ const AdminDashboard = () => {
           </div>
 
           {/* Recent Payments + Returns */}
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* Recent Payments */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-slate-200">Recent Payments</h3>
-                <Link to="/admin/payments" className="text-xs text-primary-400 hover:text-primary-300">View all</Link>
+            <div className="bg-white border border-orange-200 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-[13px] font-semibold text-gray-700">Recent Payments</h3>
+                <Link to="/admin/payments" className="text-[11px] text-orange-600 hover:text-orange-700 font-medium">View all</Link>
               </div>
               {(recentActivity?.payments?.length || 0) === 0 ? (
-                <p className="text-sm text-slate-600 text-center py-4">No payments yet</p>
+                <p className="text-[13px] text-gray-400 text-center py-3">No payments yet</p>
               ) : (
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {recentActivity.payments.map((p) => (
                     <div key={p._id} className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-slate-300 capitalize">{p.paymentType?.replace('_', ' ')}</p>
-                        <p className="text-xs text-slate-600">{p.customer?.name} · {fmtDate(p.paidAt)}</p>
+                        <p className="text-[13px] text-gray-700 capitalize leading-tight">{p.paymentType?.replace('_', ' ')}</p>
+                        <p className="text-[11px] text-gray-400 mt-0.5">{p.customer?.name} · {fmtDate(p.paidAt)}</p>
                       </div>
-                      <span className={`text-sm font-bold ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
+                      <span className={`text-[13px] font-bold ${p.direction === 'outbound' ? 'text-red-500' : 'text-emerald-600'}`}>
                         {p.direction === 'outbound' ? '-' : '+'}${p.amount?.toLocaleString()}
                       </span>
                     </div>
@@ -448,34 +409,34 @@ const AdminDashboard = () => {
             </div>
 
             {/* Recent Returns */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-slate-200">Recent Returns</h3>
-                <Link to="/admin/returns" className="text-xs text-primary-400 hover:text-primary-300">View all</Link>
+            <div className="bg-white border border-orange-200 rounded-xl p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-[13px] font-semibold text-gray-700">Recent Returns</h3>
+                <Link to="/admin/returns" className="text-[11px] text-orange-600 hover:text-orange-700 font-medium">View all</Link>
               </div>
               {(recentActivity?.returns?.length || 0) === 0 ? (
-                <p className="text-sm text-slate-600 text-center py-4">No returns yet</p>
+                <p className="text-[13px] text-gray-400 text-center py-3">No returns yet</p>
               ) : (
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {recentActivity.returns.map((r) => (
                     <div key={r._id} className="flex items-center gap-2.5">
-                      <div className="h-7 w-8 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+                      <div className="h-6 w-7 rounded-lg bg-orange-100 overflow-hidden shrink-0">
                         {r.equipment?.images?.[0] ? (
                           <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <RotateCcw className="h-3 w-3 text-slate-600" />
+                            <RotateCcw className="h-3 w-3 text-orange-400" />
                           </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-slate-300 truncate">{r.equipment?.name}</p>
-                        <p className="text-xs text-slate-600">{r.customer?.name}</p>
+                        <p className="text-[12px] font-medium text-gray-700 truncate">{r.equipment?.name}</p>
+                        <p className="text-[11px] text-gray-400">{r.customer?.name}</p>
                       </div>
                       {r.isDamaged ? (
-                        <AlertTriangle className="h-4 w-4 text-red-400 shrink-0" />
+                        <AlertTriangle className="h-4 w-4 text-red-500 shrink-0" />
                       ) : (
-                        <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
                       )}
                     </div>
                   ))}
@@ -487,23 +448,23 @@ const AdminDashboard = () => {
 
         {/* ── Quick Nav Cards ───────────────────────────────────────────────── */}
         <div>
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-4">Quick Navigation</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <h2 className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-3">Quick Navigation</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
             {[
-              { label: 'Equipment', href: '/admin/equipment', icon: Package, color: 'text-cyan-400', bg: 'bg-cyan-900/20 border-cyan-900' },
-              { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList, color: 'text-indigo-400', bg: 'bg-indigo-900/20 border-indigo-900' },
-              { label: 'Returns', href: '/admin/returns', icon: RotateCcw, color: 'text-primary-400', bg: 'bg-primary-900/20 border-primary-900' },
-              { label: 'Payments', href: '/admin/payments', icon: DollarSign, color: 'text-emerald-400', bg: 'bg-emerald-900/20 border-emerald-900' },
-              { label: 'Customers', href: '/admin/customers', icon: Users, color: 'text-violet-400', bg: 'bg-violet-900/20 border-violet-900' },
+              { label: 'Equipment', href: '/admin/equipment', icon: Package, color: 'text-teal-600', bg: 'bg-white border-teal-200   hover:bg-teal-50' },
+              { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList, color: 'text-indigo-600', bg: 'bg-white border-indigo-200 hover:bg-indigo-50' },
+              { label: 'Returns', href: '/admin/returns', icon: RotateCcw, color: 'text-orange-600', bg: 'bg-white border-orange-300 hover:bg-orange-50' },
+              { label: 'Payments', href: '/admin/payments', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-white border-emerald-200 hover:bg-emerald-50' },
+              { label: 'Customers', href: '/admin/customers', icon: Users, color: 'text-violet-600', bg: 'bg-white border-violet-200 hover:bg-violet-50' },
             ].map((card) => (
               <Link
                 key={card.href}
                 to={card.href}
-                className={`flex items-center gap-3 p-4 rounded-xl border ${card.bg} hover:bg-slate-800/50 transition-all group`}
+                className={`flex items-center gap-2.5 p-3 rounded-xl border shadow-sm ${card.bg} transition-all group`}
               >
-                <card.icon className={`h-5 w-5 ${card.color} shrink-0`} />
-                <span className="text-sm font-medium text-slate-300 group-hover:text-slate-100 transition-colors">{card.label}</span>
-                <ArrowRight className="h-4 w-4 text-slate-600 group-hover:text-slate-400 ml-auto transition-colors" />
+                <card.icon className={`h-4 w-4 ${card.color} shrink-0`} />
+                <span className="text-[13px] font-medium text-gray-600 group-hover:text-gray-800 transition-colors">{card.label}</span>
+                <ArrowRight className="h-3 w-3 text-gray-400 group-hover:text-gray-600 ml-auto transition-colors" />
               </Link>
             ))}
           </div>

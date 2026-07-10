@@ -11,10 +11,10 @@ const fmt = (d) =>
   new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
 const TYPE_CONFIG = {
-  advance: { label: 'Advance', cls: 'bg-blue-900/40 text-blue-400 border-blue-800' },
-  balance: { label: 'Balance', cls: 'bg-emerald-900/40 text-emerald-400 border-emerald-800' },
-  damage_charge: { label: 'Damage', cls: 'bg-red-900/40 text-red-400 border-red-800' },
-  deposit_refund: { label: 'Deposit Refund', cls: 'bg-yellow-900/40 text-yellow-400 border-yellow-800' },
+  advance: { label: 'Advance', cls: 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-md shadow-blue-500/20 border border-white/20' },
+  balance: { label: 'Balance', cls: 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md shadow-emerald-500/20 border border-white/20' },
+  damage_charge: { label: 'Damage', cls: 'bg-gradient-to-r from-red-500 to-rose-400 text-white shadow-md shadow-red-500/20 border border-white/20' },
+  deposit_refund: { label: 'Deposit Refund', cls: 'bg-gradient-to-r from-orange-500 to-amber-400 text-white shadow-md shadow-orange-500/20 border border-white/20' },
 };
 
 const METHOD_ICONS = {
@@ -61,41 +61,40 @@ const AdminPayments = () => {
   const outboundTotal = payments.filter((p) => p.direction === 'outbound').reduce((s, p) => s + p.amount, 0);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-100">Payment Ledger</h1>
-          <p className="text-slate-400 text-sm mt-1">{pagination.total} total transaction{pagination.total !== 1 ? 's' : ''}</p>
+        <div className="mb-5">
+          <h1 className="text-2xl font-bold text-gray-800">Payment Ledger</h1>
+          <p className="text-gray-500 text-xs mt-1">{pagination.total} total transaction{pagination.total !== 1 ? 's' : ''}</p>
         </div>
 
         {/* Quick stats */}
-        <div className="grid grid-cols-3 gap-4 mb-7">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-            <p className="text-xs text-slate-500 mb-1">Total Collected</p>
-            <p className="text-xl font-bold text-emerald-400">${inboundTotal.toFixed(2)}</p>
+        <div className="grid grid-cols-3 gap-4 mb-5">
+          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm">
+            <p className="text-[11px] text-gray-500 mb-0.5">Total Collected</p>
+            <p className="text-lg font-bold text-emerald-600">${inboundTotal.toFixed(2)}</p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-            <p className="text-xs text-slate-500 mb-1">Total Refunded</p>
-            <p className="text-xl font-bold text-red-400">${outboundTotal.toFixed(2)}</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm">
+            <p className="text-[11px] text-gray-500 mb-0.5">Total Refunded</p>
+            <p className="text-lg font-bold text-red-500">${outboundTotal.toFixed(2)}</p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
-            <p className="text-xs text-slate-500 mb-1">Net Revenue</p>
-            <p className="text-xl font-bold text-primary-400">${(inboundTotal - outboundTotal).toFixed(2)}</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm">
+            <p className="text-[11px] text-gray-500 mb-0.5">Net Revenue</p>
+            <p className="text-lg font-bold text-orange-600">${(inboundTotal - outboundTotal).toFixed(2)}</p>
           </div>
         </div>
 
         {/* Type filter tabs */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2.5 mb-6">
           {FILTER_TABS.map((f) => (
             <button
               key={f.value}
               onClick={() => { setTypeFilter(f.value); setPage(1); }}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                typeFilter === f.value
-                  ? 'bg-primary-900/50 text-primary-400 border border-primary-800'
-                  : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-600'
-              }`}
+              className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 transform ${typeFilter === f.value
+                ? 'bg-gradient-to-r from-[#4558be] to-indigo-500 text-white font-bold shadow-md shadow-indigo-500/30 border border-indigo-400/50 -translate-y-0.5'
+                : 'bg-white text-gray-600 font-semibold border border-gray-200 shadow-sm hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md hover:-translate-y-0.5'
+                }`}
             >
               {f.label}
             </button>
@@ -106,71 +105,73 @@ const AdminPayments = () => {
           <div className="flex justify-center items-center py-32"><Spinner size="lg" /></div>
         ) : payments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32">
-            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 mb-4">
-              <DollarSign className="h-10 w-10 text-slate-600" />
+            <div className="p-4 rounded-2xl bg-white border border-orange-200 mb-4 shadow-sm">
+              <DollarSign className="h-10 w-10 text-orange-300" />
             </div>
-            <p className="text-slate-400">No payments found</p>
+            <p className="text-gray-400">No payments found</p>
           </div>
         ) : (
           <>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <div className="bg-white border border-orange-200 rounded-xl overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-slate-800">
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Method</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Date</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Recorded By</th>
-                      <th className="text-right px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
+                    <tr className="border-b border-orange-200 bg-orange-50">
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Method</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Recorded By</th>
+                      <th className="text-right px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800">
+                  <tbody className="divide-y divide-orange-100">
                     {payments.map((p) => {
-                      const typeCfg = TYPE_CONFIG[p.paymentType] || { label: p.paymentType, cls: 'bg-slate-800 text-slate-400 border-slate-700' };
+                      const typeCfg = TYPE_CONFIG[p.paymentType] || { label: p.paymentType, cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' };
                       return (
-                        <tr key={p._id} className="hover:bg-slate-800/40 transition-colors">
-                          <td className="px-5 py-4">
+                        <tr key={p._id} className="hover:bg-orange-50 transition-colors">
+                          <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
-                              <div className="h-7 w-7 rounded-full bg-primary-900/40 border border-primary-800 flex items-center justify-center shrink-0">
-                                <span className="text-xs font-semibold text-primary-400">
+                              <div className="h-8 w-8 rounded-full bg-[#4558be]/10 border border-[#4558be]/20 text-[#4558be] font-bold flex items-center justify-center shrink-0">
+                                <span className="text-[13px]">
                                   {p.customer?.name?.charAt(0).toUpperCase()}
                                 </span>
                               </div>
                               <div>
-                                <p className="text-sm text-slate-300">{p.customer?.name}</p>
-                                <p className="text-xs text-slate-500">{p.customer?.email}</p>
+                                <p className="text-[13px] text-gray-700 truncate max-w-[120px]">{p.customer?.name}</p>
+                                <p className="text-[11px] text-gray-400 truncate max-w-[120px]">{p.customer?.email}</p>
                               </div>
                             </div>
                           </td>
-                          <td className="px-5 py-4">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${typeCfg.cls}`}>
-                              {typeCfg.label}
-                            </span>
+                          <td className="px-4 py-3">
+                            <div className="scale-90 origin-left">
+                              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${typeCfg.cls}`}>
+                                {typeCfg.label}
+                              </span>
+                            </div>
                           </td>
-                          <td className="px-5 py-4">
-                            <span className="text-sm text-slate-400 flex items-center gap-1.5">
+                          <td className="px-4 py-3">
+                            <span className="text-[13px] text-gray-500 flex items-center gap-1.5">
                               <span>{METHOD_ICONS[p.paymentMethod]}</span>
                               <span className="capitalize">{p.paymentMethod?.replace('_', ' ')}</span>
                             </span>
                           </td>
-                          <td className="px-5 py-4">
-                            <p className="text-sm text-slate-300">{fmt(p.paidAt)}</p>
+                          <td className="px-4 py-3">
+                            <p className="text-[13px] text-gray-700">{fmt(p.paidAt)}</p>
                           </td>
-                          <td className="px-5 py-4">
-                            <p className="text-sm text-slate-400">{p.recordedBy?.name}</p>
-                            <p className="text-xs text-slate-600">{p.recordedBy?.role}</p>
+                          <td className="px-4 py-3">
+                            <p className="text-[13px] text-gray-600">{p.recordedBy?.name}</p>
+                            <p className="text-[11px] text-gray-400 capitalize">{p.recordedBy?.role}</p>
                           </td>
-                          <td className="px-5 py-4 text-right">
-                            <div className={`flex items-center justify-end gap-1.5 font-semibold ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
+                          <td className="px-4 py-3 text-right">
+                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-[13px] ${p.direction === 'outbound' ? 'text-red-500' : 'text-emerald-600'}`}>
                               {p.direction === 'outbound'
-                                ? <ArrowUpRight className="h-3.5 w-3.5" />
-                                : <ArrowDownLeft className="h-3.5 w-3.5" />}
+                                ? <ArrowUpRight className="h-3 w-3" />
+                                : <ArrowDownLeft className="h-3 w-3" />}
                               ${p.amount.toFixed(2)}
                             </div>
                             {p.transactionId && (
-                              <p className="text-xs font-mono text-slate-600 mt-0.5">{p.transactionId}</p>
+                              <p className="text-[11px] font-mono text-gray-400 mt-0.5">{p.transactionId}</p>
                             )}
                           </td>
                         </tr>
@@ -183,17 +184,17 @@ const AdminPayments = () => {
 
             {pagination.pages > 1 && (
               <div className="flex items-center justify-between mt-6">
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-gray-500">
                   Showing {(pagination.page - 1) * 20 + 1}–{Math.min(pagination.page * 20, pagination.total)} of {pagination.total}
                 </p>
                 <div className="flex items-center gap-2">
                   <button onClick={() => setPage((p) => p - 1)} disabled={page <= 1}
-                    className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                    className="p-2 rounded-lg bg-white border border-orange-300 text-gray-500 hover:text-orange-700 hover:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm">
                     <ChevronLeft className="h-4 w-4" />
                   </button>
-                  <span className="text-sm text-slate-300 px-2">{pagination.page} / {pagination.pages}</span>
+                  <span className="text-sm text-gray-600 px-2">{pagination.page} / {pagination.pages}</span>
                   <button onClick={() => setPage((p) => p + 1)} disabled={page >= pagination.pages}
-                    className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                    className="p-2 rounded-lg bg-white border border-orange-300 text-gray-500 hover:text-orange-700 hover:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm">
                     <ChevronRight className="h-4 w-4" />
                   </button>
                 </div>

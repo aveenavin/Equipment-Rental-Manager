@@ -13,13 +13,14 @@ const fmt = (d) =>
 
 const ConditionBadge = ({ condition }) => {
   const map = {
-    excellent: 'bg-emerald-900/40 text-emerald-400 border-emerald-800',
-    good: 'bg-blue-900/40 text-blue-400 border-blue-800',
-    fair: 'bg-yellow-900/40 text-yellow-400 border-yellow-800',
-    poor: 'bg-red-900/40 text-red-400 border-red-800',
+    excellent: 'bg-gradient-to-r from-emerald-500 to-teal-400 text-white shadow-md shadow-emerald-500/20 border border-white/20',
+    good: 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-md shadow-blue-500/20 border border-white/20',
+    fair: 'bg-gradient-to-r from-orange-500 to-amber-400 text-white shadow-md shadow-orange-500/20 border border-white/20',
+    poor: 'bg-gradient-to-r from-red-500 to-rose-400 text-white shadow-md shadow-red-500/20 border border-white/20',
   };
+  const cls = map[condition] || 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20';
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${map[condition] || 'bg-slate-800 text-slate-400 border-slate-700'}`}>
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${cls}`}>
       {condition}
     </span>
   );
@@ -50,19 +51,19 @@ const AdminReturns = () => {
   useEffect(() => { loadReturns(); }, [loadReturns]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-100">Return Records</h1>
-          <p className="text-slate-400 text-sm mt-1">
+        <div className="mb-5">
+          <h1 className="text-2xl font-bold text-slate-100">Return Records</h1>
+          <p className="text-slate-400 text-xs mt-1">
             {pagination.total} total return{pagination.total !== 1 ? 's' : ''} processed
           </p>
         </div>
 
         {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2.5 mb-6">
           {[
             { value: '', label: 'All Returns' },
             { value: 'false', label: 'Clean Returns' },
@@ -71,14 +72,13 @@ const AdminReturns = () => {
             <button
               key={f.value}
               onClick={() => { setDamageFilter(f.value); setPage(1); }}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                damageFilter === f.value
-                  ? 'bg-primary-900/50 text-primary-400 border border-primary-800'
-                  : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-600'
-              }`}
+              className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 transform flex items-center gap-1.5 ${damageFilter === f.value
+                ? 'bg-gradient-to-r from-[#4558be] to-indigo-500 text-white font-bold shadow-md shadow-indigo-500/30 border border-indigo-400/50 -translate-y-0.5'
+                : 'bg-white text-gray-600 font-semibold border border-gray-200 shadow-sm hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md hover:-translate-y-0.5'
+                }`}
             >
-              {f.value === 'true' && <AlertTriangle className="h-3.5 w-3.5" />}
-              {f.value === 'false' && <CheckCircle className="h-3.5 w-3.5" />}
+              {f.value === 'true' && <AlertTriangle className={`h-3.5 w-3.5 ${damageFilter === f.value ? 'text-white' : 'text-gray-400'}`} />}
+              {f.value === 'false' && <CheckCircle className={`h-3.5 w-3.5 ${damageFilter === f.value ? 'text-white' : 'text-gray-400'}`} />}
               {f.label}
             </button>
           ))}
@@ -102,98 +102,98 @@ const AdminReturns = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Return Date</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Condition</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Damage</th>
-                      <th className="text-left px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Deposit Refund</th>
-                      <th className="text-right px-5 py-3.5 text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Return Date</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Condition</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Damage</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Deposit Refund</th>
+                      <th className="text-right px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
                     {returns.map((ret) => (
                       <tr key={ret._id} className="hover:bg-slate-800/40 transition-colors">
                         {/* Equipment */}
-                        <td className="px-5 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-10 w-12 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2.5">
+                            <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
                               {ret.equipment?.images?.[0] ? (
                                 <img src={ret.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <Package className="h-5 w-5 text-slate-600" />
+                                  <Package className="h-4 w-4 text-slate-600" />
                                 </div>
                               )}
                             </div>
                             <div>
-                              <p className="text-sm font-medium text-slate-200 max-w-[160px] truncate">{ret.equipment?.name}</p>
-                              <p className="text-xs text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-[13px] font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
+                              <p className="text-[11px] text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>
 
                         {/* Customer */}
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            <div className="h-7 w-7 rounded-full bg-primary-900/40 border border-primary-800 flex items-center justify-center shrink-0">
-                              <span className="text-xs font-semibold text-primary-400">
+                            <div className="h-8 w-8 rounded-full bg-[#4558be]/10 border border-[#4558be]/20 text-[#4558be] font-bold flex items-center justify-center shrink-0">
+                              <span className="text-[13px]">
                                 {ret.customer?.name?.charAt(0).toUpperCase()}
                               </span>
                             </div>
                             <div>
-                              <p className="text-sm text-slate-300">{ret.customer?.name}</p>
-                              <p className="text-xs text-slate-500">{ret.customer?.email}</p>
+                              <p className="text-[13px] text-slate-300 truncate max-w-[120px]">{ret.customer?.name}</p>
+                              <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{ret.customer?.email}</p>
                             </div>
                           </div>
                         </td>
 
                         {/* Return Date */}
-                        <td className="px-5 py-4">
-                          <p className="text-sm text-slate-300">{fmt(ret.returnDate)}</p>
-                          <p className="text-xs text-slate-500">by {ret.processedBy?.name}</p>
+                        <td className="px-4 py-3">
+                          <p className="text-[13px] text-slate-300">{fmt(ret.returnDate)}</p>
+                          <p className="text-[11px] text-slate-500">by {ret.processedBy?.name}</p>
                         </td>
 
                         {/* Condition */}
-                        <td className="px-5 py-4">
-                          <ConditionBadge condition={ret.conditionAtReturn} />
+                        <td className="px-4 py-3">
+                          <div className="scale-90 origin-left"><ConditionBadge condition={ret.conditionAtReturn} /></div>
                         </td>
 
                         {/* Damage */}
-                        <td className="px-5 py-4">
+                        <td className="px-4 py-3">
                           {ret.isDamaged ? (
                             <div className="flex items-center gap-1.5">
-                              <AlertTriangle className="h-4 w-4 text-red-400 shrink-0" />
-                              <span className="text-sm text-red-400 font-medium">
+                              <AlertTriangle className="h-3.5 w-3.5 text-red-400 shrink-0" />
+                              <span className="text-[13px] text-red-400 font-medium">
                                 -${ret.damageCharges?.toFixed(2)}
                               </span>
                             </div>
                           ) : (
                             <div className="flex items-center gap-1.5">
-                              <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0" />
-                              <span className="text-sm text-emerald-400">Clean</span>
+                              <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                              <span className="text-[13px] text-emerald-600">Clean</span>
                             </div>
                           )}
                         </td>
 
                         {/* Deposit Refund */}
-                        <td className="px-5 py-4">
-                          <p className={`text-sm font-semibold ${ret.depositRefunded > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <td className="px-4 py-3">
+                          <p className={`text-[13px] font-semibold ${ret.depositRefunded > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
                             ${ret.depositRefunded?.toFixed(2)}
                           </p>
                           {ret.depositDeducted > 0 && (
-                            <p className="text-xs text-slate-500">Deducted: ${ret.depositDeducted?.toFixed(2)}</p>
+                            <p className="text-[11px] text-slate-500">Deducted: ${ret.depositDeducted?.toFixed(2)}</p>
                           )}
                         </td>
 
                         {/* Actions */}
-                        <td className="px-5 py-4 text-right">
+                        <td className="px-4 py-3 text-right">
                           <Link
                             to={`/admin/returns/${ret._id}`}
-                            className="inline-flex items-center p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
+                            className="inline-flex items-center p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
                             title="View details"
                           >
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-3.5 w-3.5" />
                           </Link>
                         </td>
                       </tr>
