@@ -39,4 +39,12 @@ const loginValidation = [
   body('password').notEmpty().withMessage('Password is required'),
 ];
 
-module.exports = { registerValidation, loginValidation };
+const resendVerificationValidation = [
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Please provide a valid email address')
+    .normalizeEmail(),
+];
+
+module.exports = { registerValidation, loginValidation, resendVerificationValidation };

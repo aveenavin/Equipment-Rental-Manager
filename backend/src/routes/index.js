@@ -7,6 +7,7 @@ const rentalRoutes = require('./rentalRoutes');
 const returnRoutes = require('./returnRoutes');
 const paymentRoutes = require('./paymentRoutes');
 const dashboardRoutes = require('./dashboardRoutes');
+const maintenanceRoutes = require('./maintenanceRoutes');
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.use('/rentals', rentalRoutes);
 router.use('/returns', returnRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/maintenance', maintenanceRoutes);
 
 // Catch-all for unknown /api/v1/* routes — must be last
 router.all('*', (req, res, next) => {

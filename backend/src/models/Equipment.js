@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const imageSchema = new mongoose.Schema(
+
   {
     url: { type: String, required: true },
     publicId: { type: String, required: true },
@@ -9,6 +10,7 @@ const imageSchema = new mongoose.Schema(
 );
 
 const equipmentSchema = new mongoose.Schema(
+  
   {
     name: {
       type: String,
@@ -83,7 +85,11 @@ const equipmentSchema = new mongoose.Schema(
       required: true,
     },
   },
+
+
   { timestamps: true }
+
+
 );
 
 // Auto-generate slug from name before saving

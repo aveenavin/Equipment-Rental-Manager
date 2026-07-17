@@ -8,7 +8,8 @@ import {
   DollarSign,
   Users,
   Menu,
-  X
+  X,
+  Wrench,
 } from 'lucide-react';
 
 const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
@@ -17,6 +18,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
     { label: 'Equipment', href: '/admin/equipment', icon: Package },
     { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList },
     { label: 'Returns', href: '/admin/returns', icon: RotateCcw },
+    { label: 'Maintenance', href: '/admin/maintenance', icon: Wrench },
     { label: 'Payments', href: '/admin/payments', icon: DollarSign },
     { label: 'Customers', href: '/admin/customers', icon: Users },
   ];

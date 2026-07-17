@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema(
+
   {
     name: {
       type: String,
@@ -44,8 +45,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+
+    // Email verification
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      select: false, // never returned in queries unless explicitly selected
+    },
+    verificationTokenExpires: {
+      type: Date,
+      select: false,
+    },
   },
+
+
   { timestamps: true }
+
+  
 );
 
 // Hash password before saving (only if modified)

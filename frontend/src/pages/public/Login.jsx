@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Wrench, AlertCircle } from 'lucide-react';
+import { Wrench, AlertCircle, Mail } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { loginUser } from '../../services/authService';
 import Input from '../../components/ui/Input';
@@ -21,15 +21,18 @@ const loginSchema = z.object({
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const [unverifiedEmail, setUnverifiedEmail] = useState(null);
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
     setError,
   } = useForm({ resolver: zodResolver(loginSchema) });
 
   const onSubmit = async (data) => {
+    setUnverifiedEmail(null);
     try {
       const response = await loginUser(data);
       const user = response.data.user;
@@ -44,6 +47,12 @@ const Login = () => {
     } catch (err) {
       const message =
         err.response?.data?.message || 'Login failed. Please try again.';
+
+      // Detect unverified-email block — show resend link
+      if (message.toLowerCase().includes('verify')) {
+        setUnverifiedEmail(getValues('email'));
+      }
+
       setError('root', { message });
     }
   };
@@ -64,9 +73,27 @@ const Login = () => {
         <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 shadow-xl shadow-black/30">
           {/* Root error */}
           {errors.root && (
-            <div className="mb-5 flex items-start gap-3 px-4 py-3 rounded-lg bg-red-950/50 border border-red-800 text-red-300 text-sm">
-              <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-              <span>{errors.root.message}</span>
+            <div className="mb-5 rounded-lg bg-red-950/50 border border-red-800 overflow-hidden">
+              <div className="flex items-start gap-3 px-4 py-3 text-red-300 text-sm">
+                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>{errors.root.message}</span>
+              </div>
+              {/* Resend verification shortcut */}
+              {unverifiedEmail && (
+                <div className="px-4 py-2.5 bg-red-950/60 border-t border-red-900 flex items-center gap-2">
+                  <Mail className="h-3.5 w-3.5 text-red-400 shrink-0" />
+                  <p className="text-xs text-red-400">
+                    Didn't get the email?{' '}
+                    <Link
+                      to="/check-email"
+                      state={{ email: unverifiedEmail }}
+                      className="font-semibold text-orange-400 hover:text-orange-300 underline underline-offset-2 transition-colors"
+                    >
+                      Resend verification link
+                    </Link>
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

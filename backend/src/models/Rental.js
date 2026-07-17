@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const RENTAL_STATUSES = ['pending', 'confirmed', 'checked_out', 'returned', 'cancelled'];
 
 const rentalSchema = new mongoose.Schema(
+  
   {
     customer: {
       type: mongoose.Schema.Types.ObjectId,
@@ -82,7 +83,13 @@ const rentalSchema = new mongoose.Schema(
       default: null,
     },
   },
+
+
+
   { timestamps: true }
+
+
+
 );
 
 // Compound index for fast availability queries

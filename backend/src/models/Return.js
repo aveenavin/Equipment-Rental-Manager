@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const returnSchema = new mongoose.Schema(
+  
   {
     rental: {
       type: mongoose.Schema.Types.ObjectId,
@@ -85,7 +86,11 @@ const returnSchema = new mongoose.Schema(
       default: null,
     },
   },
+
   { timestamps: true }
+
+
+
 );
 
 const Return = mongoose.model('Return', returnSchema);

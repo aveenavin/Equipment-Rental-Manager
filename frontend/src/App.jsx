@@ -10,6 +10,8 @@ import AdminLayout from './layouts/AdminLayout';
 import Home from './pages/public/Home';
 import Login from './pages/public/Login';
 import Register from './pages/public/Register';
+import CheckEmail from './pages/public/CheckEmail';
+import VerifyEmail from './pages/public/VerifyEmail';
 
 // Customer pages
 import CustomerDashboard from './pages/customer/Dashboard';
@@ -26,6 +28,7 @@ import AdminRentals from './pages/admin/AdminRentals';
 import AdminReturns from './pages/admin/AdminReturns';
 import ReturnDetail from './pages/admin/ReturnDetail';
 import AdminPayments from './pages/admin/AdminPayments';
+import MaintenanceLogs from './pages/admin/MaintenanceLogs';
 
 // Shared pages
 import RentalDetail from './pages/shared/RentalDetail';
@@ -66,6 +69,8 @@ function App() {
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="check-email" element={<CheckEmail />} />
+            <Route path="verify-email" element={<VerifyEmail />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 
@@ -109,6 +114,7 @@ function App() {
               <Route path="rentals/:id" element={<RentalDetail />} />
               <Route path="returns" element={<AdminReturns />} />
               <Route path="returns/:id" element={<ReturnDetail />} />
+              <Route path="maintenance" element={<MaintenanceLogs />} />
               <Route path="payments" element={<AdminPayments />} />
             </Route>
           </Route>

@@ -3,9 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
 import { Wrench, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 import { registerUser } from '../../services/authService';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
@@ -36,7 +34,6 @@ const registerSchema = z
 
 const Register = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
 
   const {
     register,
@@ -47,11 +44,10 @@ const Register = () => {
 
   const onSubmit = async ({ name, email, password }) => {
     try {
-      const response = await registerUser({ name, email, password });
-      const user = response.data.user;
-      setUser(user);
-      toast.success('Account created! Welcome aboard.');
-      navigate('/dashboard', { replace: true });
+      await registerUser({ name, email, password });
+      // Registration successful — redirect to "check your email" page.
+      // Do NOT set auth state — user is not logged in until email is verified.
+      navigate('/check-email', { state: { email }, replace: true });
     } catch (err) {
       const message =
         err.response?.data?.message || 'Registration failed. Please try again.';

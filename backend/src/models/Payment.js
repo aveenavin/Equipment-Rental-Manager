@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const paymentSchema = new mongoose.Schema(
+  
   {
     rental: {
       type: mongoose.Schema.Types.ObjectId,
@@ -73,7 +74,11 @@ const paymentSchema = new mongoose.Schema(
       default: null,
     },
   },
+
+
   { timestamps: true }
+
+
 );
 
 // Compound index for per-rental payment lookup and type filtering

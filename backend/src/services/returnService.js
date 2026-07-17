@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Return = require('../models/Return');
 const Rental = require('../models/Rental');
 const Equipment = require('../models/Equipment');
+const MaintenanceLog = require('../models/MaintenanceLog');
 const AppError = require('../utils/AppError');
 
 /**
@@ -90,6 +91,26 @@ const processReturn = async ({
       },
       { session }
     );
+
+    // 4. If damaged: automatically create a MaintenanceLog so the
+    //    maintenance list stays the single source of truth for all
+    //    equipment currently in 'maintenance' status.
+    if (damaged) {
+      await MaintenanceLog.create(
+        [
+          {
+            equipment: rental.equipment._id,
+            reportedBy: processedById,
+            description: damageDescription
+              ? `Post-return damage: ${damageDescription.trim()}`
+              : 'Post-return damage reported during return inspection.',
+            priority: 'high',
+            triggeredByReturn: returnRecord._id,
+          },
+        ],
+        { session }
+      );
+    }
 
     await session.commitTransaction();
   } catch (err) {

@@ -27,6 +27,12 @@ const protect = catchAsync(async (req, res, next) => {
     );
   }
 
+  if (!user.isVerified) {
+    return next(
+      new AppError('Please verify your email to access this resource.', 403)
+    );
+  }
+
   req.user = user;
   next();
 });

@@ -14,6 +14,7 @@ const AdminLayout = () => {
   if (location.pathname.includes('/admin/equipment')) title = 'Equipment';
   else if (location.pathname.includes('/admin/rentals')) title = 'Rentals';
   else if (location.pathname.includes('/admin/returns')) title = 'Returns';
+  else if (location.pathname.includes('/admin/maintenance')) title = 'Maintenance';
   else if (location.pathname.includes('/admin/payments')) title = 'Payments';
   else if (location.pathname.includes('/admin/customers')) title = 'Customers';
 
