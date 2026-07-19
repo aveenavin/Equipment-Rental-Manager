@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import PublicLayout from './layouts/PublicLayout';
 import ProtectedLayout from './layouts/ProtectedLayout';
 import AdminLayout from './layouts/AdminLayout';
+import CustomerLayout from './layouts/CustomerLayout';
 
 // Public pages
 import Home from './pages/public/Home';
@@ -74,29 +75,16 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
 
-          {/* Customer dashboard + protected pages */}
+          {/* Customer-facing routes — wrapped in shared CustomerLayout shell */}
           <Route
-            path="/dashboard"
             element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
           >
-            <Route index element={<CustomerDashboard />} />
-          </Route>
-
-          {/* Equipment catalog — any authenticated user */}
-          <Route
-            path="/catalog"
-            element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
-          >
-            <Route index element={<EquipmentCatalog />} />
-          </Route>
-
-          {/* Customer rental routes */}
-          <Route
-            path="/my-rentals"
-            element={<ProtectedLayout allowedRoles={['customer', 'admin', 'staff']} />}
-          >
-            <Route index element={<MyRentals />} />
-            <Route path=":id" element={<RentalDetail />} />
+            <Route element={<CustomerLayout />}>
+              <Route path="/dashboard" element={<CustomerDashboard />} />
+              <Route path="/catalog"   element={<EquipmentCatalog />} />
+              <Route path="/my-rentals"      element={<MyRentals />} />
+              <Route path="/my-rentals/:id"  element={<RentalDetail />} />
+            </Route>
           </Route>
 
           {/* Admin & Staff protected routes */}
