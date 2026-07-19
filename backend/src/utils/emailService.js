@@ -1,49 +1,65 @@
-const { Resend } = require('resend');
+'use strict';
+
+const nodemailer = require('nodemailer');
+
+// ─── Transport ─────────────────────────────────────────────────────────────────
 
 /**
- * Lazily initialise the Resend client so the module can load even before
- * the server fully validates env vars. The client is created once per
- * process and reused across all calls.
+ * Lazily create and cache the Nodemailer transporter.
+ * The transporter is created once per process and reused across all calls.
+ * Required env vars:
+ *   SMTP_HOST  — e.g. smtp.gmail.com
+ *   SMTP_PORT  — e.g. 465 (SSL) or 587 (TLS/STARTTLS)
+ *   SMTP_USER  — your full Gmail address
+ *   SMTP_PASS  — Gmail App Password (NOT your account password)
+ *   SMTP_FROM  — display name + address, e.g. EquipRental <noreply@gmail.com>
  */
-let _resend = null;
-const getClient = () => {
-  if (!_resend) {
-    if (!process.env.RESEND_API_KEY) {
-      throw new Error(
-        '[emailService] RESEND_API_KEY is not set. Add it to your .env file.'
-      );
-    }
-    _resend = new Resend(process.env.RESEND_API_KEY);
+let _transporter = null;
+
+const getTransporter = () => {
+  if (_transporter) return _transporter;
+
+  const required = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'];
+  const missing = required.filter((key) => !process.env[key]);
+
+  if (missing.length) {
+    throw new Error(
+      `[emailService] Missing required env vars: ${missing.join(', ')}. Add them to your .env file.`
+    );
   }
-  return _resend;
+
+  const port = parseInt(process.env.SMTP_PORT, 10);
+
+  _transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port,
+    // Port 465 → implicit SSL; anything else → STARTTLS upgrade
+    secure: port === 465,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  return _transporter;
 };
 
-const getFromAddress = () =>
-  `${process.env.EMAIL_FROM_NAME || 'EquipRental'} <${process.env.EMAIL_FROM_ADDRESS}>`;
-
-// ─── Helpers ───────────────────────────────────────────────────────────────────
+// ─── Internal send helper ───────────────────────────────────────────────────────
 
 /**
- * Send an email via Resend and throw on failure.
- * Resend returns { data, error } instead of throwing — we normalise that here
- * so callers can use standard try/catch.
+ * Send an email via Nodemailer and throw on failure.
+ *
+ * @param {{ to: string, subject: string, html: string }} options
  */
 const send = async ({ to, subject, html }) => {
-  const client = getClient();
+  const transporter = getTransporter();
 
-  const { data, error } = await client.emails.send({
-    from: getFromAddress(),
-    to: [to],
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM,
+    to,
     subject,
     html,
   });
-
-  if (error) {
-    console.error('[emailService] Resend API error:', error);
-    throw new Error(error.message || 'Failed to send email via Resend.');
-  }
-
-  return data;
 };
 
 // ─── Public API ────────────────────────────────────────────────────────────────
@@ -51,7 +67,7 @@ const send = async ({ to, subject, html }) => {
 /**
  * Send the initial email-verification link after registration.
  *
- * @param {string} email      — recipient address
+ * @param {string} email      — recipient address (entered during signup)
  * @param {string} name       — recipient display name
  * @param {string} verifyUrl  — full verification URL containing the raw token
  */
@@ -66,6 +82,10 @@ const sendVerificationEmail = async (email, name, verifyUrl) => {
 /**
  * Send a fresh verification link when the user requests a resend.
  * The previous token is already invalidated by authService before this is called.
+ *
+ * @param {string} email      — recipient address
+ * @param {string} name       — recipient display name
+ * @param {string} verifyUrl  — full verification URL containing the raw token
  */
 const sendResendVerificationEmail = async (email, name, verifyUrl) => {
   await send({
