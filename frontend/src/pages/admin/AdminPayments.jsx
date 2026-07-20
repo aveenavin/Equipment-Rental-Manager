@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import {
-  DollarSign, ArrowDownLeft, ArrowUpRight, CreditCard,
+  IndianRupee, ArrowDownLeft, ArrowUpRight, CreditCard,
   ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import { fetchPayments } from '../../services/paymentService';
 
 const fmt = (d) =>
-  new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  new Date(d).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
 
 const TYPE_CONFIG = {
   advance: { label: 'Advance', cls: 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-md shadow-blue-500/20 border border-white/20' },
@@ -65,23 +65,23 @@ const AdminPayments = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         <div className="mb-5">
-          <h1 className="text-2xl font-bold text-gray-800">Payment Ledger</h1>
+          <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 drop-shadow-sm pb-1">Payment Ledger</h1>
           <p className="text-gray-500 text-xs mt-1">{pagination.total} total transaction{pagination.total !== 1 ? 's' : ''}</p>
         </div>
 
         {/* Quick stats */}
-        <div className="grid grid-cols-3 gap-4 mb-5">
-          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm">
-            <p className="text-[11px] text-gray-500 mb-0.5">Total Collected</p>
-            <p className="text-lg font-bold text-emerald-600">${inboundTotal.toFixed(2)}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm min-w-0">
+            <p className="text-[11px] text-gray-500 mb-0.5 truncate">Total Collected</p>
+            <p className="text-lg font-bold text-emerald-600 truncate">₹{inboundTotal.toFixed(2)}</p>
           </div>
-          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm">
-            <p className="text-[11px] text-gray-500 mb-0.5">Total Refunded</p>
-            <p className="text-lg font-bold text-red-500">${outboundTotal.toFixed(2)}</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm min-w-0">
+            <p className="text-[11px] text-gray-500 mb-0.5 truncate">Total Refunded</p>
+            <p className="text-lg font-bold text-red-500 truncate">₹{outboundTotal.toFixed(2)}</p>
           </div>
-          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm">
-            <p className="text-[11px] text-gray-500 mb-0.5">Net Revenue</p>
-            <p className="text-lg font-bold text-orange-600">${(inboundTotal - outboundTotal).toFixed(2)}</p>
+          <div className="bg-white border border-orange-200 rounded-xl p-3.5 shadow-sm min-w-0">
+            <p className="text-[11px] text-gray-500 mb-0.5 truncate">Net Revenue</p>
+            <p className="text-lg font-bold text-orange-600 truncate">₹{(inboundTotal - outboundTotal).toFixed(2)}</p>
           </div>
         </div>
 
@@ -106,7 +106,7 @@ const AdminPayments = () => {
         ) : payments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32">
             <div className="p-4 rounded-2xl bg-white border border-orange-200 mb-4 shadow-sm">
-              <DollarSign className="h-10 w-10 text-orange-300" />
+              <IndianRupee className="h-10 w-10 text-orange-300" />
             </div>
             <p className="text-gray-400">No payments found</p>
           </div>
@@ -168,7 +168,7 @@ const AdminPayments = () => {
                               {p.direction === 'outbound'
                                 ? <ArrowUpRight className="h-3 w-3" />
                                 : <ArrowDownLeft className="h-3 w-3" />}
-                              ${p.amount.toFixed(2)}
+                              ₹{p.amount.toFixed(2)}
                             </div>
                             {p.transactionId && (
                               <p className="text-[11px] font-mono text-gray-400 mt-0.5">{p.transactionId}</p>

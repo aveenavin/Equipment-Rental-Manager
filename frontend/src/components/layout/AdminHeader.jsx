@@ -20,13 +20,13 @@ const AdminHeader = ({ title, lastUpdated, setMobileOpen }) => {
             <BarChart3 className="h-4 w-4 text-white" />
           </div>
           <span className="font-bold text-white hidden sm:block text-[14px]">EquipRental</span>
-          <span className="text-[10px] px-1.5 py-0.5 bg-orange-500 text-white border border-orange-500 hidden sm:block font-medium tracking-wide uppercase">Admin</span>
+          <span className="text-[11px] px-3.5 py-1 bg-black/20 backdrop-blur-md border border-white/10 text-white/95 rounded-full shadow-inner hidden sm:block font-extrabold tracking-[0.2em] uppercase">Admin</span>
           <span className="font-medium text-white sm:ml-1.5 sm:border-l sm:border-orange-500 sm:pl-3 text-[14px]">{title}</span>
         </div>
         <div className="flex items-center gap-3.5">
           {lastUpdated && (
             <span className="text-[11px] text-orange-200 hidden md:block font-medium">
-              Updated {lastUpdated.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+              Updated {lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
             </span>
           )}
           <span className="text-[13px] font-medium text-orange-100 hidden sm:block">{user?.name}</span>

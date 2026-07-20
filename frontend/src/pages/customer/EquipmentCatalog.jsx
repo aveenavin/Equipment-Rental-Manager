@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'react-hot-toast';
-import { Search, Filter, X, Package, ShoppingCart } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Package, ShoppingCart, ChevronDown, Truck, Zap, Activity, Wind, Shield, Box, Wrench } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import { StatusBadge } from '../../components/equipment/EquipmentBadges';
@@ -10,15 +10,15 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const CATEGORIES = [
-  { value: '', label: 'All Categories' },
-  { value: 'heavy-machinery', label: 'Heavy Machinery' },
-  { value: 'power-tools', label: 'Power Tools' },
-  { value: 'lifting-equipment', label: 'Lifting Equipment' },
-  { value: 'compressors', label: 'Compressors' },
-  { value: 'generators', label: 'Generators' },
-  { value: 'scaffolding', label: 'Scaffolding' },
-  { value: 'vehicles', label: 'Vehicles' },
-  { value: 'other', label: 'Other' },
+  { value: '', label: 'All Categories', icon: Package },
+  { value: 'heavy-machinery', label: 'Heavy Machinery', icon: Truck },
+  { value: 'power-tools', label: 'Power Tools', icon: Zap },
+  { value: 'lifting-equipment', label: 'Lifting Equipment', icon: Activity },
+  { value: 'compressors', label: 'Compressors', icon: Wind },
+  { value: 'generators', label: 'Generators', icon: Shield },
+  { value: 'scaffolding', label: 'Scaffolding', icon: Box },
+  { value: 'vehicles', label: 'Vehicles', icon: Truck },
+  { value: 'other', label: 'Other', icon: Wrench },
 ];
 
 const EquipmentCatalog = () => {
@@ -33,6 +33,19 @@ const EquipmentCatalog = () => {
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
   const [bookingTarget, setBookingTarget] = useState(null);
+
+  const dropdownRef = useRef(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const loadEquipment = useCallback(async () => {
     setIsLoading(true);
@@ -72,12 +85,14 @@ const EquipmentCatalog = () => {
   };
 
   return (
-    <div className="p-6 sm:p-8">
+    <div className="py-6 px-4 sm:py-8 sm:px-6 lg:px-8 max-w-[1600px] mx-auto w-full">
 
       {/* Page header */}
-      <div className="mb-7">
-        <h1 className="text-2xl font-bold text-slate-100">Equipment Catalog</h1>
-        <p className="text-slate-400 text-sm mt-1">
+      <div className="mb-8 pb-6 border-b border-slate-800/60">
+        <h1 className="text-3xl sm:text-4xl tracking-tight drop-shadow-sm pb-1">
+          <span className="font-extrabold text-slate-100">Equipment</span> <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Catalog</span>
+        </h1>
+        <p className="text-slate-400 font-medium text-[15px] mt-2 max-w-xl leading-relaxed">
           Browse {pagination.total} available item{pagination.total !== 1 ? 's' : ''} ready to rent
         </p>
       </div>
@@ -85,37 +100,75 @@ const EquipmentCatalog = () => {
       {/* Search + category filter toolbar */}
       <div className="flex flex-col md:flex-row gap-3 mb-7">
         <form onSubmit={handleSearch} className="flex gap-2 flex-1">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <div className="relative flex-1 group">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search equipment..."
-              className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-600"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
             />
             {searchInput && (
               <button
                 type="button"
                 onClick={() => { setSearchInput(''); setSearch(''); setPage(1); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
-          <Button type="submit" variant="secondary" size="md">Search</Button>
+          <button
+            type="submit"
+            className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
+          >
+            Search
+          </button>
         </form>
 
-        <div className="flex items-center gap-1.5">
-          <Filter className="h-4 w-4 text-slate-400 shrink-0" />
-          <select
-            value={category}
-            onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-            className="px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-600 cursor-pointer"
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center justify-between gap-3 min-w-[220px] px-5 py-3 rounded-[16px] bg-slate-900 border border-slate-800 hover:border-slate-600 hover:bg-slate-800/50 text-slate-100 text-[15px] font-semibold shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-orange-500/50"
           >
-            {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-          </select>
+            <div className="flex items-center gap-3">
+              <SlidersHorizontal className="h-4 w-4 text-orange-500" />
+              <span className="tracking-wide">
+                {CATEGORIES.find(c => c.value === category)?.label || 'All Categories'}
+              </span>
+            </div>
+            <ChevronDown className={`h-5 w-5 text-slate-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {isDropdownOpen && (
+            <div className="absolute z-50 right-0 mt-2 w-[220px] bg-white rounded-2xl shadow-2xl shadow-black/10 border border-slate-100 p-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
+              {CATEGORIES.map((c) => {
+                const Icon = c.icon;
+                const isSelected = category === c.value;
+                return (
+                  <button
+                    key={c.value}
+                    type="button"
+                    onClick={() => {
+                      setCategory(c.value);
+                      setPage(1);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`group w-full flex items-center gap-3 px-3 py-2 mb-0.5 last:mb-0 rounded-xl text-[14px] font-medium tracking-tight transition-all duration-200 ${
+                      isSelected 
+                        ? 'bg-orange-50 text-orange-600' 
+                        : 'text-gray-600 hover:bg-black hover:text-white'
+                    }`}
+                  >
+                    <Icon className={`h-4 w-4 transition-colors ${isSelected ? 'text-orange-500' : 'text-gray-400 group-hover:text-white/80'}`} />
+                    {c.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -160,21 +213,23 @@ const EquipmentCatalog = () => {
 
                 {/* Card body */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-semibold text-slate-100 text-sm leading-snug line-clamp-2 mb-1">
+                  <h3 className="font-medium text-slate-100 text-[18px] leading-snug line-clamp-2 mb-1.5 tracking-tight">
                     {item.name}
                   </h3>
-                  <p className="text-xs text-slate-500 capitalize mb-3">
+                  <p className="text-xs font-semibold text-slate-400 tracking-wide capitalize mb-3">
                     {item.category?.replace(/-/g, ' ')}
                   </p>
 
                   <div className="mt-auto pt-3 border-t border-slate-800">
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <p className="text-lg font-bold text-orange-400">
-                          ${item.dailyRate}
-                          <span className="text-xs font-normal text-slate-500">/day</span>
+                        <p className="text-[17px] font-bold text-orange-400">
+                          ₹{item.dailyRate}
+                          <span className="text-xs font-semibold text-slate-500 ml-1">/day</span>
                         </p>
-                        <p className="text-xs text-slate-500">Deposit: ${item.securityDeposit}</p>
+                        <p className="text-xs font-medium text-slate-500 mt-0.5">
+                          Deposit: <span className="font-semibold text-slate-400">₹{item.securityDeposit}</span>
+                        </p>
                       </div>
                     </div>
                     <Button

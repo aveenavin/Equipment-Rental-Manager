@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Plus, Search, Filter, Eye, Pencil, Trash2, Package, X } from 'lucide-react';
+import { Plus, Search, Filter, Eye, Pencil, Trash2, Package, X, ChevronDown, Activity, Check } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import { StatusBadge, ConditionBadge } from '../../components/equipment/EquipmentBadges';
 import EquipmentForm from '../../components/equipment/EquipmentForm';
 import { fetchEquipment, deleteEquipment } from '../../services/equipmentService';
 import { useAuth } from '../../context/AuthContext';
+import CustomDropdown from '../../components/ui/CustomDropdown';
 
 const CATEGORIES = [
   { value: '', label: 'All Categories' },
@@ -117,7 +118,7 @@ const EquipmentList = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-slate-100">Equipment Inventory</h1>
+            <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 drop-shadow-sm pb-1">Equipment Inventory</h1>
             <p className="text-slate-400 text-xs mt-1">
               {pagination.total} item{pagination.total !== 1 ? 's' : ''} total
             </p>
@@ -155,24 +156,19 @@ const EquipmentList = () => {
             </button>
           </form>
 
-          <div className="flex gap-2">
-            <div className="flex items-center gap-1.5">
-              <Filter className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-              <select
-                value={category}
-                onChange={(e) => { setCategory(e.target.value); setPage(1); }}
-                className="px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-[13px] focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-              >
-                {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-              </select>
-            </div>
-            <select
+          <div className="flex flex-col sm:flex-row gap-3">
+            <CustomDropdown
+              icon={Filter}
+              value={category}
+              options={CATEGORIES}
+              onChange={(val) => { setCategory(val); setPage(1); }}
+            />
+            <CustomDropdown
+              icon={Activity}
               value={status}
-              onChange={(e) => { setStatus(e.target.value); setPage(1); }}
-              className="px-2.5 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-[13px] focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-            >
-              {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-            </select>
+              options={STATUSES}
+              onChange={(val) => { setStatus(val); setPage(1); }}
+            />
           </div>
         </div>
 
@@ -209,17 +205,17 @@ const EquipmentList = () => {
                   </div>
 
                   {/* Info */}
-                  <div className="p-3.5 flex flex-col flex-1">
-                    <h3 className="font-semibold text-slate-100 text-[13px] leading-snug line-clamp-2 mb-1">{item.name}</h3>
-                    <p className="text-[11px] text-slate-500 capitalize mb-2">{item.category?.replace('-', ' ')}</p>
+                    <div className="p-3.5 flex flex-col flex-1">
+                      <h3 className="font-medium text-slate-100 text-[16px] leading-tight line-clamp-2 mb-1.5 tracking-tight">{item.name}</h3>
+                      <p className="text-xs font-semibold text-slate-400 tracking-wide capitalize mb-2">{item.category?.replace('-', ' ')}</p>
                     <div className="flex items-center gap-2 mb-3 scale-90 origin-left">
                       <ConditionBadge condition={item.condition} />
                     </div>
-                    <div className="mt-auto pt-2.5 border-t border-slate-800 flex items-center justify-between">
-                      <div>
-                        <p className="text-base font-bold text-primary-400">${item.dailyRate}<span className="text-[10px] font-normal text-slate-500">/day</span></p>
-                        <p className="text-[10px] text-slate-500">Dep: ${item.securityDeposit}</p>
-                      </div>
+                      <div className="mt-auto pt-2.5 border-t border-slate-800 flex items-center justify-between">
+                        <div>
+                          <p className="text-[17px] font-bold text-primary-400">₹{item.dailyRate}<span className="text-xs font-semibold text-slate-500 ml-1">/day</span></p>
+                          <p className="text-xs font-medium text-slate-500 mt-0.5">Dep: <span className="font-semibold text-slate-400">₹{item.securityDeposit}</span></p>
+                        </div>
                       <div className="flex gap-1">
                         <Link
                           to={`/admin/equipment/${item._id}`}

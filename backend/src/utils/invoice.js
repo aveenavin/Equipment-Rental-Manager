@@ -151,15 +151,15 @@ const buildInvoice = async (rentalId, requestingUser) => {
 
     returnRecord: returnRecord
       ? {
-          returnDate: returnRecord.returnDate,
-          conditionAtReturn: returnRecord.conditionAtReturn,
-          isDamaged: returnRecord.isDamaged,
-          damageDescription: returnRecord.damageDescription,
-          damageCharges: returnRecord.damageCharges,
-          depositDeducted: returnRecord.depositDeducted,
-          depositRefunded: returnRecord.depositRefunded,
-          processedBy: returnRecord.processedBy,
-        }
+        returnDate: returnRecord.returnDate,
+        conditionAtReturn: returnRecord.conditionAtReturn,
+        isDamaged: returnRecord.isDamaged,
+        damageDescription: returnRecord.damageDescription,
+        damageCharges: returnRecord.damageCharges,
+        depositDeducted: returnRecord.depositDeducted,
+        depositRefunded: returnRecord.depositRefunded,
+        processedBy: returnRecord.processedBy,
+      }
       : null,
   };
 };

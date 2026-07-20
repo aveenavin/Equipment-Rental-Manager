@@ -6,7 +6,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import {
-  Package, Users, ClipboardList, DollarSign, RotateCcw,
+  Package, Users, ClipboardList, IndianRupee, RotateCcw,
   TrendingUp, AlertTriangle, CheckCircle, Wrench, LogOut,
   ArrowRight, BarChart3,
 } from 'lucide-react';
@@ -17,8 +17,8 @@ import { fetchDashboard } from '../../services/dashboardService';
 import { useAuth } from '../../context/AuthContext';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 
-const fmtCurrency = (v) => `$${Number(v || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-const fmtDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const fmtCurrency = (v) => `₹${Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+const fmtDate = (d) => new Date(d).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
 
 // Chart colors — warm orange-forward palette on light background
 const CHART_COLORS = {
@@ -95,9 +95,9 @@ const AdminDashboard = () => {
         {/* Page heading */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-extrabold text-gray-800">Dashboard</h1>
+            <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#4558be] to-purple-500 drop-shadow-sm pb-1">Dashboard</h1>
             <p className="text-gray-500 text-xs mt-1">
-              {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>
         </div>
@@ -139,11 +139,11 @@ const AdminDashboard = () => {
           <StatCard
             label="Revenue This Month"
             value={fmtCurrency(revenue.thisMonth)}
-            icon={DollarSign}
+            icon={IndianRupee}
             iconColor="text-orange-600"
             iconBg="bg-orange-100 border-orange-200"
             trend={revenue.growthPercent}
-            trendLabel={`vs $${(revenue.lastMonth || 0).toLocaleString()} last month`}
+            trendLabel={`vs ₹${(revenue.lastMonth || 0).toLocaleString()} last month`}
           />
           <StatCard
             label="Returns Today"
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
                 />
               )}
             </div>
-            <div className="flex gap-5 mt-2.5">
+            <div className="flex flex-wrap gap-3 sm:gap-5 mt-2.5">
               {[
                 { label: 'Available', val: equipment.available, color: 'bg-emerald-500' },
                 { label: 'Rented', val: equipment.rented, color: 'bg-violet-500' },
@@ -203,7 +203,7 @@ const AdminDashboard = () => {
         {/* ── Charts row ───────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Revenue Trend — 2/3 width */}
-          <div className="xl:col-span-2 bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+          <div className="xl:col-span-2 bg-white border border-orange-200 rounded-xl px-5 py-3 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-[13px] font-semibold text-gray-700">Revenue Trend</h3>
@@ -227,16 +227,16 @@ const AdminDashboard = () => {
                   tick={{ fill: '#9ca3af', fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
-                  tickFormatter={(v) => `$${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
+                  tickFormatter={(v) => `₹${v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v}`}
                 />
-                <Tooltip content={<CustomTooltip prefix="$" />} cursor={{ fill: '#fff7ed' }} />
+                <Tooltip content={<CustomTooltip prefix="₹" />} cursor={{ fill: '#fff7ed' }} />
                 <Bar dataKey="value" name="Revenue" fill={CHART_COLORS.primary} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* Rental Status Donut — 1/3 width */}
-          <div className="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+          <div className="bg-white border border-orange-200 rounded-xl px-5 py-3 shadow-sm">
             <div className="mb-4">
               <h3 className="text-[13px] font-semibold text-gray-700">Rental Status</h3>
               <p className="text-[11px] text-gray-400 mt-0.5">Distribution across all rentals</p>
@@ -282,7 +282,7 @@ const AdminDashboard = () => {
         {/* ── Second charts row ─────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {/* Rental Trend Line Chart */}
-          <div className="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+          <div className="bg-white border border-orange-200 rounded-xl px-5 py-3 shadow-sm">
             <div className="mb-4">
               <h3 className="text-[13px] font-semibold text-gray-700">Rental Volume</h3>
               <p className="text-[11px] text-gray-400 mt-0.5">New rentals created per month</p>
@@ -307,7 +307,7 @@ const AdminDashboard = () => {
           </div>
 
           {/* Equipment by Category Bar */}
-          <div className="bg-white border border-orange-200 rounded-xl p-5 shadow-sm">
+          <div className="bg-white border border-orange-200 rounded-xl px-5 py-3 shadow-sm">
             <div className="mb-4">
               <h3 className="text-[13px] font-semibold text-gray-700">Fleet by Category</h3>
               <p className="text-[11px] text-gray-400 mt-0.5">Equipment availability across categories</p>
@@ -371,9 +371,9 @@ const AdminDashboard = () => {
                       <p className="text-[13px] font-medium text-gray-700 truncate">{r.equipment?.name}</p>
                       <p className="text-[11px] text-gray-400 truncate">{r.customer?.name} · {fmtDate(r.createdAt)}</p>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <RentalStatusBadge status={r.status} />
-                      <span className="text-xs font-semibold text-orange-600">${r.totalAmount?.toLocaleString()}</span>
+                    <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-2 shrink-0">
+                      <div className="scale-90 sm:scale-100 origin-right"><RentalStatusBadge status={r.status} /></div>
+                      <span className="text-xs font-semibold text-orange-600">₹{r.totalAmount?.toLocaleString()}</span>
                     </div>
                   </Link>
                 ))}
@@ -394,13 +394,13 @@ const AdminDashboard = () => {
               ) : (
                 <div className="space-y-2">
                   {recentActivity.payments.map((p) => (
-                    <div key={p._id} className="flex items-center justify-between">
-                      <div>
-                        <p className="text-[13px] text-gray-700 capitalize leading-tight">{p.paymentType?.replace('_', ' ')}</p>
-                        <p className="text-[11px] text-gray-400 mt-0.5">{p.customer?.name} · {fmtDate(p.paidAt)}</p>
+                    <div key={p._id} className="flex items-center justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[13px] text-gray-700 capitalize leading-tight truncate">{p.paymentType?.replace('_', ' ')}</p>
+                        <p className="text-[11px] text-gray-400 mt-0.5 truncate">{p.customer?.name} · {fmtDate(p.paidAt)}</p>
                       </div>
-                      <span className={`text-[13px] font-bold ${p.direction === 'outbound' ? 'text-red-500' : 'text-emerald-600'}`}>
-                        {p.direction === 'outbound' ? '-' : '+'}${p.amount?.toLocaleString()}
+                      <span className={`text-[13px] font-bold shrink-0 ${p.direction === 'outbound' ? 'text-red-500' : 'text-emerald-600'}`}>
+                        {p.direction === 'outbound' ? '-' : '+'}₹{p.amount?.toLocaleString()}
                       </span>
                     </div>
                   ))}
@@ -454,7 +454,7 @@ const AdminDashboard = () => {
               { label: 'Equipment', href: '/admin/equipment', icon: Package, color: 'text-teal-600', bg: 'bg-white border-teal-200   hover:bg-teal-50' },
               { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList, color: 'text-indigo-600', bg: 'bg-white border-indigo-200 hover:bg-indigo-50' },
               { label: 'Returns', href: '/admin/returns', icon: RotateCcw, color: 'text-orange-600', bg: 'bg-white border-orange-300 hover:bg-orange-50' },
-              { label: 'Payments', href: '/admin/payments', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-white border-emerald-200 hover:bg-emerald-50' },
+              { label: 'Payments', href: '/admin/payments', icon: IndianRupee, color: 'text-emerald-600', bg: 'bg-white border-emerald-200 hover:bg-emerald-50' },
               { label: 'Customers', href: '/admin/customers', icon: Users, color: 'text-violet-600', bg: 'bg-white border-violet-200 hover:bg-violet-50' },
             ].map((card) => (
               <Link

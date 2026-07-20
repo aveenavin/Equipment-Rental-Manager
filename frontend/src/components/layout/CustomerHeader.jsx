@@ -25,7 +25,7 @@ const CustomerHeader = ({ title, setMobileOpen }) => {
 
           <span className="font-bold text-white hidden sm:block text-[14px]">EquipRental</span>
 
-          <span className="text-[10px] px-1.5 py-0.5 bg-orange-500 text-white border border-orange-500 hidden sm:block font-medium tracking-wide uppercase">
+          <span className="hidden sm:inline-flex items-center justify-center px-2 py-[3px] rounded bg-black/20 text-[10px] font-bold text-white/90 tracking-wide uppercase">
             Customer
           </span>
 

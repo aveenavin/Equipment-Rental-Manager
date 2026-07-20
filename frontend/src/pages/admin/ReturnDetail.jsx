@@ -3,16 +3,16 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   ArrowLeft, Package, AlertTriangle, CheckCircle,
-  Calendar, DollarSign, User, Wrench, ClipboardList,
+  Calendar, IndianRupee, User, Wrench, ClipboardList,
   ShieldCheck,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import { fetchReturnById } from '../../services/returnService';
 
 const fmt = (d) =>
-  d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '—';
+  d ? new Date(d).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : '—';
 const fmtTime = (d) =>
-  d ? new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+  d ? new Date(d).toLocaleString('en-IN', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
 
 const InfoRow = ({ label, value }) => (
   <div className="flex justify-between items-start py-2 border-b border-slate-800 last:border-0 gap-4">
@@ -134,15 +134,15 @@ const ReturnDetail = () => {
           {/* Deposit & Financials */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-3">
-              <DollarSign className="h-3.5 w-3.5 text-slate-400" />
+              <IndianRupee className="h-3.5 w-3.5 text-slate-400" />
               <h3 className="text-[13px] font-semibold text-slate-300">Deposit Settlement</h3>
             </div>
-            <InfoRow label="Security Deposit" value={`$${record.rental?.securityDeposit?.toFixed(2)}`} />
+            <InfoRow label="Security Deposit" value={`₹${record.rental?.securityDeposit?.toFixed(2)}`} />
             <InfoRow
               label="Damage Charges"
               value={
                 record.damageCharges > 0
-                  ? <span className="text-red-400">-${record.damageCharges.toFixed(2)}</span>
+                  ? <span className="text-red-400">-₹{record.damageCharges.toFixed(2)}</span>
                   : <span className="text-slate-500">None</span>
               }
             />
@@ -150,15 +150,15 @@ const ReturnDetail = () => {
               label="Deposit Deducted"
               value={
                 record.depositDeducted > 0
-                  ? <span className="text-red-400">-${record.depositDeducted.toFixed(2)}</span>
-                  : '$0.00'
+                  ? <span className="text-red-400">-₹{record.depositDeducted.toFixed(2)}</span>
+                  : '₹0.00'
               }
             />
             <InfoRow
               label="Deposit Refunded"
               value={
                 <span className={record.depositRefunded > 0 ? 'text-emerald-600 font-bold' : 'text-red-500'}>
-                  ${record.depositRefunded.toFixed(2)}
+                  ₹{record.depositRefunded.toFixed(2)}
                 </span>
               }
             />
@@ -183,8 +183,8 @@ const ReturnDetail = () => {
             </div>
             <InfoRow label="Rental Period" value={`${fmt(record.rental?.startDate)} → ${fmt(record.rental?.endDate)}`} />
             <InfoRow label="Total Days" value={`${record.rental?.totalDays} days`} />
-            <InfoRow label="Rental Cost" value={`$${record.rental?.rentalCost?.toFixed(2)}`} />
-            <InfoRow label="Total Paid" value={`$${record.rental?.totalAmount?.toFixed(2)}`} />
+            <InfoRow label="Rental Cost" value={`₹${record.rental?.rentalCost?.toFixed(2)}`} />
+            <InfoRow label="Total Paid" value={`₹${record.rental?.totalAmount?.toFixed(2)}`} />
           </div>
 
           {/* Damage Report */}

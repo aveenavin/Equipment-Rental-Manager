@@ -5,7 +5,7 @@ import {
   Package,
   ClipboardList,
   RotateCcw,
-  DollarSign,
+  IndianRupee,
   Users,
   Menu,
   X,
@@ -19,7 +19,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
     { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList },
     { label: 'Returns', href: '/admin/returns', icon: RotateCcw },
     { label: 'Maintenance', href: '/admin/maintenance', icon: Wrench },
-    { label: 'Payments', href: '/admin/payments', icon: DollarSign },
+    { label: 'Payments', href: '/admin/payments', icon: IndianRupee },
     { label: 'Customers', href: '/admin/customers', icon: Users },
   ];
 

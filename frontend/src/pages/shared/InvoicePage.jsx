@@ -109,7 +109,7 @@ const InvoicePage = () => {
               <p className="font-semibold text-slate-100 print:text-slate-900">{invoice.equipment?.name}</p>
               <p className="text-sm text-slate-400 capitalize print:text-slate-600">{invoice.equipment?.category?.replace(/-/g, ' ')}</p>
               <p className="text-xs font-mono text-slate-500 mt-1 print:text-slate-400">Rental: {fmt(invoice.rental?.startDate)} → {fmt(invoice.rental?.endDate)}</p>
-              <p className="text-xs text-slate-500 print:text-slate-400">{invoice.rental?.totalDays} day{invoice.rental?.totalDays !== 1 ? 's' : ''} @ ${invoice.rental?.dailyRate}/day</p>
+              <p className="text-xs text-slate-500 print:text-slate-400">{invoice.rental?.totalDays} day{invoice.rental?.totalDays !== 1 ? 's' : ''} @ ₹{invoice.rental?.dailyRate}/day</p>
             </div>
           </div>
 
@@ -130,7 +130,7 @@ const InvoicePage = () => {
                     <td className="py-3 text-sm text-slate-200 print:text-slate-800">{item.description}</td>
                     <td className="py-3 text-xs text-slate-500 print:text-slate-500">{item.detail}</td>
                     <td className={`py-3 text-sm font-medium text-right ${item.amount < 0 ? 'text-emerald-400 print:text-emerald-600' : 'text-slate-200 print:text-slate-800'}`}>
-                      {item.amount < 0 ? `-$${Math.abs(item.amount).toFixed(2)}` : `$${item.amount.toFixed(2)}`}
+                      {item.amount < 0 ? `-₹${Math.abs(item.amount).toFixed(2)}` : `₹${item.amount.toFixed(2)}`}
                     </td>
                   </tr>
                 ))}
@@ -156,7 +156,7 @@ const InvoicePage = () => {
                         <p className="text-xs text-slate-600 print:text-slate-400">{fmt(p.paidAt)}</p>
                       </div>
                       <span className={`text-sm font-semibold ${p.direction === 'outbound' ? 'text-red-400 print:text-red-600' : 'text-emerald-400 print:text-emerald-600'}`}>
-                        {p.direction === 'outbound' ? '-' : '+'}${p.amount.toFixed(2)}
+                        {p.direction === 'outbound' ? '-' : '+'}₹{p.amount.toFixed(2)}
                       </span>
                     </div>
                   ))}
@@ -170,38 +170,38 @@ const InvoicePage = () => {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400 print:text-slate-600">Rental Cost</span>
-                  <span className="text-slate-200 print:text-slate-800">${invoice.totals?.subtotal?.toFixed(2)}</span>
+                  <span className="text-slate-200 print:text-slate-800">₹{invoice.totals?.subtotal?.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400 print:text-slate-600">Security Deposit</span>
-                  <span className="text-slate-200 print:text-slate-800">${invoice.totals?.securityDeposit?.toFixed(2)}</span>
+                  <span className="text-slate-200 print:text-slate-800">₹{invoice.totals?.securityDeposit?.toFixed(2)}</span>
                 </div>
                 {invoice.totals?.damageCharges > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-red-400 print:text-red-600">Damage Charges</span>
-                    <span className="text-red-400 print:text-red-600">+${invoice.totals.damageCharges.toFixed(2)}</span>
+                    <span className="text-red-400 print:text-red-600">+₹{invoice.totals.damageCharges.toFixed(2)}</span>
                   </div>
                 )}
                 {invoice.totals?.depositRefunded > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-emerald-400 print:text-emerald-600">Deposit Refund</span>
-                    <span className="text-emerald-400 print:text-emerald-600">-${invoice.totals.depositRefunded.toFixed(2)}</span>
+                    <span className="text-emerald-400 print:text-emerald-600">-₹{invoice.totals.depositRefunded.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm pt-2 border-t border-slate-700 print:border-slate-300">
                   <span className="text-slate-300 font-semibold print:text-slate-700">Total Amount</span>
-                  <span className="text-slate-100 font-semibold print:text-slate-900">${invoice.totals?.totalAmount?.toFixed(2)}</span>
+                  <span className="text-slate-100 font-semibold print:text-slate-900">₹{invoice.totals?.totalAmount?.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-emerald-400 print:text-emerald-600">Total Paid</span>
-                  <span className="text-emerald-400 font-semibold print:text-emerald-600">${invoice.paymentSummary?.netPaid?.toFixed(2)}</span>
+                  <span className="text-emerald-400 font-semibold print:text-emerald-600">₹{invoice.paymentSummary?.netPaid?.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-base font-bold pt-2 border-t-2 border-primary-700 print:border-blue-400">
                   <span className={invoice.paymentSummary?.balance > 0 ? 'text-red-400 print:text-red-600' : 'text-emerald-400 print:text-emerald-600'}>
                     {invoice.paymentSummary?.balance > 0 ? 'Balance Due' : 'Fully Paid'}
                   </span>
                   <span className={invoice.paymentSummary?.balance > 0 ? 'text-red-400 print:text-red-600' : 'text-emerald-400 print:text-emerald-600'}>
-                    ${invoice.paymentSummary?.balance?.toFixed(2)}
+                    ₹{invoice.paymentSummary?.balance?.toFixed(2)}
                   </span>
                 </div>
               </div>

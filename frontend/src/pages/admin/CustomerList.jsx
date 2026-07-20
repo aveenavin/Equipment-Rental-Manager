@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   Search, X, Users, Eye, Pencil, Trash2,
-  UserCheck, UserX, Shield, ChevronLeft, ChevronRight,
+  UserCheck, UserX, Shield, ChevronLeft, ChevronRight, Activity
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
+import CustomDropdown from '../../components/ui/CustomDropdown';
 import { useAuth } from '../../context/AuthContext';
 import { fetchCustomers, deleteCustomer, updateCustomer } from '../../services/customerService';
 
@@ -171,7 +172,7 @@ const CustomerList = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-slate-100">Customer Directory</h1>
+            <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600 drop-shadow-sm pb-1">Customer Directory</h1>
             <p className="text-slate-400 text-xs mt-1">
               {pagination.total} registered customer{pagination.total !== 1 ? 's' : ''}
             </p>
@@ -204,15 +205,18 @@ const CustomerList = () => {
             </button>
           </form>
 
-          <select
-            value={statusFilter}
-            onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-            className="px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-          >
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="suspended">Suspended</option>
-          </select>
+          <div className="w-[170px]">
+            <CustomDropdown
+              icon={Activity}
+              value={statusFilter}
+              options={[
+                { value: '', label: 'All Statuses' },
+                { value: 'active', label: 'Active' },
+                { value: 'suspended', label: 'Suspended' }
+              ]}
+              onChange={(val) => { setStatusFilter(val); setPage(1); }}
+            />
+          </div>
         </div>
 
         {/* Table */}
@@ -267,7 +271,7 @@ const CustomerList = () => {
                         </td>
                         <td className="px-4 py-3">
                           <p className="text-[13px] text-slate-400">
-                            {new Date(customer.createdAt).toLocaleDateString('en-US', {
+                            {new Date(customer.createdAt).toLocaleDateString('en-IN', {
                               year: 'numeric', month: 'short', day: 'numeric',
                             })}
                           </p>

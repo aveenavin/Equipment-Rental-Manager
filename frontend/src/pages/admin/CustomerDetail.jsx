@@ -157,14 +157,14 @@ const CustomerDetail = () => {
           <DetailRow
             icon={Calendar}
             label="Registered"
-            value={new Date(customer.createdAt).toLocaleDateString('en-US', {
+            value={new Date(customer.createdAt).toLocaleDateString('en-IN', {
               year: 'numeric', month: 'long', day: 'numeric',
             })}
           />
           <DetailRow
             icon={Pencil}
             label="Last Updated"
-            value={new Date(customer.updatedAt).toLocaleDateString('en-US', {
+            value={new Date(customer.updatedAt).toLocaleDateString('en-IN', {
               year: 'numeric', month: 'long', day: 'numeric',
             })}
           />

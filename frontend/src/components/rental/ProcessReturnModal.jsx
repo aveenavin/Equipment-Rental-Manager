@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import {
   X, AlertTriangle, CheckCircle, Package,
-  DollarSign, ClipboardList, Calendar,
+  IndianRupee, ClipboardList, Calendar,
 } from 'lucide-react';
 import Button from '../ui/Button';
 import { processReturn } from '../../services/returnService';
@@ -158,9 +158,9 @@ const ProcessReturnModal = ({ rental, onClose, onProcessed }) => {
               </div>
 
               <div>
-                <label className="block text-sm text-slate-300 mb-1.5">Damage Charges ($)</label>
+                <label className="block text-sm text-slate-300 mb-1.5">Damage Charges (₹)</label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                   <input
                     type="number"
                     min="0"
@@ -182,18 +182,18 @@ const ProcessReturnModal = ({ rental, onClose, onProcessed }) => {
             </p>
             <div className="flex justify-between text-sm">
               <span className="text-slate-400">Security Deposit</span>
-              <span className="text-slate-200">${securityDeposit.toFixed(2)}</span>
+              <span className="text-slate-200">₹{securityDeposit.toFixed(2)}</span>
             </div>
             {isDamaged && (
               <div className="flex justify-between text-sm">
                 <span className="text-slate-400">Damage Charges</span>
-                <span className="text-red-400">-${depositDeducted.toFixed(2)}</span>
+                <span className="text-red-400">-₹{depositDeducted.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-sm font-semibold pt-2 border-t border-slate-700">
               <span className="text-slate-300">Deposit Refund</span>
               <span className={depositRefunded > 0 ? 'text-emerald-400' : 'text-red-400'}>
-                ${depositRefunded.toFixed(2)}
+                ₹{depositRefunded.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between text-sm pt-1">

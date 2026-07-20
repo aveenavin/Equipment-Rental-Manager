@@ -269,10 +269,10 @@ const RentalDetail = () => {
               <DollarSign className="h-4 w-4 text-slate-400" />
               <h3 className="text-sm font-semibold text-slate-300">Cost Breakdown</h3>
             </div>
-            <InfoRow label="Daily Rate" value={`$${rental.dailyRate}`} />
-            <InfoRow label="Rental Cost" value={`$${rental.rentalCost.toFixed(2)}`} />
-            <InfoRow label="Security Deposit" value={`$${rental.securityDeposit.toFixed(2)}`} />
-            <InfoRow label="Total Amount" value={<span className="text-primary-400 font-bold">${rental.totalAmount.toFixed(2)}</span>} />
+            <InfoRow label="Daily Rate" value={`₹${rental.dailyRate}`} />
+            <InfoRow label="Rental Cost" value={`₹${rental.rentalCost.toFixed(2)}`} />
+            <InfoRow label="Security Deposit" value={`₹${rental.securityDeposit.toFixed(2)}`} />
+            <InfoRow label="Total Amount" value={<span className="text-primary-400 font-bold">₹{rental.totalAmount.toFixed(2)}</span>} />
           </div>
 
           {/* Customer Info (admin/staff only) */}
@@ -340,16 +340,16 @@ const RentalDetail = () => {
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div className="bg-slate-800/60 rounded-lg p-3">
                     <p className="text-xs text-slate-500 mb-1">Total Paid</p>
-                    <p className="text-sm font-bold text-emerald-400">${(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
+                    <p className="text-sm font-bold text-emerald-400">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
                   </div>
                   <div className="bg-slate-800/60 rounded-lg p-3">
                     <p className="text-xs text-slate-500 mb-1">Total Due</p>
-                    <p className="text-sm font-bold text-slate-200">${(rental.totalAmount || 0).toFixed(2)}</p>
+                    <p className="text-sm font-bold text-slate-200">₹{(rental.totalAmount || 0).toFixed(2)}</p>
                   </div>
                   <div className="bg-slate-800/60 rounded-lg p-3">
                     <p className="text-xs text-slate-500 mb-1">Balance</p>
                     <p className={`text-sm font-bold ${(paymentData.summary?.balance || 0) > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
-                      ${(paymentData.summary?.balance || 0).toFixed(2)}
+                      ₹{(paymentData.summary?.balance || 0).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -367,7 +367,7 @@ const RentalDetail = () => {
                         </div>
                         <span className={`flex items-center gap-1 text-sm font-semibold ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
                           {p.direction === 'outbound' ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownLeft className="h-3.5 w-3.5" />}
-                          ${p.amount.toFixed(2)}
+                          ₹{p.amount.toFixed(2)}
                         </span>
                       </div>
                     ))}

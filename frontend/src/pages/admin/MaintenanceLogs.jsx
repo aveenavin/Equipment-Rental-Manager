@@ -14,7 +14,7 @@ import {
 import api from '../../services/api';
 
 const fmt = (d) =>
-  d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
+  d ? new Date(d).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
 
 // ─── Priority Badge ────────────────────────────────────────────────────────────
 const PriorityBadge = ({ priority }) => {
@@ -168,7 +168,7 @@ const CreateLogModal = ({ onClose, onCreated }) => {
               </select>
             </div>
             <div>
-              <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Est. Cost ($)</label>
+              <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Est. Cost (₹)</label>
               <input
                 type="number"
                 name="estimatedCost"
@@ -273,7 +273,7 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
           </div>
 
           <div>
-            <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Actual Cost ($)</label>
+            <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Actual Cost (₹)</label>
             <input
               type="number"
               name="actualCost"
@@ -346,7 +346,7 @@ const MaintenanceLogs = () => {
         {/* Header */}
         <div className="flex items-start justify-between mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Maintenance Logs</h1>
+            <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 drop-shadow-sm pb-1">Maintenance Logs</h1>
             <p className="text-slate-500 text-xs mt-1">
               {pagination.total} total log{pagination.total !== 1 ? 's' : ''}
             </p>
@@ -480,11 +480,11 @@ const MaintenanceLogs = () => {
                         <td className="px-4 py-3">
                           {log.status === 'completed' && log.actualCost != null ? (
                             <p className="text-sm font-semibold text-emerald-400">
-                              ${log.actualCost.toFixed(2)}
+                              ₹{log.actualCost.toFixed(2)}
                             </p>
                           ) : log.estimatedCost != null ? (
                             <p className="text-sm text-slate-400">
-                              ~${log.estimatedCost.toFixed(2)}
+                              ~₹{log.estimatedCost.toFixed(2)}
                             </p>
                           ) : (
                             <p className="text-sm text-slate-600">—</p>

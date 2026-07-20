@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { X, Calendar, DollarSign, AlertCircle, Package } from 'lucide-react';
+import { X, Calendar, IndianRupee, AlertCircle, Package } from 'lucide-react';
 import Button from '../ui/Button';
 import { createRental, fetchEquipmentAvailability } from '../../services/rentalService';
 
@@ -176,17 +176,17 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-slate-400">Rental Cost</span>
-                <span className="text-slate-200">${rentalCost.toFixed(2)}</span>
+                <span className="text-slate-200">₹{rentalCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-slate-400">Security Deposit</span>
-                <span className="text-slate-200">${equipment.securityDeposit.toFixed(2)}</span>
+                <span className="text-slate-200">₹{equipment.securityDeposit.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm font-semibold pt-2 border-t border-slate-700">
                 <span className="text-slate-300 flex items-center gap-1">
-                  <DollarSign className="h-3.5 w-3.5" /> Total
+                  <IndianRupee className="h-3.5 w-3.5" /> Total
                 </span>
-                <span className="text-primary-400 text-base">${totalAmount.toFixed(2)}</span>
+                <span className="text-primary-400 text-base">₹{totalAmount.toFixed(2)}</span>
               </div>
             </div>
           )}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   FileText, Search, X, ChevronLeft, ChevronRight,
-  Eye, CheckCircle, Truck, RotateCcw, XCircle, Calendar, DollarSign, User,
+  Eye, CheckCircle, Truck, RotateCcw, XCircle, Calendar, IndianRupee, User,
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
@@ -11,7 +11,7 @@ import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import { fetchRentals, updateRentalStatus } from '../../services/rentalService';
 
 const fmt = (d) =>
-  new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  new Date(d).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
 
 const QUICK_ACTIONS = {
   pending: { label: 'Confirm', icon: CheckCircle, next: 'confirmed', variant: 'text-blue-600 hover:text-blue-700' },
@@ -64,7 +64,7 @@ const AdminRentals = () => {
 
         {/* Header */}
         <div className="mb-5">
-          <h1 className="text-2xl font-bold text-slate-100">Rental Management</h1>
+          <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-500 drop-shadow-sm pb-1">Rental Management</h1>
           <p className="text-slate-400 text-xs mt-1">
             {pagination.total} total rental{pagination.total !== 1 ? 's' : ''}
           </p>
@@ -166,8 +166,8 @@ const AdminRentals = () => {
 
                           {/* Amount */}
                           <td className="px-4 py-3">
-                            <p className="text-[13px] font-semibold text-primary-400">${rental.totalAmount.toFixed(2)}</p>
-                            <p className="text-[11px] text-slate-500">+${rental.securityDeposit} dep.</p>
+                            <p className="text-[13px] font-semibold text-primary-400">₹{rental.totalAmount.toFixed(2)}</p>
+                            <p className="text-[11px] text-slate-500">+₹{rental.securityDeposit} dep.</p>
                           </td>
 
                           {/* Status */}

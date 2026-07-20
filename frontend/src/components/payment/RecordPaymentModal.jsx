@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { X, DollarSign, CreditCard, AlertCircle, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+import { X, IndianRupee, CreditCard, AlertCircle, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 import Button from '../ui/Button';
 import { recordPayment } from '../../services/paymentService';
 
@@ -75,11 +75,11 @@ const RecordPaymentModal = ({ rental, summary, onClose, onRecorded }) => {
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary-900/30 border border-primary-800">
-              <DollarSign className="h-5 w-5 text-primary-400" />
+              <IndianRupee className="h-5 w-5 text-primary-400" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-slate-100">Record Payment</h2>
-              <p className="text-xs text-slate-400">Balance due: <span className={summary?.balance > 0 ? 'text-red-400 font-semibold' : 'text-emerald-400 font-semibold'}>${(summary?.balance || 0).toFixed(2)}</span></p>
+              <p className="text-xs text-slate-400">Balance due: <span className={summary?.balance > 0 ? 'text-red-400 font-semibold' : 'text-emerald-400 font-semibold'}>₹{(summary?.balance || 0).toFixed(2)}</span></p>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-200 transition-colors">
@@ -141,9 +141,9 @@ const RecordPaymentModal = ({ rental, summary, onClose, onRecorded }) => {
           {/* Amount + Method row */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Amount ($) <span className="text-red-400">*</span></label>
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">Amount (₹) <span className="text-red-400">*</span></label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 <input
                   type="number"
                   min="0.01"

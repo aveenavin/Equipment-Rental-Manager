@@ -194,7 +194,7 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
 
         <Input
           id="dailyRate"
-          label="Daily Rate ($)"
+          label="Daily Rate (₹)"
           type="number"
           min="0"
           step="0.01"
@@ -206,7 +206,7 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
 
         <Input
           id="securityDeposit"
-          label="Security Deposit ($)"
+          label="Security Deposit (₹)"
           type="number"
           min="0"
           step="0.01"

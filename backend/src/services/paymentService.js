@@ -36,7 +36,7 @@ const recordPayment = async ({
     const afterPayment = parseFloat((alreadyPaid + parsedAmount).toFixed(2));
     if (afterPayment > rental.totalAmount + 0.01) {
       throw new AppError(
-        `Payment of $${parsedAmount} would exceed the total amount due ($${rental.totalAmount}). Already paid: $${alreadyPaid.toFixed(2)}.`,
+        `Payment of ₹${parsedAmount} would exceed the total amount due (₹${rental.totalAmount}). Already paid: ₹${alreadyPaid.toFixed(2)}.`,
         400
       );
     }

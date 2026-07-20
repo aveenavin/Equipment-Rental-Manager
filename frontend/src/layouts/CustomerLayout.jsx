@@ -14,7 +14,7 @@ const CustomerLayout = () => {
   else if (location.pathname.startsWith('/my-rentals')) title = 'My Rentals';
 
   return (
-    <div className="flex min-h-screen bg-slate-950">
+    <div className="flex min-h-screen bg-[#EBE8E1]">
       <CustomerSidebar
         collapsed={collapsed}
         setCollapsed={setCollapsed}

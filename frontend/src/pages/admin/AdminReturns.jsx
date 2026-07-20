@@ -9,7 +9,7 @@ import Spinner from '../../components/ui/Spinner';
 import { fetchReturns } from '../../services/returnService';
 
 const fmt = (d) =>
-  new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  new Date(d).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
 
 const ConditionBadge = ({ condition }) => {
   const map = {
@@ -56,7 +56,7 @@ const AdminReturns = () => {
 
         {/* Header */}
         <div className="mb-5">
-          <h1 className="text-2xl font-bold text-slate-100">Return Records</h1>
+          <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-600 drop-shadow-sm pb-1">Return Records</h1>
           <p className="text-slate-400 text-xs mt-1">
             {pagination.total} total return{pagination.total !== 1 ? 's' : ''} processed
           </p>
@@ -179,7 +179,7 @@ const AdminReturns = () => {
                         {/* Deposit Refund */}
                         <td className="px-4 py-3">
                           <p className={`text-[13px] font-semibold ${ret.depositRefunded > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                            ${ret.depositRefunded?.toFixed(2)}
+                            ₹{ret.depositRefunded?.toFixed(2)}
                           </p>
                           {ret.depositDeducted > 0 && (
                             <p className="text-[11px] text-slate-500">Deducted: ${ret.depositDeducted?.toFixed(2)}</p>

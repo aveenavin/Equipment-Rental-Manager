@@ -156,11 +156,11 @@ const EquipmentDetail = () => {
             <div className="grid grid-cols-2 gap-2.5">
               <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
                 <p className="text-[11px] text-slate-500 mb-0.5">Daily Rate</p>
-                <p className="text-xl font-bold text-primary-400">${equipment.dailyRate}</p>
+                <p className="text-xl font-bold text-primary-400">₹{equipment.dailyRate}</p>
               </div>
               <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
                 <p className="text-[11px] text-slate-500 mb-0.5">Security Deposit</p>
-                <p className="text-xl font-bold text-slate-200">${equipment.securityDeposit}</p>
+                <p className="text-xl font-bold text-slate-200">₹{equipment.securityDeposit}</p>
               </div>
             </div>
 
@@ -182,7 +182,7 @@ const EquipmentDetail = () => {
               </div>
               <div className="flex justify-between items-center text-[13px]">
                 <span className="text-slate-500">Created</span>
-                <span className="text-slate-300">{new Date(equipment.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                <span className="text-slate-300">{new Date(equipment.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
               </div>
             </div>
 
