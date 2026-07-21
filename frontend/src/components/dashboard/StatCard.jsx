@@ -1,5 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+
+const CountUp = ({ to }) => {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString());
+
+  useEffect(() => {
+    const controls = animate(count, to, { duration: 1.5, ease: "easeOut" });
+    return controls.stop;
+  }, [count, to]);
+
+  return <motion.span>{rounded}</motion.span>;
+};
 
 const StatCard = ({
   label,
@@ -35,7 +48,7 @@ const StatCard = ({
         )}
       </div>
       <p className="text-lg font-extrabold text-gray-800 tabular-nums tracking-tight mt-0.5">
-        {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
+        {prefix}{typeof value === 'number' ? <CountUp to={value} /> : value}{suffix}
       </p>
       <p className="text-[11px] text-gray-500 mt-0 font-semibold leading-tight">{label}</p>
       {(sub || trendLabel) && (

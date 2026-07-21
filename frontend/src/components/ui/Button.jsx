@@ -3,13 +3,13 @@ import Spinner from './Spinner';
 
 const variants = {
   primary:
-    'bg-gradient-to-b from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-md hover:shadow-orange-500/20 active:scale-[0.97] active:shadow-inner border border-orange-500/20 disabled:from-orange-300 disabled:to-orange-300 disabled:shadow-none disabled:active:scale-100 disabled:cursor-not-allowed',
+    'bg-gradient-to-b from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white shadow-sm hover:shadow-md hover:shadow-orange-500/20 active:scale-[0.98] border border-orange-600/50 border-t-orange-400/50 disabled:opacity-60 disabled:shadow-none disabled:active:scale-100 disabled:cursor-not-allowed transition-all duration-200',
   secondary:
-    'bg-white hover:bg-orange-50 text-gray-700 border border-gray-200 shadow-sm hover:shadow hover:border-orange-300 hover:text-orange-700 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed',
+    'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 shadow-sm hover:border-slate-500 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed transition-all duration-200',
   danger:
-    'bg-gradient-to-b from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-[0_1px_2px_rgba(0,0,0,0.1)] hover:shadow-md hover:shadow-red-500/20 active:scale-[0.97] active:shadow-inner border border-red-700/20 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed',
+    'bg-gradient-to-b from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white shadow-sm hover:shadow-md hover:shadow-red-500/20 active:scale-[0.98] border border-red-600/50 border-t-red-400/50 disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed transition-all duration-200',
   ghost:
-    'bg-transparent hover:bg-gray-100 text-gray-600 active:scale-[0.97] disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed',
+    'bg-transparent hover:bg-slate-800/50 text-slate-400 hover:text-slate-200 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 disabled:cursor-not-allowed transition-all duration-200',
 };
 
 const sizes = {
@@ -40,8 +40,10 @@ const Button = ({
       `}
       {...props}
     >
-      {isLoading && <Spinner size="sm" />}
-      {children}
+      <span className="relative z-10 flex items-center justify-center gap-2">
+        {isLoading && <Spinner size="sm" />}
+        {children}
+      </span>
     </button>
   );
 };

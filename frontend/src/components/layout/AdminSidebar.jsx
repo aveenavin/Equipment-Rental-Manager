@@ -38,15 +38,15 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
         This is the ONLY element that changes width (w-64 to w-20).
         It has overflow-hidden to act as a clipping mask over the inner content.
       */}
-      <div className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 border-r border-orange-200 transition-all duration-300 ease-in-out md:static shadow-sm overflow-hidden ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        } ${collapsed ? 'md:w-16' : 'md:w-56'} w-56 shrink-0`}>
+      <div className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-gradient-to-b from-gray-800 to-indigo-950 border-r border-orange-200 transition-all duration-300 ease-in-out md:static shadow-sm overflow-hidden ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        } ${collapsed ? 'md:w-16' : 'md:w-48'} w-48 shrink-0`}>
 
         {/* 
           INNER CONTAINER:
-          Fixed width (w-56) so its flexbox layout NEVER recalculates when the sidebar collapses.
+          Fixed width (w-48) so its flexbox layout NEVER recalculates when the sidebar collapses.
           This completely eliminates any jittering or snapping.
         */}
-        <div className="w-56 flex flex-col h-full">
+        <div className="w-48 flex flex-col h-full">
 
           <div className="h-14 flex items-center px-3 border-b border-orange-100 shrink-0">
             {/* Desktop Collapse Toggle */}
@@ -81,7 +81,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center p-2.5 rounded-xl transition-colors duration-200 group ${isActive
-                    ? 'bg-orange-50 text-orange-700 font-semibold shadow-sm ring-1 ring-orange-200/50'
+                  ? 'bg-gradient-to-r from-orange-500/20 to-transparent border-l-2 border-orange-400 text-orange-400 font-semibold'
                     : 'text-white hover:bg-white/10 hover:text-white font-medium'
                   }`
                 }

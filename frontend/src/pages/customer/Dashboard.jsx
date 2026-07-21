@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -6,6 +6,7 @@ import {
   CheckCircle, Clock, TrendingUp,
   Activity, Box, ChevronRight
 } from 'lucide-react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { fetchRentals } from '../../services/rentalService';
 import { fetchEquipment } from '../../services/equipmentService';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
@@ -16,6 +17,18 @@ const fmt = (d) =>
 
 const fmtCurrency = (n) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(n);
+
+const CountUp = ({ to }) => {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString());
+
+  useEffect(() => {
+    const controls = animate(count, to, { duration: 1.5, ease: "easeOut" });
+    return controls.stop;
+  }, [count, to]);
+
+  return <motion.span>{rounded}</motion.span>;
+};
 
 const StatCard = ({ icon: Icon, label, value, accent, numColor, isLoading }) => (
   <div className="relative overflow-hidden flex flex-col p-2.5 rounded-[16px] bg-slate-900 border border-slate-800 shadow-lg hover:shadow-xl hover:border-slate-700 hover:-translate-y-1 transition-all duration-300 group">
@@ -30,7 +43,9 @@ const StatCard = ({ icon: Icon, label, value, accent, numColor, isLoading }) => 
       {isLoading ? (
         <div className="h-6 w-16 bg-slate-800/80 rounded animate-pulse" />
       ) : (
-        <p className={`text-xl font-extrabold tracking-tight ${numColor}`}>{value}</p>
+        <p className={`text-xl font-extrabold tracking-tight ${numColor}`}>
+          <CountUp to={value || 0} />
+        </p>
       )}
     </div>
   </div>
@@ -89,8 +104,13 @@ const CustomerDashboard = () => {
   return (
     <div className="py-6 px-4 sm:py-8 sm:px-6 lg:px-8 max-w-[1600px] mx-auto w-full space-y-8">
 
-      {/* ── Hero Section ────────────────────────────────────────────────── */}
-      <div className="relative rounded-[24px] overflow-hidden bg-slate-900 border border-slate-800 p-8 sm:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+      {/* ── Hero Section ──────────────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+        className="relative rounded-[24px] overflow-hidden bg-slate-900 border border-slate-800 p-8 sm:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8"
+      >
         {/* Background Gradients */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/30 rounded-full blur-[100px] translate-x-1/3 -translate-y-1/3" />
@@ -99,13 +119,28 @@ const CustomerDashboard = () => {
         </div>
 
         <div className="relative z-10 w-full">
-          <h1 className="text-3xl sm:text-4xl tracking-tight leading-tight">
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, type: 'spring', stiffness: 80, damping: 20 }}
+            className="text-3xl sm:text-4xl tracking-tight leading-tight"
+          >
             <span className="font-bold text-slate-300">Welcome back,</span> <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-800">{user?.name?.split(' ')[0] || 'User'}</span>
-          </h1>
-          <p className="text-slate-400 text-[15px] sm:text-base mt-3 max-w-xl leading-relaxed">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28, type: 'spring', stiffness: 80, damping: 20 }}
+            className="text-slate-400 text-[15px] sm:text-base mt-3 max-w-xl leading-relaxed"
+          >
             Manage your equipment rentals, browse the latest available inventory, and track your active bookings all in one highly functional space.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42, type: 'spring', stiffness: 80, damping: 20 }}
+            className="mt-8 flex flex-wrap items-center gap-4"
+          >
             <Link
               to="/catalog"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-orange-800 text-white px-7 py-3.5 rounded-xl font-bold shadow-[0_4px_20px_rgba(234,88,12,0.3)] hover:shadow-[0_4px_25px_rgba(234,88,12,0.5)] hover:-translate-y-0.5 transition-all duration-300"
@@ -120,9 +155,9 @@ const CustomerDashboard = () => {
               <ClipboardList className="h-5 w-5 text-slate-400" />
               View Rentals
             </Link>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Summary Stats ───────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -162,10 +197,15 @@ const CustomerDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* ── Recent Activity ─────────────────────────────────────────────── */}
-        <div className="lg:col-span-2 flex flex-col relative bg-slate-900 border border-slate-800 rounded-[24px] shadow-xl overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, type: 'spring', stiffness: 80, damping: 20 }}
+          className="lg:col-span-2 flex flex-col relative bg-slate-900 border border-slate-800 rounded-[24px] shadow-xl overflow-hidden"
+        >
           {/* Background Gradients */}
           <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-amber-500/30 rounded-full blur-[80px] translate-x-1/3 -translate-y-1/3" />
+            <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-yellow-400/25 rounded-full blur-[100px] translate-x-1/4 -translate-y-1/2" />
             <div className="absolute bottom-0 left-0 w-[200px] h-[200px] bg-blue-500/5 rounded-full blur-[60px] -translate-x-1/3 translate-y-1/3" />
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-30 mask-image:linear-gradient(to_bottom,white,transparent)]" />
           </div>
@@ -232,17 +272,23 @@ const CustomerDashboard = () => {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* ── Quick Action Cards ──────────────────────────────────────────── */}
         <div className="space-y-6">
-          <Link
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 80, damping: 20 }}
+          >
+            <Link
             to="/catalog"
             className="group block relative overflow-hidden rounded-[24px] bg-slate-900 border border-slate-800 hover:border-orange-600/50 shadow-lg hover:shadow-[0_8px_30px_rgba(234,88,12,0.15)] transition-all duration-300 hover:-translate-y-1"
           >
             {/* Background Gradients */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-              <div className="absolute -top-10 -right-10 w-[200px] h-[200px] bg-amber-500/30 rounded-full blur-[60px]" />
+              <div className="absolute top-1/2 -right-10 w-[200px] h-[200px] bg-yellow-400/30 rounded-full blur-[60px] -translate-y-1/2" />
               <div className="absolute -bottom-10 -left-10 w-[150px] h-[150px] bg-blue-500/5 rounded-full blur-[50px]" />
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-30 mask-image:linear-gradient(to_bottom,white,transparent)]" />
             </div>
@@ -263,14 +309,21 @@ const CustomerDashboard = () => {
               </div>
             </div>
           </Link>
+          </motion.div>
 
-          <Link
-            to="/my-rentals"
-            className="group block relative overflow-hidden rounded-[24px] bg-slate-900 border border-slate-800 hover:border-blue-500/50 shadow-lg hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] transition-all duration-300 hover:-translate-y-1"
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ delay: 0.35, type: 'spring', stiffness: 80, damping: 20 }}
           >
+            <Link
+              to="/my-rentals"
+              className="group block relative overflow-hidden rounded-[24px] bg-slate-900 border border-slate-800 hover:border-blue-500/50 shadow-lg hover:shadow-[0_8px_30px_rgba(59,130,246,0.15)] transition-all duration-300 hover:-translate-y-1"
+            >
             {/* Background Gradients */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-              <div className="absolute -top-10 -right-10 w-[200px] h-[200px] bg-amber-500/30 rounded-full blur-[60px]" />
+              <div className="absolute top-1/2 -right-10 w-[200px] h-[200px] bg-yellow-400/30 rounded-full blur-[60px] -translate-y-1/2" />
               <div className="absolute -bottom-10 -left-10 w-[150px] h-[150px] bg-blue-500/5 rounded-full blur-[50px]" />
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-30 mask-image:linear-gradient(to_bottom,white,transparent)]" />
             </div>
@@ -290,9 +343,85 @@ const CustomerDashboard = () => {
                 Manage Bookings <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
-          </Link>
+            </Link>
+          </motion.div>
         </div>
       </div>
+
+      {/* ── Footer ────────────────────────────────────────────────────── */}
+      <footer className="border-t border-slate-300/20 pt-12 pb-8 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+          {/* About */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xl">🔧</span>
+              <span className="font-black text-slate-100 text-lg tracking-tight">EquipRental</span>
+            </div>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+            </p>
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-5">
+              {['𝕏', 'in', 'f', '▶'].map((s, i) => (
+                <button
+                  key={i}
+                  className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 hover:border-orange-500/50 hover:bg-slate-700 text-slate-400 hover:text-orange-400 text-xs font-bold flex items-center justify-center transition-all duration-200"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h4>
+            <ul className="space-y-2.5">
+              {['Browse Catalog', 'My Rentals', 'Dashboard', 'Book Equipment'].map((l) => (
+                <li key={l}>
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Contact</h4>
+            <ul className="space-y-2.5 text-sm text-slate-500">
+              <li className="flex items-start gap-2"><span>📧</span> support@equiprental.com</li>
+              <li className="flex items-start gap-2"><span>📞</span> +91 98765 43210</li>
+              <li className="flex items-start gap-2"><span>📍</span> Mumbai, Maharashtra, India</li>
+              <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
+            <ul className="space-y-2.5">
+              {['Privacy Policy', 'Terms & Conditions', 'Refund Policy', 'Cookie Policy'].map((l) => (
+                <li key={l}>
+                  <button className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left">
+                    {l}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-slate-300/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+          <span>© {new Date().getFullYear()} EquipRental. All rights reserved.</span>
+          <span className="flex items-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
+        </div>
+      </footer>
 
     </div>
   );

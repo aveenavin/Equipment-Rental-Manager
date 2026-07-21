@@ -9,6 +9,7 @@ import EquipmentForm from '../../components/equipment/EquipmentForm';
 import { fetchEquipment, deleteEquipment } from '../../services/equipmentService';
 import { useAuth } from '../../context/AuthContext';
 import CustomDropdown from '../../components/ui/CustomDropdown';
+import { motion } from 'framer-motion';
 
 const CATEGORIES = [
   { value: '', label: 'All Categories' },
@@ -113,7 +114,7 @@ const EquipmentList = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
@@ -187,7 +188,12 @@ const EquipmentList = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+            >
               {equipment.map((item) => (
                 <div key={item._id} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-slate-600 transition-colors group">
                   {/* Image */}
@@ -247,7 +253,7 @@ const EquipmentList = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Pagination */}
             {pagination.pages > 1 && (

@@ -7,7 +7,7 @@ const CustomerHeader = ({ title, setMobileOpen }) => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="border-b border-orange-300 bg-[#4558be] sticky top-0 z-30 shrink-0">
+    <header className="border-b border-orange-300 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-500 sticky top-0 z-30 shrink-0">
       <div className="px-4 sm:px-5 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           {/* Hamburger for mobile */}

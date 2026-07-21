@@ -59,16 +59,29 @@ const Register = () => {
     <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="p-3 rounded-xl bg-primary-600/10 border border-primary-800/50 mb-4">
-            <Wrench className="h-7 w-7 text-primary-400" />
+        <div className="flex flex-col items-center mb-8 relative">
+          {/* Ambient Glow */}
+          <div className="absolute top-0 w-full h-full bg-orange-500/10 blur-[50px] -z-10 rounded-full"></div>
+
+          {/* Logo Container */}
+          <div className="animate-hero-enter relative p-4 rounded-2xl bg-slate-900/50 border border-slate-700/50 shadow-xl mb-6 group hover:border-orange-500/50 transition-colors duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <Wrench className="h-8 w-8 text-orange-400 drop-shadow-[0_0_10px_rgba(249,115,22,0.8)] relative z-10" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-100">Create your account</h1>
-          <p className="text-slate-400 text-sm mt-1">Start managing equipment rentals today</p>
+
+          {/* Main Title */}
+          <h1 className="animate-hero-enter delay-150 text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-slate-200 to-slate-400 mb-3 text-center">
+            Create account
+          </h1>
+          
+          {/* Subtitle */}
+          <p className="animate-hero-enter delay-300 text-slate-400 text-sm md:text-base font-medium text-center">
+            Start managing equipment rentals today
+          </p>
         </div>
 
         {/* Card */}
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 shadow-xl shadow-black/30">
+        <div className="animate-hero-enter delay-500 bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 shadow-xl shadow-black/30">
           {/* Root error */}
           {errors.root && (
             <div className="mb-5 flex items-start gap-3 px-4 py-3 rounded-lg bg-red-950/50 border border-red-800 text-red-300 text-sm">
@@ -134,7 +147,7 @@ const Register = () => {
           </form>
         </div>
 
-        <p className="text-center text-sm text-slate-500 mt-6">
+        <p className="animate-hero-enter delay-700 text-center text-sm text-slate-500 mt-6">
           Already have an account?{' '}
           <Link to="/login" className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
             Sign in

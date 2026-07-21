@@ -9,6 +9,7 @@ import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import { fetchRentals, updateRentalStatus } from '../../services/rentalService';
+import { motion } from 'framer-motion';
 
 const fmt = (d) =>
   new Date(d).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -60,7 +61,7 @@ const AdminRentals = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
 
         {/* Header */}
         <div className="mb-5">
@@ -99,8 +100,21 @@ const AdminRentals = () => {
           </div>
         ) : (
           <>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-              <div className="overflow-x-auto">
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 25 }}
+              className="relative bg-gradient-to-b from-slate-800/90 to-slate-900 border border-slate-700/60 rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/40 ring-1 ring-white/[0.05]"
+            >
+              {/* Premium Top Edge Spotlight */}
+              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-300/50 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mix-blend-overlay" />
+              
+              {/* Diffused Ambient Glow */}
+              <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-sky-300/15 blur-[100px] rounded-full" />
+              </div>
+              <div className="relative z-10 overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
@@ -210,7 +224,7 @@ const AdminRentals = () => {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </motion.div>
 
             {/* Pagination */}
             {pagination.pages > 1 && (

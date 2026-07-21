@@ -6,7 +6,7 @@
      PRIMARY — Orange palette (was blue)
      All primary-* classes now use warm orange tones
   ────────────────────────────────────────────────────────────── */
-  --color-primary-50:  #fff7ed;
+  --color-primary-50: #fff7ed;
   --color-primary-100: #ffedd5;
   --color-primary-200: #fed7aa;
   --color-primary-300: #fdba74;
@@ -35,24 +35,38 @@
        slate-100 (was heading text)    → gray-800     (heading text)
        slate-50  (was hover surface)   → orange-50    (hover surface)
   ────────────────────────────────────────────────────────────── */
-  --color-slate-950: #fed7aa;   /* orange-200 — body background */
-  --color-slate-900: #ffffff;   /* white — card / panel background */
-  --color-slate-800: #fff7ed;   /* orange-50 — secondary bg / hover */
-  --color-slate-700: #fed7aa;   /* orange-200 — border default */
-  --color-slate-600: #fdba74;   /* orange-300 — dim accent border */
-  --color-slate-500: #9ca3af;   /* gray-400 — muted / placeholder text */
-  --color-slate-400: #6b7280;   /* gray-500 — secondary text */
-  --color-slate-300: #4b5563;   /* gray-600 — label / caption text */
-  --color-slate-200: #374151;   /* gray-700 — body text */
-  --color-slate-100: #1f2937;   /* gray-800 — heading / primary text */
-  --color-slate-50:  #fff7ed;   /* orange-50 — subtle hover surface */
+  --color-slate-950: #fed7aa;
+  /* orange-200 — body background */
+  --color-slate-900: #ffffff;
+  /* white — card / panel background */
+  --color-slate-800: #fff7ed;
+  /* orange-50 — secondary bg / hover */
+  --color-slate-700: #fed7aa;
+  /* orange-200 — border default */
+  --color-slate-600: #fdba74;
+  /* orange-300 — dim accent border */
+  --color-slate-500: #9ca3af;
+  /* gray-400 — muted / placeholder text */
+  --color-slate-400: #6b7280;
+  /* gray-500 — secondary text */
+  --color-slate-300: #4b5563;
+  /* gray-600 — label / caption text */
+  --color-slate-200: #374151;
+  /* gray-700 — body text */
+  --color-slate-100: #1f2937;
+  /* gray-800 — heading / primary text */
+  --color-slate-50: #fff7ed;
+  /* orange-50 — subtle hover surface */
 
   /* ──────────────────────────────────────────────────────────────
      SURFACE — warm light equivalents (used in dashboard/cards)
   ────────────────────────────────────────────────────────────── */
-  --color-surface-800: #ffedd5;   /* orange-100 */
-  --color-surface-900: #fff7ed;   /* orange-50 */
-  --color-surface-950: #fed7aa;   /* orange-200 — matches body */
+  --color-surface-800: #ffedd5;
+  /* orange-100 */
+  --color-surface-900: #fff7ed;
+  /* orange-50 */
+  --color-surface-950: #fed7aa;
+  /* orange-200 — matches body */
 
   /* ──────────────────────────────────────────────────────────────
      ACCENT — kept as warm orange (was already orange)
@@ -73,7 +87,9 @@
 }
 
 /* ── Base Reset & Defaults ── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -84,8 +100,10 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: #fed7aa;   /* orange-200 */
-  color: #1f2937;               /* gray-800 */
+  background-color: #fed7aa;
+  /* orange-200 */
+  color: #1f2937;
+  /* gray-800 */
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -100,26 +118,80 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #ffedd5;   /* orange-100 */
+  background: #ffedd5;
+  /* orange-100 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #fdba74;   /* orange-300 */
+  background: #fdba74;
+  /* orange-300 */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #fb923c;   /* orange-400 */
+  background: #fb923c;
+  /* orange-400 */
 }
 
 /* ── Focus Visible ── */
 :focus-visible {
-  outline: 2px solid #ea580c;   /* orange-600 */
+  outline: 2px solid #ea580c;
+  /* orange-600 */
   outline-offset: 2px;
 }
 
 /* ── Selection ── */
 ::selection {
-  background-color: #fb923c;   /* orange-400 */
+  background-color: #fb923c;
+  /* orange-400 */
   color: #ffffff;
+}
+
+/* ── Button Shine Animation ── */
+@keyframes btn-shine {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+
+  100% {
+    transform: translateX(250%) skewX(-15deg);
+  }
+}
+
+.animate-btn-shine {
+  animation: btn-shine 2.4s ease-in-out infinite;
+}
+
+/* ── Hero Entrance Animation ── */
+@keyframes hero-enter {
+  0%   { opacity: 0; transform: translateY(32px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0)     scale(1);   }
+}
+.animate-hero-enter { animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+.delay-100 { animation-delay: 100ms;  }
+.delay-200 { animation-delay: 200ms;  }
+.delay-350 { animation-delay: 350ms;  }
+.delay-500 { animation-delay: 500ms;  }
+.delay-650 { animation-delay: 650ms;  }
+.delay-800 { animation-delay: 800ms;  }
+
+/* ── Floating orb ── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px)   scale(1);    }
+  50%       { transform: translateY(-28px) scale(1.05); }
+}
+@keyframes float-slow-rev {
+  0%, 100% { transform: translateY(0px)  scale(1);    }
+  50%       { transform: translateY(28px) scale(1.05); }
+}
+.animate-float         { animation: float-slow     9s  ease-in-out infinite; }
+.animate-float-rev     { animation: float-slow-rev 11s ease-in-out infinite; }
+
+/* ── Hero grid overlay ── */
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 52px 52px;
 }

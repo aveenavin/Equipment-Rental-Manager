@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
@@ -7,6 +7,7 @@ import {
   CheckCircle, AlertCircle, ShoppingBag, TrendingUp,
   Shield, ExternalLink,
 } from 'lucide-react';
+import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
@@ -41,8 +42,32 @@ const STATUS_BORDER = {
 };
 
 // ─── Stat summary card ───────────────────────────────────────────────────────
-const StatCard = ({ icon: Icon, label, value, accent, numColor }) => (
-  <div className="relative overflow-hidden flex flex-col p-2.5 rounded-[16px] bg-slate-900 border border-slate-800 shadow-sm hover:shadow-md hover:border-slate-700 transition-all group">
+const CountUp = ({ to, isCurrency = false }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => 
+    isCurrency ? fmtCurrency(latest) : Math.round(latest).toLocaleString()
+  );
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(count, to, { duration: 1.5, ease: "easeOut" });
+      return controls.stop;
+    }
+  }, [count, to, isInView]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+};
+
+const StatCard = ({ icon: Icon, label, value, accent, numColor, index = 0, isCurrency = false }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
+    className="relative overflow-hidden flex flex-col p-2.5 rounded-[16px] bg-slate-900 border border-slate-800 shadow-sm hover:shadow-md hover:border-slate-700 transition-all group"
+  >
     <div className={`absolute -right-4 -top-4 w-20 h-20 rounded-full ${accent} opacity-10 blur-2xl group-hover:opacity-20 transition-opacity`} />
     <div className="flex items-center gap-2 mb-1">
       <div className={`p-1.5 rounded-lg ${accent} shrink-0 shadow-inner`}>
@@ -51,9 +76,11 @@ const StatCard = ({ icon: Icon, label, value, accent, numColor }) => (
       <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-tight">{label}</p>
     </div>
     <div className="pl-0.5">
-      <p className={`text-xl font-extrabold tracking-tight ${numColor}`}>{value}</p>
+      <p className={`text-xl font-extrabold tracking-tight ${numColor}`}>
+        <CountUp to={value} isCurrency={isCurrency} />
+      </p>
     </div>
-  </div>
+  </motion.div>
 );
 
 // ─── Timeline step ───────────────────────────────────────────────────────────
@@ -122,8 +149,13 @@ const RentalCard = ({ rental, onCancel }) => {
   const borderColor = STATUS_BORDER[rental.status] || 'border-l-slate-600';
 
   return (
-    <div className={`group relative bg-slate-900 border border-slate-800 border-l-4 ${borderColor} rounded-2xl overflow-hidden transition-all duration-300 hover:border-slate-600 hover:shadow-xl hover:shadow-black/40 hover:-translate-y-0.5`}>
-      <div className="flex flex-col md:flex-row h-full">
+    <div className={`group relative bg-gradient-to-b from-yellow-50 to-white border border-slate-800 border-l-4 ${borderColor} rounded-2xl overflow-hidden transition-all duration-300 hover:border-slate-600 hover:shadow-xl hover:shadow-black/40 hover:-translate-y-0.5`}>
+      {/* Ambient glow - left image side only */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-[270px] h-[120px] bg-yellow-400/15 blur-[40px]" />
+        <div className="absolute bottom-0 left-0 w-[270px] h-[120px] bg-yellow-400/15 blur-[40px]" />
+      </div>
+      <div className="flex flex-col md:flex-row h-full relative z-10">
 
         {/* ── Equipment preview area ──────────────────────────────────────── */}
         <div className="md:w-[270px] p-4 pr-2 sm:p-5 sm:pr-3 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-center bg-slate-900/30 shrink-0">
@@ -357,6 +389,7 @@ const MyRentals = () => {
       {/* ── Stat cards ──────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         <StatCard
+          index={0}
           icon={ShoppingBag}
           label="Total Bookings"
           value={allRentals.length}
@@ -364,6 +397,7 @@ const MyRentals = () => {
           numColor="text-indigo-400"
         />
         <StatCard
+          index={1}
           icon={TrendingUp}
           label="Active"
           value={active}
@@ -371,6 +405,7 @@ const MyRentals = () => {
           numColor="text-pink-400"
         />
         <StatCard
+          index={2}
           icon={CheckCircle}
           label="Completed"
           value={returned}
@@ -378,9 +413,11 @@ const MyRentals = () => {
           numColor="text-teal-400"
         />
         <StatCard
+          index={3}
           icon={DollarSign}
           label="Total Spend"
-          value={fmtCurrency(totalSpend)}
+          value={totalSpend}
+          isCurrency={true}
           accent="bg-violet-500/10 text-violet-400 border border-violet-800/30"
           numColor="text-purple-400"
         />
@@ -492,6 +529,22 @@ const MyRentals = () => {
                   Next
                 </Button>
               </div>
+            </div>
+          )}
+
+          {/* End of list indicator */}
+          {page >= pagination.pages && (
+            <div className="flex flex-col items-center justify-center pt-8 pb-4 gap-3">
+              <div className="flex items-center gap-3 w-full max-w-sm">
+                <div className="flex-1 h-px bg-slate-800" />
+                <span className="text-xs font-semibold text-slate-600 uppercase tracking-widest whitespace-nowrap">
+                  No more bookings
+                </span>
+                <div className="flex-1 h-px bg-slate-800" />
+              </div>
+              <p className="text-xs text-slate-600">
+                Showing all {pagination.total} booking{pagination.total !== 1 ? 's' : ''}
+              </p>
             </div>
           )}
         </div>

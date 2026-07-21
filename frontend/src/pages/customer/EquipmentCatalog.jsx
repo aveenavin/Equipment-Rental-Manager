@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'react-hot-toast';
 import { Search, SlidersHorizontal, X, Package, ShoppingCart, ChevronDown, Truck, Zap, Activity, Wind, Shield, Box, Wrench } from 'lucide-react';
+import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import { StatusBadge } from '../../components/equipment/EquipmentBadges';
@@ -8,6 +9,22 @@ import BookingModal from '../../components/rental/BookingModal';
 import { fetchEquipment } from '../../services/equipmentService';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
+const CountUp = ({ to, suffix = '' }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString() + suffix);
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(count, to, { duration: 1.5, ease: "easeOut" });
+      return controls.stop;
+    }
+  }, [count, to, isInView]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+};
 
 const CATEGORIES = [
   { value: '', label: 'All Categories', icon: Package },
@@ -156,11 +173,10 @@ const EquipmentCatalog = () => {
                       setPage(1);
                       setIsDropdownOpen(false);
                     }}
-                    className={`group w-full flex items-center gap-3 px-3 py-2 mb-0.5 last:mb-0 rounded-xl text-[14px] font-medium tracking-tight transition-all duration-200 ${
-                      isSelected 
-                        ? 'bg-orange-50 text-orange-600' 
+                    className={`group w-full flex items-center gap-3 px-3 py-2 mb-0.5 last:mb-0 rounded-xl text-[14px] font-medium tracking-tight transition-all duration-200 ${isSelected
+                        ? 'bg-orange-50 text-orange-600'
                         : 'text-gray-600 hover:bg-black hover:text-white'
-                    }`}
+                      }`}
                   >
                     <Icon className={`h-4 w-4 transition-colors ${isSelected ? 'text-orange-500' : 'text-gray-400 group-hover:text-white/80'}`} />
                     {c.label}
@@ -189,8 +205,12 @@ const EquipmentCatalog = () => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {equipment.map((item) => (
-              <div
+              <motion.div
                 key={item._id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ type: 'spring', stiffness: 80, damping: 20 }}
                 className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group"
               >
                 {/* Image */}
@@ -242,7 +262,7 @@ const EquipmentCatalog = () => {
                     </Button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -284,6 +304,185 @@ const EquipmentCatalog = () => {
           }}
         />
       )}
+
+      {/* ── Why Choose EquipRental? ─────────────────────────────────────── */}
+      <div className="mt-20 mb-16">
+        <div className="text-center mb-10">
+          <span className="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold uppercase tracking-widest mb-4">
+            Why Us
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-100">
+            Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">EquipRental?</span>
+          </h2>
+          <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto">
+            Everything you need for a seamless equipment rental experience.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {[
+            {
+              icon: '🛡️',
+              title: 'Verified Equipment',
+              desc: 'Every item is inspected, certified, and maintained to the highest safety standards.',
+              color: 'from-blue-500/10 to-transparent border-blue-800/30',
+              accent: 'text-blue-400',
+            },
+            {
+              icon: '🔒',
+              title: 'Secure Booking',
+              desc: 'Industry-grade encryption protects your bookings and payment details.',
+              color: 'from-emerald-500/10 to-transparent border-emerald-800/30',
+              accent: 'text-emerald-400',
+            },
+            {
+              icon: '💰',
+              title: 'Affordable Pricing',
+              desc: 'Transparent, competitive rates with no hidden fees. Pay only for what you use.',
+              color: 'from-orange-500/10 to-transparent border-orange-800/30',
+              accent: 'text-orange-400',
+            },
+            {
+              icon: '🕐',
+              title: '24/7 Support',
+              desc: 'Our dedicated support team is always available to assist you, day or night.',
+              color: 'from-purple-500/10 to-transparent border-purple-800/30',
+              accent: 'text-purple-400',
+            },
+          ].map((f, index) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, x: index < 2 ? -50 : 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
+              className={`group relative bg-gradient-to-b ${f.color} bg-slate-900 border rounded-2xl p-6 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/30 transition-all duration-300`}
+            >
+              <div className="text-3xl mb-4">{f.icon}</div>
+              <h3 className={`text-base font-bold ${f.accent} mb-2`}>{f.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Statistics ─────────────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ type: 'spring', stiffness: 80, damping: 20 }}
+        className="mb-16 rounded-2xl bg-slate-900 border border-slate-700/50 overflow-hidden"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-300/20">
+          {[
+            { end: 500, suffix: '+', label: 'Equipment Available', icon: '🏗️' },
+            { end: 1200, suffix: '+', label: 'Happy Customers', icon: '🤝' },
+            { end: 98, suffix: '%', label: 'Satisfaction Rate', icon: '⭐' },
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
+              className="flex flex-col items-center justify-center py-6 px-6 text-center group hover:bg-slate-800/50 transition-colors duration-300"
+            >
+              <motion.span
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15 + 0.1, type: 'spring', stiffness: 120, damping: 15 }}
+                className="text-3xl mb-2"
+              >
+                {stat.icon}
+              </motion.span>
+              <span className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 tracking-tight">
+                <CountUp to={stat.end} suffix={stat.suffix} />
+              </span>
+              <span className="text-slate-400 text-sm font-medium mt-1">{stat.label}</span>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+
+
+      {/* ── Footer ────────────────────────────────────────────────────── */}
+      <footer className="border-t border-slate-300/20 pt-12 pb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+          {/* About */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xl">🔧</span>
+              <span className="font-black text-slate-100 text-lg tracking-tight">EquipRental</span>
+            </div>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+            </p>
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-5">
+              {['𝕏', 'in', 'f', '▶'].map((s, i) => (
+                <button
+                  key={i}
+                  className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 hover:border-orange-500/50 hover:bg-slate-700 text-slate-400 hover:text-orange-400 text-xs font-bold flex items-center justify-center transition-all duration-200"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h4>
+            <ul className="space-y-2.5">
+              {['Browse Catalog', 'My Rentals', 'Dashboard', 'Book Equipment'].map((l) => (
+                <li key={l}>
+                  <button
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Contact</h4>
+            <ul className="space-y-2.5 text-sm text-slate-500">
+              <li className="flex items-start gap-2"><span>📧</span> support@equiprental.com</li>
+              <li className="flex items-start gap-2"><span>📞</span> +91 98765 43210</li>
+              <li className="flex items-start gap-2"><span>📍</span> Mumbai, Maharashtra, India</li>
+              <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
+            <ul className="space-y-2.5">
+              {['Privacy Policy', 'Terms & Conditions', 'Refund Policy', 'Cookie Policy'].map((l) => (
+                <li key={l}>
+                  <button className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left">
+                    {l}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-slate-300/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+          <span>© {new Date().getFullYear()} EquipRental. All rights reserved.</span>
+          <span className="flex items-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
+        </div>
+      </footer>
+
     </div>
   );
 };

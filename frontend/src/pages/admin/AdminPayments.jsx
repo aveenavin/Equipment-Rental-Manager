@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import { fetchPayments } from '../../services/paymentService';
+import { motion } from 'framer-motion';
 
 const fmt = (d) =>
   new Date(d).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -62,7 +63,7 @@ const AdminPayments = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
 
         <div className="mb-5">
           <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 drop-shadow-sm pb-1">Payment Ledger</h1>
@@ -112,24 +113,37 @@ const AdminPayments = () => {
           </div>
         ) : (
           <>
-            <div className="bg-white border border-orange-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="overflow-x-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 25 }}
+              className="relative bg-gradient-to-b from-slate-800/90 to-slate-900 border border-slate-700/60 rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/40 ring-1 ring-white/[0.05]"
+            >
+              {/* Premium Top Edge Spotlight */}
+              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-sky-300/50 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mix-blend-overlay" />
+              
+              {/* Diffused Ambient Glow */}
+              <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-sky-300/15 blur-[100px] rounded-full" />
+              </div>
+              <div className="relative z-10 overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-orange-200 bg-orange-50">
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Type</th>
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Method</th>
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Recorded By</th>
-                      <th className="text-right px-4 py-2.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
+                    <tr className="border-b border-slate-800">
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Type</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Method</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Date</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Recorded By</th>
+                      <th className="text-right px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-orange-100">
+                  <tbody className="divide-y divide-slate-800">
                     {payments.map((p) => {
                       const typeCfg = TYPE_CONFIG[p.paymentType] || { label: p.paymentType, cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' };
                       return (
-                        <tr key={p._id} className="hover:bg-orange-50 transition-colors">
+                        <tr key={p._id} className="hover:bg-slate-800/40 transition-colors">
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
                               <div className="h-8 w-8 rounded-full bg-[#4558be]/10 border border-[#4558be]/20 text-[#4558be] font-bold flex items-center justify-center shrink-0">
@@ -138,8 +152,8 @@ const AdminPayments = () => {
                                 </span>
                               </div>
                               <div>
-                                <p className="text-[13px] text-gray-700 truncate max-w-[120px]">{p.customer?.name}</p>
-                                <p className="text-[11px] text-gray-400 truncate max-w-[120px]">{p.customer?.email}</p>
+                                <p className="text-[13px] text-slate-200 truncate max-w-[120px]">{p.customer?.name}</p>
+                                <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{p.customer?.email}</p>
                               </div>
                             </div>
                           </td>
@@ -151,27 +165,27 @@ const AdminPayments = () => {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="text-[13px] text-gray-500 flex items-center gap-1.5">
+                            <span className="text-[13px] text-slate-400 flex items-center gap-1.5">
                               <span>{METHOD_ICONS[p.paymentMethod]}</span>
                               <span className="capitalize">{p.paymentMethod?.replace('_', ' ')}</span>
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="text-[13px] text-gray-700">{fmt(p.paidAt)}</p>
+                            <p className="text-[13px] text-slate-300">{fmt(p.paidAt)}</p>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="text-[13px] text-gray-600">{p.recordedBy?.name}</p>
-                            <p className="text-[11px] text-gray-400 capitalize">{p.recordedBy?.role}</p>
+                            <p className="text-[13px] text-slate-300">{p.recordedBy?.name}</p>
+                            <p className="text-[11px] text-slate-500 capitalize">{p.recordedBy?.role}</p>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-[13px] ${p.direction === 'outbound' ? 'text-red-500' : 'text-emerald-600'}`}>
+                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-[13px] ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
                               {p.direction === 'outbound'
                                 ? <ArrowUpRight className="h-3 w-3" />
                                 : <ArrowDownLeft className="h-3 w-3" />}
                               ₹{p.amount.toFixed(2)}
                             </div>
                             {p.transactionId && (
-                              <p className="text-[11px] font-mono text-gray-400 mt-0.5">{p.transactionId}</p>
+                              <p className="text-[11px] font-mono text-slate-500 mt-0.5">{p.transactionId}</p>
                             )}
                           </td>
                         </tr>
@@ -180,7 +194,7 @@ const AdminPayments = () => {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </motion.div>
 
             {pagination.pages > 1 && (
               <div className="flex items-center justify-between mt-6">

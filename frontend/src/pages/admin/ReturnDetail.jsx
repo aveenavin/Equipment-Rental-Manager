@@ -59,7 +59,7 @@ const ReturnDetail = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-gray-800">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
 
         <Link to="/admin/returns" className="inline-flex items-center gap-1.5 text-[13px] text-gray-500 hover:text-orange-700 transition-colors mb-5">
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Returns

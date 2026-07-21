@@ -8,9 +8,9 @@ import {
 
 const CustomerSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
   const navItems = [
-    { label: 'Dashboard',  href: '/dashboard', icon: Home, exact: true },
-    { label: 'Browse Equipment', href: '/catalog',    icon: Package },
-    { label: 'My Rentals',  href: '/my-rentals', icon: Calendar },
+    { label: 'Dashboard', href: '/dashboard', icon: Home, exact: true },
+    { label: 'Browse Equipment', href: '/catalog', icon: Package },
+    { label: 'My Rentals', href: '/my-rentals', icon: Calendar },
   ];
 
   return (
@@ -25,7 +25,7 @@ const CustomerSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen })
 
       {/* Sidebar Container */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-slate-100 transition-transform duration-300 ease-in-out md:static md:translate-x-0 w-[84px] shrink-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-gradient-to-b from-blue-50 to-white border-r border-blue-100 transition-transform duration-300 ease-in-out md:static md:translate-x-0 w-[84px] shrink-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -38,10 +38,9 @@ const CustomerSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen })
               end={item.exact}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `relative flex flex-col items-center justify-center w-full py-3 transition-all duration-200 group ${
-                  isActive 
-                    ? 'text-[#ea580c] hover:text-[#c2410c]' 
-                    : 'text-[#334155] hover:text-[#0f172a] hover:bg-slate-50'
+                `relative flex flex-col items-center justify-center w-full py-3 transition-all duration-200 group ${isActive
+                  ? 'text-[#ea580c] hover:text-[#c2410c]'
+                  : 'text-[#334155] hover:text-[#0f172a] hover:bg-slate-50'
                 }`
               }
             >
@@ -51,11 +50,10 @@ const CustomerSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen })
                   {isActive && (
                     <div className="absolute inset-y-0 left-0 w-[94%] bg-[#FFF3ED] border-l-[3px] border-[#ea580c] rounded-r-[14px] -z-10" />
                   )}
-                  
-                  <item.icon 
-                    className={`h-[20px] w-[20px] mb-1.5 z-10 transition-transform duration-200 ${
-                      !isActive ? 'group-hover:scale-110' : ''
-                    }`}
+
+                  <item.icon
+                    className={`h-[20px] w-[20px] mb-1.5 z-10 transition-transform duration-200 ${!isActive ? 'group-hover:scale-110' : ''
+                      }`}
                     strokeWidth={isActive ? 1.75 : 1.5}
                   />
                   <span className="text-[10px] font-semibold text-center leading-tight px-1 z-10 text-inherit">
