@@ -46,7 +46,7 @@ const CountUp = ({ to, isCurrency = false }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => 
+  const rounded = useTransform(count, (latest) =>
     isCurrency ? fmtCurrency(latest) : Math.round(latest).toLocaleString()
   );
 
@@ -60,23 +60,25 @@ const CountUp = ({ to, isCurrency = false }) => {
   return <motion.span ref={ref}>{rounded}</motion.span>;
 };
 
-const StatCard = ({ icon: Icon, label, value, accent, numColor, index = 0, isCurrency = false }) => (
-  <motion.div 
+const StatCard = ({ icon: Icon, label, value, bg, borderColor, iconColor, index = 0, isCurrency = false }) => (
+  <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.3 }}
     transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
-    className="relative overflow-hidden flex flex-col p-2.5 rounded-[16px] bg-slate-900 border border-slate-800 shadow-sm hover:shadow-md hover:border-slate-700 transition-all group"
+    className={`relative overflow-hidden flex items-center p-4 rounded-2xl bg-gradient-to-br ${bg} border ${borderColor} shadow-lg hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 transition-all duration-300 group`}
   >
-    <div className={`absolute -right-4 -top-4 w-20 h-20 rounded-full ${accent} opacity-10 blur-2xl group-hover:opacity-20 transition-opacity`} />
-    <div className="flex items-center gap-2 mb-1">
-      <div className={`p-1.5 rounded-lg ${accent} shrink-0 shadow-inner`}>
-        <Icon className="h-3.5 w-3.5" />
-      </div>
-      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-tight">{label}</p>
+    {/* Decorative inner glass effect */}
+    <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500" />
+
+    <div className={`p-3 rounded-xl bg-slate-900/50 shrink-0 border ${borderColor} shadow-inner mr-4 relative z-10 backdrop-blur-sm group-hover:bg-slate-900/80 transition-all duration-300`}>
+      <Icon className={`h-5 w-5 ${iconColor}`} />
     </div>
-    <div className="pl-0.5">
-      <p className={`text-xl font-extrabold tracking-tight ${numColor}`}>
+
+    <div className="flex flex-col relative z-10">
+      <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider leading-tight mb-1">{label}</p>
+      <p className="text-2xl font-black tracking-tight text-black/70 drop-shadow-sm leading-none">
         <CountUp to={value} isCurrency={isCurrency} />
       </p>
     </div>
@@ -87,8 +89,8 @@ const StatCard = ({ icon: Icon, label, value, accent, numColor, index = 0, isCur
 const TimelineStep = ({ icon: Icon, label, date, active, done }) => (
   <div className={`relative flex flex-col items-center gap-2 z-10 w-20 ${active ? 'opacity-100' : done ? 'opacity-100' : 'opacity-80 grayscale'}`}>
     <div className={`h-8 w-8 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${active ? 'bg-orange-500 border-orange-200 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] scale-110'
-        : done ? 'bg-slate-800 border-orange-500/80 text-orange-400 shadow-sm'
-          : 'bg-slate-900 border-slate-700 text-slate-500'
+      : done ? 'bg-slate-800 border-orange-500/80 text-orange-400 shadow-sm'
+        : 'bg-slate-900 border-slate-700 text-slate-500'
       }`}>
       <Icon className="h-4 w-4" />
     </div>
@@ -387,30 +389,33 @@ const MyRentals = () => {
       </div>
 
       {/* ── Stat cards ──────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
         <StatCard
           index={0}
           icon={ShoppingBag}
           label="Total Bookings"
           value={allRentals.length}
-          accent="bg-orange-500/10 text-orange-400 border border-orange-800/30"
-          numColor="text-indigo-400"
+          bg="from-orange-900/40 via-slate-900 to-slate-900"
+          borderColor="border-orange-500/20"
+          iconColor="text-orange-400"
         />
         <StatCard
           index={1}
           icon={TrendingUp}
           label="Active"
           value={active}
-          accent="bg-blue-500/10 text-blue-400 border border-blue-800/30"
-          numColor="text-pink-400"
+          bg="from-blue-900/40 via-slate-900 to-slate-900"
+          borderColor="border-blue-500/20"
+          iconColor="text-blue-400"
         />
         <StatCard
           index={2}
           icon={CheckCircle}
           label="Completed"
           value={returned}
-          accent="bg-emerald-500/10 text-emerald-400 border border-emerald-800/30"
-          numColor="text-teal-400"
+          bg="from-emerald-900/40 via-slate-900 to-slate-900"
+          borderColor="border-emerald-500/20"
+          iconColor="text-emerald-400"
         />
         <StatCard
           index={3}
@@ -418,8 +423,9 @@ const MyRentals = () => {
           label="Total Spend"
           value={totalSpend}
           isCurrency={true}
-          accent="bg-violet-500/10 text-violet-400 border border-violet-800/30"
-          numColor="text-purple-400"
+          bg="from-purple-900/40 via-slate-900 to-slate-900"
+          borderColor="border-purple-500/20"
+          iconColor="text-purple-400"
         />
       </div>
 
@@ -430,8 +436,8 @@ const MyRentals = () => {
             key={value}
             onClick={() => { setStatusFilter(value); setPage(1); }}
             className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 group ${statusFilter === value
-                ? 'text-orange-50 bg-orange-500 shadow-[0_2px_10px_rgba(249,115,22,0.3)]'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/80'
+              ? 'text-orange-50 bg-orange-500 shadow-[0_2px_10px_rgba(249,115,22,0.3)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/80'
               }`}
           >
             <Icon className={`h-4 w-4 transition-colors ${statusFilter === value ? 'text-orange-200' : 'text-slate-500 group-hover:text-slate-400'}`} />
@@ -510,8 +516,8 @@ const MyRentals = () => {
                         key={p}
                         onClick={() => setPage(p)}
                         className={`w-9 h-9 text-[13px] font-bold rounded-lg transition-all duration-200 ${p === page
-                            ? 'bg-orange-500 text-white shadow-md shadow-orange-500/30 scale-105'
-                            : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-600 hover:text-slate-200 hover:bg-slate-800/50'
+                          ? 'bg-orange-500 text-white shadow-md shadow-orange-500/30 scale-105'
+                          : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-600 hover:text-slate-200 hover:bg-slate-800/50'
                           }`}
                       >
                         {p}

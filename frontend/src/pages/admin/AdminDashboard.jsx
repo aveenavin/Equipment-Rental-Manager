@@ -104,7 +104,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* ── KPI Cards ────────────────────────────────────────────────────── */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -164,7 +164,7 @@ const AdminDashboard = () => {
 
         {/* ── Equipment status mini-bar ────────────────────────────────────── */}
         {equipment.total > 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -216,7 +216,7 @@ const AdminDashboard = () => {
         {/* ── Charts row ───────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Revenue Trend — 2/3 width */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -255,7 +255,7 @@ const AdminDashboard = () => {
           </motion.div>
 
           {/* Rental Status Donut — 1/3 width */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -307,7 +307,7 @@ const AdminDashboard = () => {
         {/* ── Second charts row ─────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {/* Rental Trend Line Chart */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -338,7 +338,7 @@ const AdminDashboard = () => {
           </motion.div>
 
           {/* Equipment by Category Bar */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -378,7 +378,7 @@ const AdminDashboard = () => {
         {/* ── Recent Activity ───────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Recent Rentals */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.1 }}
@@ -427,7 +427,7 @@ const AdminDashboard = () => {
           {/* Recent Payments + Returns */}
           <div className="space-y-4">
             {/* Recent Payments */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -458,7 +458,7 @@ const AdminDashboard = () => {
             </motion.div>
 
             {/* Recent Returns */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
@@ -562,12 +562,13 @@ const AdminDashboard = () => {
                 { label: 'Customers', path: '/admin/customers' }
               ].map((l) => (
                 <li key={l.label}>
-                  <button
+                  <Link
+                    to={l.path}
                     onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     className="text-gray-500 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left"
                   >
                     {l.label}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -577,9 +578,9 @@ const AdminDashboard = () => {
           <div>
             <h4 className="text-gray-700 font-bold text-sm uppercase tracking-widest mb-4">Support</h4>
             <ul className="space-y-2.5 text-sm text-gray-500">
-              <li className="flex items-start gap-2"><span>📧</span> admin@equiprental.com</li>
-              <li className="flex items-start gap-2"><span>📞</span> +91 98765 43210</li>
-              <li className="flex items-start gap-2"><span>📍</span> Mumbai, Maharashtra, India</li>
+              <li className="flex items-start gap-2"><span>📧</span> 73aveen@gmail.com</li>
+              <li className="flex items-start gap-2"><span>📞</span> +91 9xxxxxxx</li>
+              <li className="flex items-start gap-2"><span>📍</span> Bhopal, Madhya Pradesh, India</li>
               <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
             </ul>
           </div>
@@ -588,11 +589,20 @@ const AdminDashboard = () => {
           <div>
             <h4 className="text-gray-700 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
             <ul className="space-y-2.5">
-              {['Admin Policies', 'Security Overview', 'API Documentation', 'System Status'].map((l) => (
-                <li key={l}>
-                  <button className="text-gray-500 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left">
-                    {l}
-                  </button>
+              {[
+                { label: 'Admin Policies', path: '/admin/policies' },
+                { label: 'Security Overview', path: '/admin/security' },
+                { label: 'API Documentation', path: '/admin/api' },
+                { label: 'System Status', path: '/admin/status' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.path}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-gray-500 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>

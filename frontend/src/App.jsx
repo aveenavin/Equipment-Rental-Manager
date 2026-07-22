@@ -34,6 +34,16 @@ import MaintenanceLogs from './pages/admin/MaintenanceLogs';
 // Shared pages
 import RentalDetail from './pages/shared/RentalDetail';
 import InvoicePage from './pages/shared/InvoicePage';
+import {
+  PrivacyPolicy,
+  TermsConditions,
+  RefundPolicy,
+  CookiePolicy,
+  AdminPolicies,
+  AdminSecurity,
+  AdminApiDocs,
+  AdminSystemStatus,
+} from './pages/shared/LegalPages';
 
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -72,6 +82,10 @@ function App() {
             <Route path="register" element={<Register />} />
             <Route path="check-email" element={<CheckEmail />} />
             <Route path="verify-email" element={<VerifyEmail />} />
+            <Route path="privacy" element={<PrivacyPolicy />} />
+            <Route path="terms" element={<TermsConditions />} />
+            <Route path="refund" element={<RefundPolicy />} />
+            <Route path="cookie" element={<CookiePolicy />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 
@@ -104,6 +118,10 @@ function App() {
               <Route path="returns/:id" element={<ReturnDetail />} />
               <Route path="maintenance" element={<MaintenanceLogs />} />
               <Route path="payments" element={<AdminPayments />} />
+              <Route path="policies" element={<AdminPolicies />} />
+              <Route path="security" element={<AdminSecurity />} />
+              <Route path="api" element={<AdminApiDocs />} />
+              <Route path="status" element={<AdminSystemStatus />} />
             </Route>
           </Route>
 

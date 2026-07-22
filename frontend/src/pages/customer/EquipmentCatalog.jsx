@@ -8,7 +8,7 @@ import { StatusBadge } from '../../components/equipment/EquipmentBadges';
 import BookingModal from '../../components/rental/BookingModal';
 import { fetchEquipment } from '../../services/equipmentService';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const CountUp = ({ to, suffix = '' }) => {
   const ref = useRef(null);
@@ -174,8 +174,8 @@ const EquipmentCatalog = () => {
                       setIsDropdownOpen(false);
                     }}
                     className={`group w-full flex items-center gap-3 px-3 py-2 mb-0.5 last:mb-0 rounded-xl text-[14px] font-medium tracking-tight transition-all duration-200 ${isSelected
-                        ? 'bg-orange-50 text-orange-600'
-                        : 'text-gray-600 hover:bg-black hover:text-white'
+                      ? 'bg-orange-50 text-orange-600'
+                      : 'text-gray-600 hover:bg-black hover:text-white'
                       }`}
                   >
                     <Icon className={`h-4 w-4 transition-colors ${isSelected ? 'text-orange-500' : 'text-gray-400 group-hover:text-white/80'}`} />
@@ -367,44 +367,48 @@ const EquipmentCatalog = () => {
       </div>
 
       {/* ── Statistics ─────────────────────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-        className="mb-16 rounded-2xl bg-slate-900 border border-slate-700/50 overflow-hidden"
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-300/20">
-          {[
-            { end: 500, suffix: '+', label: 'Equipment Available', icon: '🏗️' },
-            { end: 1200, suffix: '+', label: 'Happy Customers', icon: '🤝' },
-            { end: 98, suffix: '%', label: 'Satisfaction Rate', icon: '⭐' },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
-              className="flex flex-col items-center justify-center py-6 px-6 text-center group hover:bg-slate-800/50 transition-colors duration-300"
+      <div className="mb-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {[
+          {
+            end: 500, suffix: '+', label: 'Equipment Available', icon: '🏗️',
+            bg: 'from-blue-900/40 via-slate-900 to-slate-900', border: 'border-blue-500/20', text: 'from-blue-400 to-blue-600'
+          },
+          {
+            end: 1200, suffix: '+', label: 'Happy Customers', icon: '🤝',
+            bg: 'from-emerald-900/40 via-slate-900 to-slate-900', border: 'border-emerald-500/20', text: 'from-emerald-400 to-emerald-600'
+          },
+          {
+            end: 98, suffix: '%', label: 'Satisfaction Rate', icon: '⭐',
+            bg: 'from-orange-900/40 via-slate-900 to-slate-900', border: 'border-orange-500/20', text: 'from-orange-400 to-orange-600'
+          },
+        ].map((stat, index) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
+            className={`flex flex-col items-center justify-center py-5 px-5 text-center group bg-gradient-to-br ${stat.bg} border ${stat.border} rounded-2xl hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 transition-all duration-300 relative overflow-hidden`}
+          >
+            {/* Optional glow effect */}
+            <div className={`absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors duration-500`} />
+
+            <motion.span
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.15 + 0.1, type: 'spring', stiffness: 120, damping: 15 }}
+              className="text-3xl mb-2 drop-shadow-md"
             >
-              <motion.span
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 + 0.1, type: 'spring', stiffness: 120, damping: 15 }}
-                className="text-3xl mb-2"
-              >
-                {stat.icon}
-              </motion.span>
-              <span className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600 tracking-tight">
-                <CountUp to={stat.end} suffix={stat.suffix} />
-              </span>
-              <span className="text-slate-400 text-sm font-medium mt-1">{stat.label}</span>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+              {stat.icon}
+            </motion.span>
+            <span className={`text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r ${stat.text} tracking-tight drop-shadow-sm`}>
+              <CountUp to={stat.end} suffix={stat.suffix} />
+            </span>
+            <span className="text-slate-300 text-xs font-semibold mt-1 tracking-wide uppercase">{stat.label}</span>
+          </motion.div>
+        ))}
+      </div>
 
 
 
@@ -437,14 +441,21 @@ const EquipmentCatalog = () => {
           <div>
             <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h4>
             <ul className="space-y-2.5">
-              {['Browse Catalog', 'My Rentals', 'Dashboard', 'Book Equipment'].map((l) => (
-                <li key={l}>
-                  <button
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              {[
+                { label: 'Browse Catalog', path: '/catalog' },
+                { label: 'My Rentals', path: '/my-rentals' },
+                { label: 'Dashboard', path: '/dashboard' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link 
+                    to={l.path}
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left"
                   >
-                    {l}
-                  </button>
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -454,9 +465,9 @@ const EquipmentCatalog = () => {
           <div>
             <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Contact</h4>
             <ul className="space-y-2.5 text-sm text-slate-500">
-              <li className="flex items-start gap-2"><span>📧</span> support@equiprental.com</li>
-              <li className="flex items-start gap-2"><span>📞</span> +91 98765 43210</li>
-              <li className="flex items-start gap-2"><span>📍</span> Mumbai, Maharashtra, India</li>
+              <li className="flex items-start gap-2"><span>📧</span> 73aveen@gmail.com</li>
+              <li className="flex items-start gap-2"><span>📞</span> +91 9xxxxxxx</li>
+              <li className="flex items-start gap-2"><span>📍</span> Bhopal, Madhya Pradesh, India</li>
               <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
             </ul>
           </div>
@@ -465,11 +476,20 @@ const EquipmentCatalog = () => {
           <div>
             <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
             <ul className="space-y-2.5">
-              {['Privacy Policy', 'Terms & Conditions', 'Refund Policy', 'Cookie Policy'].map((l) => (
-                <li key={l}>
-                  <button className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left">
-                    {l}
-                  </button>
+              {[
+                { label: 'Privacy Policy', path: '/privacy' },
+                { label: 'Terms & Conditions', path: '/terms' },
+                { label: 'Refund Policy', path: '/refund' },
+                { label: 'Cookie Policy', path: '/cookie' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link 
+                    to={l.path}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
