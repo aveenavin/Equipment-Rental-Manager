@@ -2,33 +2,36 @@ const User = require('../models/User');
 
 /**
  * Ensures the default admin account exists in the database.
- * Runs once on every server startup. Safe to call repeatedly — it is fully
- * idempotent and will never create a duplicate admin.
+ * Runs once on every server startup — fully idempotent.
  *
- * Credentials  : 73aveen@gmail.com / admin123
- * Role         : admin
- * Status       : active
- * isVerified   : true
+ * Credentials are read from environment variables so they can be
+ * safely managed via your hosting platform's secret store.
+ *
+ * Set in production:
+ *   ADMIN_EMAIL    – admin login email
+ *   ADMIN_PASSWORD – strong admin password (min 8 chars)
  */
 const seedAdmin = async () => {
   try {
-    const existing = await User.findOne({ email: '73aveen@gmail.com' });
+    const email = process.env.ADMIN_EMAIL || '73aveen@gmail.com';
+    const password = process.env.ADMIN_PASSWORD || 'admin123';
+
+    const existing = await User.findOne({ email });
 
     if (existing) {
-      console.log('Admin account already exists — skipping seed.');
-      return;
+      return; // Already exists — nothing to do
     }
 
     await User.create({
       name: 'Admin',
-      email: '73aveen@gmail.com',
-      password: 'admin123', // hashed by the pre-save hook in User.js
+      email,
+      password, // hashed by the pre-save hook in User.js
       role: 'admin',
       status: 'active',
       isVerified: true,
     });
 
-    console.log('✅ Default admin account created: 73aveen@gmail.com');
+    console.log(`✅ Default admin account created: ${email}`);
   } catch (error) {
     // Log but do not crash the server — a missing admin is recoverable.
     console.error('❌ Failed to seed admin account:', error.message);

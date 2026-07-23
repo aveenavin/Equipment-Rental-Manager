@@ -2,8 +2,15 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   const uri = process.env.MONGO_URI;
+  const isProd = process.env.NODE_ENV === 'production';
 
   if (!uri || uri === 'PASTE_YOUR_ATLAS_URI_HERE') {
+    if (isProd) {
+      // Hard exit in production — a missing DB URI is unrecoverable
+      console.error('❌ MONGO_URI is not set. Cannot start server in production.');
+      process.exit(1);
+    }
+
     console.warn('\n==================================================================');
     console.warn('⚠️  DATABASE CONFIGURATION WARNING:');
     console.warn('MONGO_URI is not set or is still using the placeholder in backend/.env.');

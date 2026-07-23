@@ -110,10 +110,60 @@ Base URL: `http://localhost:5000/api/v1`
 ## Security
 
 - Passwords hashed with `bcryptjs` (cost factor 12)
-- JWT tokens stored in `httpOnly`, `secure`, `sameSite=strict` cookies
-- Rate limiting on all auth endpoints
-- NoSQL injection protection via `express-mongo-sanitize`
-- Secure HTTP headers via `helmet`
+- JWT tokens stored in `httpOnly`, `secure`, `sameSite` cookies
+- Rate limiting: 200 req/15 min (global), 20 req/15 min (auth)
+- NoSQL injection protection via custom sanitizer (Express 5 compatible)
+- Secure HTTP headers via `helmet` with custom CSP
+- Request body capped at 10 KB to prevent payload attacks
+- `gzip` compression on all API responses
+
+---
+
+## Production Deployment
+
+The backend is deployed to **Render** and the frontend to **Vercel**. Since they run on different domains, cookies are configured with `sameSite=none; secure` automatically.
+
+### Backend → Render
+
+**Option A — Blueprint (recommended)**
+1. Push this repo to GitHub.
+2. Render Dashboard → **New → Blueprint** → connect your repo.
+3. Render detects `render.yaml` and creates the service automatically.
+4. Go to the created service → **Environment** → add all `sync: false` secrets.
+
+**Option B — Manual**
+1. Render Dashboard → **New → Web Service** → connect your repo.
+2. Set **Root Directory**: `backend` | **Build**: `npm install` | **Start**: `npm start`
+3. Add all environment variables from `backend/.env.production.example`.
+
+### Frontend → Vercel
+
+```bash
+# Install Vercel CLI (one-time)
+npm i -g vercel
+
+# From the frontend directory
+cd frontend
+vercel --prod
+```
+
+Or connect via Vercel Dashboard → **New Project** → import repo → set **Root Directory** to `frontend`.
+
+**Required Vercel Environment Variable:**
+```
+VITE_API_BASE_URL = https://your-backend.onrender.com/api/v1
+```
+
+### Post-Deploy Verification
+
+| Check | How |
+|---|---|
+| Backend alive | `GET https://your-backend.onrender.com/health` → `{"status":"ok"}` |
+| API auth works | Login via frontend → check cookies in DevTools |
+| DB connected | Server logs should show `MongoDB connected: ...` |
+| Image uploads | Create equipment with images → verify Cloudinary URL |
+| No source maps | DevTools Sources → no `.jsx` files visible |
+| No stack traces | Hit a bad route → response should be `{"status":"error","message":"..."}` |
 
 ---
 

@@ -1,4 +1,25 @@
 require('dotenv').config();
+
+// ─── Production Environment Validation ───────────────────────────────────────
+// Fail fast: exit immediately if critical env vars are missing in production.
+if (process.env.NODE_ENV === 'production') {
+  const REQUIRED_ENV_VARS = [
+    'MONGO_URI',
+    'JWT_ACCESS_SECRET',
+    'JWT_REFRESH_SECRET',
+    'CLIENT_URL',
+  ];
+
+  const missing = REQUIRED_ENV_VARS.filter((key) => !process.env[key]);
+
+  if (missing.length > 0) {
+    console.error('❌ Missing required environment variables for production:');
+    missing.forEach((key) => console.error(`   - ${key}`));
+    console.error('Set these variables on your hosting platform and redeploy.');
+    process.exit(1);
+  }
+}
+
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
 const seedAdmin = require('./src/utils/seedAdmin');
@@ -9,7 +30,11 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB, seed required data, then start server
 connectDB().then(async () => {
   await seedAdmin();
-  await seedData();
+
+  // Only seed demo data in development (skipped in production by default)
+  if (process.env.SEED_DATA !== 'false') {
+    await seedData();
+  }
 
   const server = app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);

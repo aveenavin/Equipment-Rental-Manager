@@ -25,7 +25,7 @@ const CustomerSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen })
 
       {/* Sidebar Container */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-gradient-to-b from-blue-50 to-white border-r border-blue-100 transition-transform duration-300 ease-in-out md:static md:translate-x-0 w-[84px] shrink-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-gradient-to-b from-blue-200 to-white border-r border-blue-100 transition-transform duration-300 ease-in-out md:static md:translate-x-0 w-[72px] shrink-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
