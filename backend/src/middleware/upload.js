@@ -25,7 +25,18 @@ const upload = multer({
 const streamUpload = (buffer, options) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
-      if (error) return reject(new AppError('Image upload failed. Please try again.', 500));
+      if (error) {
+        // Log the real Cloudinary error so it appears in server output
+        console.error('[Cloudinary] upload_stream error:', {
+          message: error.message,
+          http_code: error.http_code,
+          name: error.name,
+        });
+        return reject(new AppError(
+          `Cloudinary upload failed: ${error.message || 'Unknown error'}`,
+          error.http_code >= 400 && error.http_code < 500 ? error.http_code : 500
+        ));
+      }
       resolve(result);
     });
     streamifier.createReadStream(buffer).pipe(stream);

@@ -20,6 +20,31 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
+// ─── Cloudinary Credential Check ─────────────────────────────────────────────
+// Warn at startup (all environments) so image upload failures are caught early
+// rather than only discovered at request time.
+const CLOUDINARY_PLACEHOLDERS = [
+  'your_cloudinary_cloud_name',
+  'your_cloudinary_api_key',
+  'your_cloudinary_api_secret',
+];
+if (
+  CLOUDINARY_PLACEHOLDERS.includes(process.env.CLOUDINARY_CLOUD_NAME) ||
+  CLOUDINARY_PLACEHOLDERS.includes(process.env.CLOUDINARY_API_KEY) ||
+  CLOUDINARY_PLACEHOLDERS.includes(process.env.CLOUDINARY_API_SECRET) ||
+  !process.env.CLOUDINARY_CLOUD_NAME ||
+  !process.env.CLOUDINARY_API_KEY ||
+  !process.env.CLOUDINARY_API_SECRET
+) {
+  console.warn('\n==================================================================');
+  console.warn('⚠️  CLOUDINARY WARNING:');
+  console.warn('CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, or CLOUDINARY_API_SECRET');
+  console.warn('are missing or still set to placeholder values in backend/.env');
+  console.warn('Image uploads WILL fail until real credentials are provided.');
+  console.warn('Get your credentials at: https://console.cloudinary.com');
+  console.warn('==================================================================\n');
+}
+
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
 const seedAdmin = require('./src/utils/seedAdmin');
