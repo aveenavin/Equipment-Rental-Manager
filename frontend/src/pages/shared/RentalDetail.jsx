@@ -67,7 +67,7 @@ const RentalDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [id]);
+  }, [id, navigate, backPath]);
 
   const loadPayments = useCallback(async () => {
     if (!id) return;

@@ -2,14 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
-  Calendar, Package, ChevronRight, XCircle, FileText,
+  Calendar, Package, XCircle, FileText,
   ArrowRight, DollarSign, Clock, Truck, RotateCcw,
   CheckCircle, AlertCircle, ShoppingBag, TrendingUp,
   Shield, ExternalLink,
 } from 'lucide-react';
 import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import Button from '../../components/ui/Button';
-import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import { fetchRentals, cancelRental } from '../../services/rentalService';
 

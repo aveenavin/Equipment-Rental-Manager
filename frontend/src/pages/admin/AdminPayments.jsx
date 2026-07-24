@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import {
-  IndianRupee, ArrowDownLeft, ArrowUpRight, CreditCard,
+  IndianRupee, ArrowDownLeft, ArrowUpRight,
   ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';

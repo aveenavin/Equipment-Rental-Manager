@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -30,7 +30,7 @@ const CountUp = ({ to }) => {
   return <motion.span>{rounded}</motion.span>;
 };
 
-const StatCard = ({ icon: Icon, label, value, gradient, shadowColor, index = 0, isLoading = false }) => (
+const StatCard = ({ icon: Icon, label, value, gradient, shadowColor: _shadowColor, index: _index = 0, isLoading = false }) => (
   <div
     className={`relative overflow-hidden flex items-center p-4 rounded-2xl bg-gradient-to-br ${gradient} shadow-2xl transition-all duration-300`}
   >

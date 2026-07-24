@@ -53,7 +53,7 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
   const isEdit = !!equipment;
   const [newFiles, setNewFiles] = useState([]);
   const [newPreviews, setNewPreviews] = useState([]);
-  const [existingImages, setExistingImages] = useState(equipment?.images || []);
+  const existingImages = equipment?.images || [];
   const [imagesToDelete, setImagesToDelete] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

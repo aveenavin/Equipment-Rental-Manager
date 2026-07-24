@@ -6,7 +6,7 @@ import {
   Calendar
 } from 'lucide-react';
 
-const CustomerSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
+const CustomerSidebar = ({ mobileOpen, setMobileOpen }) => {
   const navItems = [
     { label: 'Dashboard', href: '/dashboard', icon: Home, exact: true },
     { label: 'Browse Equipment', href: '/catalog', icon: Package },

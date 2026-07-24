@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Plus, Search, Filter, Eye, Pencil, Trash2, Package, X, ChevronDown, Activity, Check } from 'lucide-react';
+import { Plus, Search, Filter, Eye, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import { StatusBadge, ConditionBadge } from '../../components/equipment/EquipmentBadges';

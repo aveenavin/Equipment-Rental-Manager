@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
   Search, X, Users, Eye, Pencil, Trash2,
-  UserCheck, UserX, Shield, ChevronLeft, ChevronRight, Activity
+  UserCheck, UserX, ChevronLeft, ChevronRight, Activity
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';

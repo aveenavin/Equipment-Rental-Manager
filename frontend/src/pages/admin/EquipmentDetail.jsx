@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ArrowLeft, Pencil, Trash2, Package, ChevronLeft, ChevronRight, X } from 'lucide-react';
@@ -22,7 +22,7 @@ const EquipmentDetail = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const loadEquipment = async () => {
+  const loadEquipment = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await fetchEquipmentById(id);
@@ -33,9 +33,9 @@ const EquipmentDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id, navigate]);
 
-  useEffect(() => { loadEquipment(); }, [id]);
+  useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
   const handleDelete = async () => {
     setIsDeleting(true);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ArrowLeft, Printer, CheckCircle, Clock, AlertCircle, XCircle } from 'lucide-react';
@@ -26,7 +26,7 @@ const TYPE_COLORS = {
 const InvoicePage = () => {
   const { rentalId } = useParams();
   const navigate = useNavigate();
-  const { user, isAdmin, isStaff } = useAuth();
+  const { isAdmin, isStaff } = useAuth();
   const canManage = isAdmin || isStaff;
 
   const [invoice, setInvoice] = useState(null);
@@ -34,21 +34,20 @@ const InvoicePage = () => {
 
   const backPath = canManage ? `/admin/rentals/${rentalId}` : `/my-rentals/${rentalId}`;
 
-  useEffect(() => {
-    const load = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetchInvoice(rentalId);
-        setInvoice(res.data.data.invoice);
-      } catch (err) {
-        toast.error(err.response?.data?.message || 'Invoice not found.');
-        navigate(backPath);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    load();
-  }, [rentalId]);
+  const load = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetchInvoice(rentalId);
+      setInvoice(res.data.data.invoice);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Invoice not found.');
+      navigate(backPath);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [rentalId, navigate, backPath]);
+
+  useEffect(() => { load(); }, [load]);
 
   if (isLoading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><Spinner size="lg" /></div>;
   if (!invoice) return null;

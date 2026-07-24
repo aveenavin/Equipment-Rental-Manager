@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
@@ -33,7 +33,7 @@ const CustomerDetail = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const loadCustomer = async () => {
+  const loadCustomer = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await fetchCustomerById(id);
@@ -44,9 +44,9 @@ const CustomerDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id, navigate]);
 
-  useEffect(() => { loadCustomer(); }, [id]);
+  useEffect(() => { loadCustomer(); }, [loadCustomer]);
 
   const handleToggleStatus = async () => {
     if (!isAdmin) return;

@@ -68,7 +68,7 @@ function App() {
               borderRadius: '0.75rem',
               fontSize: '0.875rem',
             },
-            success: { iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' } },
+            success: { iconTheme: { primary: '#10b981', secondary: '#f1f5f9' } },
             error: { iconTheme: { primary: '#ef4444', secondary: '#f1f5f9' } },
             
           }}

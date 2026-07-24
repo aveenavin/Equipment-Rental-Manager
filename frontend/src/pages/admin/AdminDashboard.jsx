@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
@@ -7,14 +7,11 @@ import {
 } from 'recharts';
 import {
   Package, Users, ClipboardList, IndianRupee, RotateCcw,
-  TrendingUp, AlertTriangle, CheckCircle, Wrench, LogOut,
-  ArrowRight, BarChart3,
+  AlertTriangle, CheckCircle, Wrench, ArrowRight,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import StatCard from '../../components/dashboard/StatCard';
-import Button from '../../components/ui/Button';
 import { fetchDashboard } from '../../services/dashboardService';
-import { useAuth } from '../../context/AuthContext';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import { motion } from 'framer-motion';
 
@@ -53,28 +50,26 @@ const AdminDashboard = () => {
   const { setLastUpdated: setHeaderLastUpdated } = useOutletContext() || {};
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState(null);
 
-  const load = async (silent = false) => {
+  const load = useCallback(async (silent = false) => {
     if (!silent) setIsLoading(true);
     try {
       const res = await fetchDashboard();
       setData(res.data.data);
       const now = new Date();
-      setLastUpdated(now);
       if (setHeaderLastUpdated) setHeaderLastUpdated(now);
     } catch {
       if (!silent) toast.error('Failed to load dashboard data.');
     } finally {
       if (!silent) setIsLoading(false);
     }
-  };
+  }, [setHeaderLastUpdated]);
 
   useEffect(() => {
     load();
     const interval = setInterval(() => load(true), 60000); // auto-refresh every minute
     return () => clearInterval(interval);
-  }, []);
+  }, [load]);
 
   if (isLoading) {
     return (

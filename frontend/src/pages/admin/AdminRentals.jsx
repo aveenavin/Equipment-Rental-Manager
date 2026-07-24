@@ -2,10 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
-  FileText, Search, X, ChevronLeft, ChevronRight,
-  Eye, CheckCircle, Truck, RotateCcw, XCircle, Calendar, IndianRupee, User,
+  FileText, ChevronLeft, ChevronRight,
+  Eye, CheckCircle, Truck, RotateCcw, Calendar,
 } from 'lucide-react';
-import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import { fetchRentals, updateRentalStatus } from '../../services/rentalService';

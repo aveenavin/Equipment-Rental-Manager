@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import {
@@ -34,21 +34,20 @@ const ReturnDetail = () => {
   const [record, setRecord] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const load = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetchReturnById(id);
-        setRecord(res.data.data.return);
-      } catch (err) {
-        toast.error(err.response?.data?.message || 'Return record not found.');
-        navigate('/admin/returns');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    load();
-  }, [id]);
+  const load = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetchReturnById(id);
+      setRecord(res.data.data.return);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Return record not found.');
+      navigate('/admin/returns');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id, navigate]);
+
+  useEffect(() => { load(); }, [load]);
 
   if (isLoading) return <div className="min-h-screen bg-[#d8d9e0] flex items-center justify-center"><Spinner size="lg" /></div>;
   if (!record) return null;

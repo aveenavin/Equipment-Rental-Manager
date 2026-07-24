@@ -4,7 +4,6 @@ import CustomerSidebar from '../components/layout/CustomerSidebar';
 import CustomerHeader from '../components/layout/CustomerHeader';
 
 const CustomerLayout = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -16,8 +15,6 @@ const CustomerLayout = () => {
   return (
     <div className="flex min-h-screen bg-[#EBE8E1]">
       <CustomerSidebar
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
       />

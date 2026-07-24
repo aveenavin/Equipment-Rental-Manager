@@ -31,8 +31,9 @@ const PORT = process.env.PORT || 5000;
 connectDB().then(async () => {
   await seedAdmin();
 
-  // Only seed demo data in development (skipped in production by default)
-  if (process.env.SEED_DATA !== 'false') {
+  // Only seed demo data in non-production environments.
+  // In production, data seeding must be explicitly enabled via SEED_DATA=true.
+  if (process.env.NODE_ENV !== 'production' || process.env.SEED_DATA === 'true') {
     await seedData();
   }
 
