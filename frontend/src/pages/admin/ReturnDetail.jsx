@@ -91,7 +91,7 @@ const ReturnDetail = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 flex items-center gap-3">
           <div className="h-16 w-20 rounded-xl bg-slate-800 overflow-hidden shrink-0">
             {record.equipment?.images?.[0] ? (
-              <img src={record.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
+              <img src={record.equipment.images[0].url} alt="" className="w-full h-full object-contain p-2" />
             ) : (
               <div className="w-full h-full flex items-center justify-center"><Package className="h-6 w-6 text-slate-600" /></div>
             )}
@@ -122,7 +122,7 @@ const ReturnDetail = () => {
             </div>
             <InfoRow label="Actual Return Date" value={fmt(record.returnDate)} />
             <InfoRow label="Condition at Return" value={
-              <span className={`inline-flex px-1.5 py-0.5 rounded-md text-[11px] font-medium border capitalize ${conditionColors[record.conditionAtReturn]}`}>
+              <span className={`inline-flex px-1.5 py-0.5 rounded-md text-[11px] font-medium border capitalize ${conditionClasses[record.conditionAtReturn]}`}>
                 {record.conditionAtReturn}
               </span>
             } />

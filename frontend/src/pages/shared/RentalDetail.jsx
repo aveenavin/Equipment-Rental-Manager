@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Package, Calendar, DollarSign, User,
   CheckCircle, Truck, RotateCcw, XCircle, ChevronDown, ExternalLink,
-  FileText, PlusCircle, ArrowDownLeft, ArrowUpRight,
+  FileText, PlusCircle, ArrowDownLeft, ArrowUpRight, Clock, MapPin, Hash, ShieldCheck, Mail, Phone, CreditCard
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
@@ -21,19 +22,41 @@ const fmt = (d) =>
 const fmtTime = (d) =>
   d ? new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
 
-const InfoRow = ({ label, value }) => (
-  <div className="flex justify-between items-start py-2.5 border-b border-slate-800 last:border-0 gap-4">
-    <span className="text-sm text-slate-500 shrink-0">{label}</span>
-    <span className="text-sm text-slate-200 font-medium text-right">{value}</span>
+const STATUS_TRANSITIONS = {
+  pending: { label: 'Confirm Booking', nextStatus: 'confirmed', icon: CheckCircle, variant: 'primary', color: 'from-blue-500 to-indigo-500' },
+  confirmed: { label: 'Mark Checked Out', nextStatus: 'checked_out', icon: Truck, variant: 'primary', color: 'from-amber-500 to-orange-500' },
+};
+
+const InfoRow = ({ label, value, icon: Icon, valueClass = "text-slate-200" }) => (
+  <div className="flex justify-between items-center py-2 border-b border-slate-700/50 last:border-0 group">
+    <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+      {Icon && <div className="p-1 rounded-lg bg-slate-800"><Icon className="h-4 w-4 text-primary-400" /></div>}
+      <span className="text-sm font-medium">{label}</span>
+    </div>
+    <span className={`text-sm font-semibold text-right ${valueClass}`}>{value}</span>
   </div>
 );
 
-// Only pending → confirmed and confirmed → checked_out use the simple transition.
-// checked_out → returned uses the dedicated ProcessReturnModal.
-const STATUS_TRANSITIONS = {
-  pending: { label: 'Confirm Booking', nextStatus: 'confirmed', icon: CheckCircle, variant: 'primary' },
-  confirmed: { label: 'Mark Checked Out', nextStatus: 'checked_out', icon: Truck, variant: 'primary' },
-};
+const SectionCard = ({ title, icon: Icon, children, className = "" }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 15 }}
+    animate={{ opacity: 1, y: 0 }}
+    className={`bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-5 shadow-xl relative overflow-hidden ${className}`}
+  >
+    <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+      <Icon className="w-24 h-24" />
+    </div>
+    <div className="flex items-center gap-3 mb-4 relative z-10">
+      <div className="p-2 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-600/10 border border-primary-500/30">
+        <Icon className="h-4 w-4 text-primary-400" />
+      </div>
+      <h3 className="text-base font-bold text-slate-100 tracking-tight">{title}</h3>
+    </div>
+    <div className="relative z-10">
+      {children}
+    </div>
+  </motion.div>
+);
 
 const RentalDetail = () => {
   const { id } = useParams();
@@ -76,7 +99,7 @@ const RentalDetail = () => {
       const res = await fetchPaymentsByRental(id);
       setPaymentData({ payments: res.data.data.payments, summary: res.data.data.summary });
     } catch {
-      // Payments may not exist yet — silent fail
+      // Payments may not exist yet
     } finally {
       setPaymentsLoading(false);
     }
@@ -133,274 +156,396 @@ const RentalDetail = () => {
   const canProcessReturn = canManage && rental.status === 'checked_out';
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden pb-20">
+      
+      {/* Background Ambience */}
+      <div className="fixed top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-primary-900/20 to-transparent pointer-events-none" />
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
 
-        <Link to={backPath} className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">
+        <Link to={backPath} className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors mb-6 bg-slate-900/50 px-4 py-2 rounded-xl border border-slate-800 backdrop-blur-md w-fit">
           <ArrowLeft className="h-4 w-4" /> Back to {isCustomer ? 'My Rentals' : 'All Rentals'}
         </Link>
 
-        {/* Status header */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <RentalStatusBadge status={rental.status} />
-                <span className="text-xs text-slate-500 font-mono">#{rental._id.slice(-8).toUpperCase()}</span>
-              </div>
-              <p className="text-xs text-slate-500">Booked on {fmtTime(rental.createdAt)}</p>
-            </div>
-
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* Simple status transitions (pending → confirmed, confirmed → checked_out) */}
-              {canManage && nextAction && (
-                <Button
-                  variant={nextAction.variant}
-                  size="sm"
-                  isLoading={isUpdating}
-                  onClick={() => handleStatusUpdate(nextAction.nextStatus)}
-                  className="flex items-center gap-2"
-                >
-                  {React.createElement(nextAction.icon, { className: 'h-4 w-4' })}
-                  {nextAction.label}
-                </Button>
-              )}
-
-              {/* Process Return button — opens rich return modal */}
-              {canProcessReturn && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setShowReturnModal(true)}
-                  className="flex items-center gap-2 border-emerald-800 text-emerald-400 hover:bg-emerald-900/30"
-                >
-                  <RotateCcw className="h-4 w-4" /> Process Return
-                </Button>
-              )}
-
-              {/* Customer cancel */}
-              {canCancelSelf && !showCancelConfirm && (
-                <Button variant="ghost" size="sm" className="text-red-400" onClick={() => setShowCancelConfirm(true)}>
-                  <XCircle className="h-4 w-4 mr-1" /> Cancel Rental
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* View return record link (admin, returned status) */}
-          {canManage && rental.status === 'returned' && rental.returnRecord && (
-            <div className="mt-4 pt-4 border-t border-slate-800">
-              <Link
-                to={`/admin/returns/${rental.returnRecord}`}
-                className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
-              >
-                <ExternalLink className="h-3.5 w-3.5" /> View detailed return record
-              </Link>
-            </div>
-          )}
-
-          {/* Admin cancel accordion */}
-          {canCancelAdmin && !nextAction && !['returned', 'cancelled'].includes(rental.status) && (
-            <button
-              onClick={() => setShowCancelAdmin(!showCancelAdmin)}
-              className="mt-4 text-xs text-red-400 hover:text-red-300 flex items-center gap-1"
+        {/* TWO COLUMN LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* ======================= */}
+          {/* LEFT COLUMN: MAIN CONTENT */}
+          {/* ======================= */}
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            
+            {/* HERO CARD (Redesigned) */}
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full rounded-[2.5rem] bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 shadow-2xl overflow-hidden relative"
             >
-              Cancel this rental <ChevronDown className={`h-3 w-3 transition-transform ${showCancelAdmin ? 'rotate-180' : ''}`} />
-            </button>
-          )}
-          {canCancelAdmin && showCancelAdmin && (
-            <div className="mt-3 space-y-3 pt-3 border-t border-slate-800">
-              <textarea
-                rows={2}
-                value={cancelNote}
-                onChange={(e) => setCancelNote(e.target.value)}
-                placeholder="Reason for cancellation (optional)..."
-                className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
-              <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => setShowCancelAdmin(false)}>Back</Button>
-                <Button variant="danger" size="sm" isLoading={isUpdating} onClick={handleAdminCancel}>Confirm Cancellation</Button>
-              </div>
-            </div>
-          )}
-
-          {/* Customer cancel confirm */}
-          {showCancelConfirm && (
-            <div className="mt-4 pt-4 border-t border-slate-800 space-y-3">
-              <p className="text-sm text-slate-400">Are you sure you want to cancel this rental?</p>
-              <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => setShowCancelConfirm(false)} disabled={isCancelling}>Keep it</Button>
-                <Button variant="danger" size="sm" isLoading={isCancelling} onClick={handleCustomerCancel}>Yes, Cancel</Button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Equipment card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-5 flex items-center gap-4">
-          <div className="h-20 w-24 rounded-xl bg-slate-800 overflow-hidden shrink-0">
-            {rental.equipment?.images?.[0] ? (
-              <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center"><Package className="h-8 w-8 text-slate-600" /></div>
-            )}
-          </div>
-          <div>
-            <h2 className="font-semibold text-slate-100">{rental.equipment?.name}</h2>
-            <p className="text-sm text-slate-500 capitalize">{rental.equipment?.category?.replace(/-/g, ' ')}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {/* Dates */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Calendar className="h-4 w-4 text-slate-400" />
-              <h3 className="text-sm font-semibold text-slate-300">Rental Period</h3>
-            </div>
-            <InfoRow label="Start Date" value={fmt(rental.startDate)} />
-            <InfoRow label="End Date" value={fmt(rental.endDate)} />
-            <InfoRow label="Duration" value={`${rental.totalDays} day${rental.totalDays !== 1 ? 's' : ''}`} />
-          </div>
-
-          {/* Financials */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <DollarSign className="h-4 w-4 text-slate-400" />
-              <h3 className="text-sm font-semibold text-slate-300">Cost Breakdown</h3>
-            </div>
-            <InfoRow label="Daily Rate" value={`₹${rental.dailyRate}`} />
-            <InfoRow label="Rental Cost" value={`₹${rental.rentalCost.toFixed(2)}`} />
-            <InfoRow label="Security Deposit" value={`₹${rental.securityDeposit.toFixed(2)}`} />
-            <InfoRow label="Total Amount" value={<span className="text-primary-400 font-bold">₹{rental.totalAmount.toFixed(2)}</span>} />
-          </div>
-
-          {/* Customer Info (admin/staff only) */}
-          {canManage && (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <User className="h-4 w-4 text-slate-400" />
-                <h3 className="text-sm font-semibold text-slate-300">Customer</h3>
-              </div>
-              <InfoRow label="Name" value={rental.customer?.name} />
-              <InfoRow label="Email" value={rental.customer?.email} />
-              <InfoRow label="Phone" value={rental.customer?.phone || '—'} />
-            </div>
-          )}
-
-          {/* Timeline */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <RotateCcw className="h-4 w-4 text-slate-400" />
-              <h3 className="text-sm font-semibold text-slate-300">Status Timeline</h3>
-            </div>
-            <InfoRow label="Booked" value={fmtTime(rental.createdAt)} />
-            {rental.confirmedAt && <InfoRow label="Confirmed" value={fmtTime(rental.confirmedAt)} />}
-            {rental.checkedOutAt && <InfoRow label="Checked Out" value={fmtTime(rental.checkedOutAt)} />}
-            {rental.returnedAt && <InfoRow label="Returned" value={fmtTime(rental.returnedAt)} />}
-            {rental.cancelledAt && <InfoRow label="Cancelled" value={fmtTime(rental.cancelledAt)} />}
-            {rental.handledBy && <InfoRow label="Handled By" value={rental.handledBy.name} />}
-          </div>
-
-          {/* Notes */}
-          {rental.notes && (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:col-span-2">
-              <h3 className="text-sm font-semibold text-slate-300 mb-2">Notes</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{rental.notes}</p>
-            </div>
-          )}
-
-          {/* Payment Summary Panel */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:col-span-2">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <DollarSign className="h-4 w-4 text-slate-400" />
-                <h3 className="text-sm font-semibold text-slate-300">Payments</h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <Link
-                  to={`/invoice/${rental._id}`}
-                  className="inline-flex items-center gap-1.5 text-xs text-primary-400 hover:text-primary-300 transition-colors"
-                >
-                  <FileText className="h-3.5 w-3.5" /> View Invoice
-                </Link>
-                {canManage && !['cancelled'].includes(rental.status) && (
-                  <Button size="sm" variant="secondary" onClick={() => setShowPaymentModal(true)} className="flex items-center gap-1.5 text-xs">
-                    <PlusCircle className="h-3.5 w-3.5" /> Record Payment
-                  </Button>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-transparent to-transparent pointer-events-none" />
+              <div className="p-8 md:p-10 flex flex-col sm:flex-row items-center sm:items-start gap-8 relative z-10">
+                
+                {/* Image Box */}
+                {canManage && rental.equipment ? (
+                  <Link to={`/admin/equipment/${rental.equipment._id}`} className="w-32 h-32 sm:w-40 sm:h-40 shrink-0 rounded-3xl bg-slate-800/80 p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
+                    {rental.equipment.images?.[0] ? (
+                      <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl group-hover:scale-105 transition-transform" />
+                    ) : (
+                      <Package className="h-16 w-16 text-slate-600 group-hover:scale-105 transition-transform" />
+                    )}
+                  </Link>
+                ) : (
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 shrink-0 rounded-3xl bg-slate-800/80 p-3 border border-slate-700/50 shadow-inner flex items-center justify-center">
+                    {rental.equipment?.images?.[0] ? (
+                      <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl" />
+                    ) : (
+                      <Package className="h-16 w-16 text-slate-600" />
+                    )}
+                  </div>
                 )}
-              </div>
-            </div>
-
-            {paymentsLoading ? (
-              <div className="flex justify-center py-4"><Spinner size="sm" /></div>
-            ) : (
-              <>
-                {/* Payment summary bar */}
-                <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="bg-slate-800/60 rounded-lg p-3">
-                    <p className="text-xs text-slate-500 mb-1">Total Paid</p>
-                    <p className="text-sm font-bold text-emerald-400">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
+                
+                {/* Title and Metadata */}
+                <div className="flex flex-col items-center sm:items-start text-center sm:text-left flex-1">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-3">
+                    <RentalStatusBadge status={rental.status} />
+                    <span className="px-3 py-1 rounded-full bg-slate-800/80 text-xs font-mono font-bold text-primary-400 border border-slate-700/50 flex items-center gap-1.5">
+                      <Hash className="h-3 w-3" /> {rental._id.slice(-8).toUpperCase()}
+                    </span>
                   </div>
-                  <div className="bg-slate-800/60 rounded-lg p-3">
-                    <p className="text-xs text-slate-500 mb-1">Total Due</p>
-                    <p className="text-sm font-bold text-slate-200">₹{(rental.totalAmount || 0).toFixed(2)}</p>
-                  </div>
-                  <div className="bg-slate-800/60 rounded-lg p-3">
-                    <p className="text-xs text-slate-500 mb-1">Balance</p>
-                    <p className={`text-sm font-bold ${(paymentData.summary?.balance || 0) > 0 ? 'text-red-400' : 'text-emerald-400'}`}>
-                      ₹{(paymentData.summary?.balance || 0).toFixed(2)}
-                    </p>
+                  <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">
+                    {canManage && rental.equipment ? (
+                      <Link to={`/admin/equipment/${rental.equipment._id}`} className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-2 group">
+                        {rental.equipment.name}
+                        <ExternalLink className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity text-primary-500" />
+                      </Link>
+                    ) : (
+                      <span className="text-primary-400">{rental.equipment?.name}</span>
+                    )}
+                  </h1>
+                  <p className="text-primary-400 font-medium capitalize tracking-wide text-sm mb-4">
+                    {rental.equipment?.category?.replace(/-/g, ' ')}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs font-medium text-slate-400 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800/80">
+                    <Clock className="h-3.5 w-3.5 text-slate-500" /> Booked: {fmtTime(rental.createdAt)}
                   </div>
                 </div>
+              </div>
+            </motion.div>
 
-                {/* Payment list */}
-                {paymentData.payments.length === 0 ? (
-                  <p className="text-sm text-slate-500 italic text-center py-3">No payments recorded yet.</p>
-                ) : (
-                  <div className="space-y-2">
-                    {paymentData.payments.map((p) => (
-                      <div key={p._id} className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
-                        <div>
-                          <p className="text-sm text-slate-300 capitalize">{p.paymentType.replace('_', ' ')} · <span className="text-slate-500 text-xs">{p.paymentMethod}</span></p>
-                          <p className="text-xs text-slate-600">{new Date(p.paidAt).toLocaleDateString()}</p>
-                        </div>
-                        <span className={`flex items-center gap-1 text-sm font-semibold ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
-                          {p.direction === 'outbound' ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownLeft className="h-3.5 w-3.5" />}
-                          ₹{p.amount.toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
+            {/* STATUS TIMELINE */}
+            <SectionCard title="Status Timeline" icon={RotateCcw}>
+              <div className="relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-700/50 pl-8">
+                <div className="relative mb-4">
+                  <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-primary-500 ring-4 ring-primary-500/20" />
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Booked</p>
+                  <p className="text-sm font-medium text-slate-200">{fmtTime(rental.createdAt)}</p>
+                </div>
+                {rental.confirmedAt && (
+                  <div className="relative mb-4">
+                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-blue-500 ring-4 ring-blue-500/20" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Confirmed</p>
+                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.confirmedAt)}</p>
                   </div>
                 )}
-              </>
+                {rental.checkedOutAt && (
+                  <div className="relative mb-4">
+                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-amber-500 ring-4 ring-amber-500/20" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Checked Out</p>
+                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.checkedOutAt)}</p>
+                  </div>
+                )}
+                {rental.returnedAt && (
+                  <div className="relative mb-4">
+                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Returned</p>
+                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.returnedAt)}</p>
+                  </div>
+                )}
+                {rental.cancelledAt && (
+                  <div className="relative mb-0">
+                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-red-500 ring-4 ring-red-500/20" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Cancelled</p>
+                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.cancelledAt)}</p>
+                  </div>
+                )}
+              </div>
+            </SectionCard>
+
+            {/* ADDITIONAL NOTES */}
+            {rental.notes && (
+              <SectionCard title="Additional Notes" icon={FileText}>
+                <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                  <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">{rental.notes}</p>
+                </div>
+              </SectionCard>
             )}
+
+            {/* PAYMENTS SECTION */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="w-full rounded-[2rem] bg-slate-900/60 backdrop-blur-md border border-slate-700/50 shadow-2xl p-6"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b border-slate-800 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                    <CreditCard className="h-6 w-6 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-100 tracking-tight">Financials & Payments</h2>
+                    <p className="text-sm text-slate-400 font-medium mt-0.5">Track all transactions for this booking</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <Link to={`/invoice/${rental._id}`} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-sm transition-all shadow-sm">
+                    <FileText className="h-4 w-4 text-primary-400" /> View Invoice
+                  </Link>
+                  {canManage && !['cancelled'].includes(rental.status) && (
+                    <button onClick={() => setShowPaymentModal(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-600/20">
+                      <PlusCircle className="h-4 w-4" /> Record Payment
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {paymentsLoading ? (
+                <div className="flex justify-center py-10"><Spinner size="lg" /></div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+                  
+                  {/* Summary Metrics */}
+                  <div className="md:col-span-1 lg:col-span-5 flex flex-col gap-3">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-emerald-900/20 border border-emerald-500/20 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform"><ArrowDownLeft className="w-16 h-16" /></div>
+                      <p className="text-sm font-bold text-emerald-400/80 uppercase tracking-widest mb-1 relative z-10">Total Paid</p>
+                      <p className="text-3xl font-black text-emerald-400 relative z-10">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 relative overflow-hidden">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Total Due</p>
+                        <p className="text-xl font-black text-slate-200">₹{(rental.totalAmount || 0).toFixed(2)}</p>
+                      </div>
+                      <div className={`p-4 rounded-2xl border relative overflow-hidden ${
+                        (paymentData.summary?.balance || 0) > 0 
+                          ? 'bg-gradient-to-br from-red-500/10 to-red-900/20 border-red-500/20' 
+                          : 'bg-gradient-to-br from-blue-500/10 to-blue-900/20 border-blue-500/20'
+                      }`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${
+                          (paymentData.summary?.balance || 0) > 0 ? 'text-red-400/80' : 'text-blue-400/80'
+                        }`}>
+                          {(paymentData.summary?.balance || 0) > 0 ? 'Balance' : 'Fully Paid'}
+                        </p>
+                        <p className={`text-xl font-black ${
+                          (paymentData.summary?.balance || 0) > 0 ? 'text-red-400' : 'text-blue-400'
+                        }`}>
+                          ₹{(paymentData.summary?.balance || 0).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Payment List */}
+                  <div className="md:col-span-1 lg:col-span-7 bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden">
+                    <div className="px-5 py-3 border-b border-slate-800 bg-slate-900">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction History</h3>
+                    </div>
+                    
+                    {paymentData.payments.length === 0 ? (
+                      <div className="p-8 text-center flex flex-col items-center">
+                        <div className="w-12 h-12 rounded-full bg-slate-800/50 flex items-center justify-center mb-3"><CreditCard className="h-6 w-6 text-slate-600" /></div>
+                        <p className="text-sm font-medium text-slate-300">No payments yet</p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-slate-800/60 max-h-[300px] overflow-y-auto custom-scrollbar">
+                        {paymentData.payments.map((p) => (
+                          <div key={p._id} className="flex items-center justify-between px-5 py-3 hover:bg-slate-800/40 transition-colors group">
+                            <div className="flex items-center gap-3">
+                              <div className={`p-2 rounded-full ${p.direction === 'outbound' ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
+                                {p.direction === 'outbound' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownLeft className="h-4 w-4" />}
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-slate-200 capitalize">
+                                  {p.paymentType.replace('_', ' ')}
+                                </p>
+                                <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+                                  {fmtTime(p.paidAt)} · <span className="uppercase text-primary-400/80">{p.paymentMethod}</span>
+                                </p>
+                              </div>
+                            </div>
+                            <span className={`text-base font-black tracking-wide ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
+                              {p.direction === 'outbound' ? '-' : '+'}₹{p.amount.toFixed(2)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+              )}
+            </motion.div>
+          </div>
+
+          {/* ======================= */}
+          {/* RIGHT COLUMN: SIDEBAR   */}
+          {/* ======================= */}
+          <div className="lg:col-span-4 flex flex-col gap-6 relative z-50">
+            
+            {/* STICKY CONTAINER FOR SIDEBAR */}
+            <div className="sticky top-8 flex flex-col gap-6">
+              
+              {/* QUICK ACTIONS */}
+              <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-slate-900/60 backdrop-blur-md border border-primary-500/30 rounded-2xl p-5 shadow-2xl relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent pointer-events-none" />
+                <h3 className="text-sm font-bold text-primary-400 uppercase tracking-widest mb-4 relative z-20 flex items-center gap-2">
+                  <RotateCcw className="h-4 w-4" /> Quick Actions
+                </h3>
+                
+                <div className="flex flex-col gap-3 relative z-20">
+                  {canManage && nextAction && (
+                    <button
+                      onClick={() => handleStatusUpdate(nextAction.nextStatus)}
+                      disabled={isUpdating}
+                      className={`w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl text-white font-bold text-sm shadow-lg transition-all ${isUpdating ? 'opacity-70 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-95'} bg-gradient-to-r ${nextAction.color}`}
+                    >
+                      {isUpdating ? <Spinner size="sm" color="white" /> : React.createElement(nextAction.icon, { className: 'h-4 w-4' })}
+                      {nextAction.label}
+                    </button>
+                  )}
+
+                  {canProcessReturn && (
+                    <button
+                      onClick={() => setShowReturnModal(true)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-bold text-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all hover:scale-[1.02]"
+                    >
+                      <RotateCcw className="h-4 w-4" /> Process Return
+                    </button>
+                  )}
+
+                  {canCancelSelf && !showCancelConfirm && (
+                    <button onClick={() => setShowCancelConfirm(true)} className="w-full px-4 py-3 rounded-xl font-bold text-sm text-red-400 bg-red-500/10 hover:bg-red-500/20 transition-all border border-red-500/30 hover:scale-[1.02]">
+                      Cancel Booking
+                    </button>
+                  )}
+                  
+                  {canManage && rental.status === 'returned' && rental.returnRecord && (
+                    <Link to={`/admin/returns/${rental.returnRecord}`} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-sm bg-slate-800 text-emerald-400 border border-slate-700 hover:bg-slate-700 hover:text-emerald-300 transition-all">
+                      <ShieldCheck className="h-4 w-4" /> View Return Record
+                    </Link>
+                  )}
+
+                  {/* Fallback when no actions are available */}
+                  {!nextAction && !canProcessReturn && !canCancelSelf && (!canManage || rental.status !== 'returned') && !canCancelAdmin && (
+                    <div className="p-4 rounded-xl border border-dashed border-slate-700/50 bg-slate-950/50 text-center">
+                      <p className="text-sm font-medium text-slate-500">No actions required.</p>
+                    </div>
+                  )}
+
+                  {/* Cancel Confirmations */}
+                  <AnimatePresence>
+                    {canCancelAdmin && !nextAction && !['returned', 'cancelled'].includes(rental.status) && (
+                      <div className="w-full mt-1">
+                        <button onClick={() => setShowCancelAdmin(!showCancelAdmin)} className="w-full flex items-center justify-between px-3 py-2 text-xs font-bold text-slate-500 hover:text-red-400 bg-slate-950/50 rounded-lg transition-colors border border-slate-800">
+                          Administrative Cancel <ChevronDown className={`h-3 w-3 transition-transform ${showCancelAdmin ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showCancelAdmin && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-2 space-y-2 overflow-hidden">
+                            <textarea rows={2} value={cancelNote} onChange={(e) => setCancelNote(e.target.value)} placeholder="Cancellation reason..." className="w-full px-3 py-2 rounded-lg bg-slate-950/50 border border-slate-700 text-slate-200 text-xs resize-none focus:ring-1 focus:ring-red-500" />
+                            <Button variant="danger" size="sm" className="w-full" isLoading={isUpdating} onClick={handleAdminCancel}>Confirm Cancel</Button>
+                          </motion.div>
+                        )}
+                      </div>
+                    )}
+                    {showCancelConfirm && (
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="w-full mt-2 space-y-2 bg-red-950/50 p-3 rounded-xl border border-red-900/50 overflow-hidden">
+                        <p className="text-xs font-bold text-red-300 text-center mb-2 uppercase tracking-widest">Cancel booking?</p>
+                        <div className="flex gap-2">
+                          <Button variant="secondary" size="sm" className="flex-1 text-xs font-bold" onClick={() => setShowCancelConfirm(false)} disabled={isCancelling}>No</Button>
+                          <Button variant="danger" size="sm" className="flex-1 text-xs font-bold" isLoading={isCancelling} onClick={handleCustomerCancel}>Yes</Button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+
+              {canManage && (
+                <SectionCard title="Customer Profile" icon={User}>
+                  <div className="space-y-1">
+                    
+                    <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
+                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+                        <div className="p-1 rounded-lg bg-slate-800"><User className="h-4 w-4 text-primary-400" /></div>
+                        <span className="text-sm font-medium">Name</span>
+                      </div>
+                      <span className="text-lg font-black text-right text-slate-100">{rental.customer?.name}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
+                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+                        <div className="p-1 rounded-lg bg-slate-800"><Mail className="h-4 w-4 text-primary-400" /></div>
+                        <span className="text-sm font-medium">Email</span>
+                      </div>
+                      <span className="text-lg font-black text-right text-primary-400">{rental.customer?.email}</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-2 group">
+                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+                        <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-primary-400" /></div>
+                        <span className="text-sm font-medium">Phone</span>
+                      </div>
+                      <span className="text-lg font-black text-right text-slate-200">{rental.customer?.phone || '—'}</span>
+                    </div>
+
+                  </div>
+                </SectionCard>
+              )}
+
+              <SectionCard title="Rental Period" icon={Calendar}>
+                <div className="space-y-1">
+                  <InfoRow label="Start Date" value={fmt(rental.startDate)} icon={Calendar} valueClass="text-emerald-400" />
+                  <InfoRow label="End Date" value={fmt(rental.endDate)} icon={Calendar} valueClass="text-red-400" />
+                  <InfoRow label="Duration" value={`${rental.totalDays} Day${rental.totalDays !== 1 ? 's' : ''}`} icon={Clock} valueClass="text-sky-400 font-bold text-base" />
+                </div>
+              </SectionCard>
+
+              <SectionCard title="Cost Breakdown" icon={DollarSign}>
+                <div className="space-y-1">
+                  <InfoRow label="Daily Rate" value={`₹${rental.dailyRate}`} icon={DollarSign} />
+                  <InfoRow label="Rental Cost" value={`₹${rental.rentalCost.toFixed(2)}`} icon={Package} />
+                  <InfoRow label="Security Deposit" value={`₹${rental.securityDeposit.toFixed(2)}`} icon={ShieldCheck} />
+                  <div className="mt-3 pt-3 border-t-2 border-primary-500/30 flex items-center justify-between">
+                    <span className="text-sm font-bold text-slate-300 uppercase tracking-wider">Total</span>
+                    <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-emerald-400">₹{rental.totalAmount.toFixed(2)}</span>
+                  </div>
+                </div>
+              </SectionCard>
+
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Process Return Modal */}
+      {/* Modals */}
       {showReturnModal && rental && (
         <ProcessReturnModal
           rental={rental}
           onClose={() => setShowReturnModal(false)}
-          onProcessed={() => {
-            setShowReturnModal(false);
-            loadRental();
-          }}
+          onProcessed={() => { setShowReturnModal(false); loadRental(); }}
         />
       )}
-
-      {/* Record Payment Modal */}
       {showPaymentModal && rental && (
         <RecordPaymentModal
           rental={rental}
           summary={paymentData.summary}
           onClose={() => setShowPaymentModal(false)}
-          onRecorded={() => {
-            setShowPaymentModal(false);
-            loadPayments();
-          }}
+          onRecorded={() => { setShowPaymentModal(false); loadPayments(); }}
         />
       )}
     </div>

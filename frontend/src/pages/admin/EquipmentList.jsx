@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Plus, Search, Filter, Eye, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
@@ -48,6 +48,7 @@ const Modal = ({ title, children, onClose }) => (
 const EquipmentList = () => {
   const { isAdmin, isStaff } = useAuth();
   const canManage = isAdmin || isStaff;
+  const navigate = useNavigate();
 
   const [equipment, setEquipment] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
@@ -195,17 +196,21 @@ const EquipmentList = () => {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
             >
               {equipment.map((item) => (
-                <div key={item._id} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-slate-600 transition-colors group">
+                <div 
+                  key={item._id} 
+                  onClick={() => navigate(`/admin/equipment/${item._id}`)}
+                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-slate-600 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                >
                   {/* Image */}
-                  <div className="h-36 bg-slate-800 relative overflow-hidden">
+                  <div className="aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
                     {item.images?.[0] ? (
-                      <img src={item.images[0].url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <img src={item.images[0].url} alt={item.name} className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-full h-full flex items-center justify-center bg-slate-800/50">
                         <Package className="h-10 w-10 text-slate-600" />
                       </div>
                     )}
-                    <div className="absolute top-2 right-2 scale-90 origin-top-right">
+                    <div className="absolute top-2 right-2 scale-90 origin-top-right z-10">
                       <StatusBadge status={item.status} />
                     </div>
                   </div>
@@ -223,25 +228,18 @@ const EquipmentList = () => {
                           <p className="text-xs font-medium text-slate-500 mt-0.5">Dep: <span className="font-semibold text-slate-400">₹{item.securityDeposit}</span></p>
                         </div>
                       <div className="flex gap-1">
-                        <Link
-                          to={`/admin/equipment/${item._id}`}
-                          className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
-                          title="View details"
-                        >
-                          <Eye className="h-3.5 w-3.5" />
-                        </Link>
                         {canManage && (
                           <>
                             <button
-                              onClick={() => setEditTarget(item)}
-                              className="p-1.5 rounded-md bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors"
+                              onClick={(e) => { e.stopPropagation(); setEditTarget(item); }}
+                              className="p-1.5 rounded-md bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors relative z-10"
                               title="Edit"
                             >
                               <Pencil className="h-3.5 w-3.5" />
                             </button>
                             <button
-                              onClick={() => setDeleteTarget(item)}
-                              className="p-1.5 rounded-md bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors"
+                              onClick={(e) => { e.stopPropagation(); setDeleteTarget(item); }}
+                              className="p-1.5 rounded-md bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors relative z-10"
                               title="Delete"
                             >
                               <Trash2 className="h-3.5 w-3.5" />

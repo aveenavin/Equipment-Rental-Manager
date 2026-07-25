@@ -398,7 +398,7 @@ const AdminDashboard = () => {
                   >
                     <div className="h-8 w-10 rounded-lg bg-amber-100 overflow-hidden shrink-0">
                       {r.equipment?.images?.[0] ? (
-                        <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
+                        <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Package className="h-3.5 w-3.5 text-amber-400" />
@@ -472,7 +472,7 @@ const AdminDashboard = () => {
                     <div key={r._id} className="flex items-center gap-2.5">
                       <div className="h-6 w-7 rounded-lg bg-amber-100 overflow-hidden shrink-0">
                         {r.equipment?.images?.[0] ? (
-                          <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
+                          <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <RotateCcw className="h-3 w-3 text-amber-400" />

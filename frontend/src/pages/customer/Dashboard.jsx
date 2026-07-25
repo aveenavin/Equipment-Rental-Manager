@@ -246,7 +246,7 @@ const CustomerDashboard = () => {
                     <div className="flex items-center gap-5">
                       <div className="h-14 w-14 rounded-xl bg-slate-950 border border-blue-500/20 overflow-hidden shrink-0 relative group-hover:border-blue-500/50 transition-colors duration-300">
                         {rental.equipment?.images?.[0] ? (
-                          <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                          <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Package className="h-6 w-6 text-slate-600" />

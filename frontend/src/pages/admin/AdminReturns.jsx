@@ -133,7 +133,7 @@ const AdminReturns = () => {
                           <div className="flex items-center gap-2.5">
                             <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
                               {ret.equipment?.images?.[0] ? (
-                                <img src={ret.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
+                                <img src={ret.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
                                   <Package className="h-4 w-4 text-slate-600" />
@@ -204,10 +204,11 @@ const AdminReturns = () => {
                         <td className="px-4 py-3 text-right">
                           <Link
                             to={`/admin/returns/${ret._id}`}
-                            className="inline-flex items-center p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-primary-600 text-slate-300 hover:text-white transition-all shadow-sm border border-slate-700 hover:border-primary-500"
                             title="View details"
                           >
-                            <Eye className="h-3.5 w-3.5" />
+                            <Eye className="h-4 w-4" />
+                            <span className="text-xs font-bold tracking-wide">View</span>
                           </Link>
                         </td>
                       </tr>

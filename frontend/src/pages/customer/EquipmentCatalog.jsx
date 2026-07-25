@@ -211,56 +211,66 @@ const EquipmentCatalog = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-                className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group"
+                onClick={() => navigate(`/catalog/${item._id}`)}
+                className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
               >
                 {/* Image */}
-                <div className="h-44 bg-slate-800 relative overflow-hidden">
+                <div className="aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
                   {item.images?.[0] ? (
                     <img
                       src={item.images[0].url}
                       alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-full h-full flex items-center justify-center bg-slate-800/50">
                       <Package className="h-12 w-12 text-slate-600" />
                     </div>
                   )}
-                  <div className="absolute top-2 right-2">
+                  <div className="absolute top-2 right-2 z-10">
                     <StatusBadge status={item.status} />
                   </div>
                 </div>
 
                 {/* Card body */}
-                <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-medium text-slate-100 text-[18px] leading-snug line-clamp-2 mb-1.5 tracking-tight">
+                <div className="p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
+                  
+                  {/* Category */}
+                  <div className="mb-2.5">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
+                      {item.category?.replace(/-/g, ' ')}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-4 group-hover:text-orange-500 transition-colors">
                     {item.name}
                   </h3>
-                  <p className="text-xs font-semibold text-slate-400 tracking-wide capitalize mb-3">
-                    {item.category?.replace(/-/g, ' ')}
-                  </p>
 
-                  <div className="mt-auto pt-3 border-t border-slate-800">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <p className="text-[17px] font-bold text-orange-400">
-                          ₹{item.dailyRate}
-                          <span className="text-xs font-semibold text-slate-500 ml-1">/day</span>
-                        </p>
-                        <p className="text-xs font-medium text-slate-500 mt-0.5">
-                          Deposit: <span className="font-semibold text-slate-400">₹{item.securityDeposit}</span>
-                        </p>
-                      </div>
+                  {/* Pricing Box */}
+                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 shadow-inner flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
+                      <p className="text-xl font-black text-orange-500 leading-none">
+                        ₹{item.dailyRate}<span className="text-[11px] font-semibold text-slate-400 ml-1">/day</span>
+                      </p>
                     </div>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="w-full flex items-center justify-center gap-2"
-                      onClick={() => handleBook(item)}
-                    >
-                      <ShoppingCart className="h-4 w-4" /> Book Now
-                    </Button>
+                    <div className="w-[1px] h-8 bg-slate-800 mx-2" />
+                    <div className="text-right">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
+                      <p className="text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
+                    </div>
                   </div>
+
+                  {/* Book Button */}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleBook(item); }}
+                    className="w-full relative z-10 group/btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                  >
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
+                    <ShoppingCart className="h-4 w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" /> 
+                    <span className="relative z-10 tracking-wide">Book Now</span>
+                  </button>
                 </div>
               </motion.div>
             ))}

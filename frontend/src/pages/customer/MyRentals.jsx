@@ -160,12 +160,12 @@ const RentalCard = ({ rental, onCancel }) => {
 
         {/* ── Equipment preview area ──────────────────────────────────────── */}
         <div className="md:w-[270px] p-4 pr-2 sm:p-5 sm:pr-3 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-center bg-slate-900/30 shrink-0">
-          <div className="relative w-full flex-1 my-1 sm:my-1.5 min-h-[150px] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-slate-700/50">
+          <div className="relative w-full flex-1 my-1 sm:my-1.5 min-h-[180px] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-slate-700/50">
             {rental.equipment?.images?.[0] ? (
               <img
                 src={rental.equipment.images[0].url}
                 alt={rental.equipment?.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-slate-800">
@@ -325,8 +325,14 @@ const MyRentals = () => {
     setIsLoading(true);
     try {
       const res = await fetchRentals({ page, limit: 10, status: statusFilter });
-      setRentals(res.data.data.rentals);
+      const fetched = res.data.data.rentals;
+      setRentals(fetched);
       setPagination(res.data.data.pagination);
+      // When no filter is active and we're on page 1, seed allRentals immediately
+      // so stats are visible without waiting for the secondary fetch.
+      if (!statusFilter && page === 1) {
+        setAllRentals((prev) => (prev.length === 0 ? fetched : prev));
+      }
     } catch {
       toast.error('Failed to load rentals.');
     } finally {
@@ -334,11 +340,14 @@ const MyRentals = () => {
     }
   }, [page, statusFilter]);
 
-  // Fetch unfiltered summary for stat cards (once on mount)
+  // Fetch the full unfiltered list for stat cards (once on mount).
+  // Limit 200 covers any realistic user history; never swallow errors silently.
   useEffect(() => {
-    fetchRentals({ page: 1, limit: 100 })
+    fetchRentals({ page: 1, limit: 200 })
       .then((res) => setAllRentals(res.data.data.rentals))
-      .catch(() => { });
+      .catch(() => {
+        // Non-critical — stats will fall back to the seeded value from loadRentals
+      });
   }, []);
 
   useEffect(() => { loadRentals(); }, [loadRentals]);

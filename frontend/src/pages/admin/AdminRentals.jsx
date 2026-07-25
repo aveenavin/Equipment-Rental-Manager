@@ -137,7 +137,7 @@ const AdminRentals = () => {
                             <div className="flex items-center gap-2.5">
                               <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
                                 {rental.equipment?.images?.[0] ? (
-                                  <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-cover" />
+                                  <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center text-slate-600 text-[10px]">N/A</div>
                                 )}
@@ -172,7 +172,7 @@ const AdminRentals = () => {
                               <span className="text-slate-600">→</span>
                               <span>{fmt(rental.endDate)}</span>
                             </div>
-                            <p className="text-[11px] text-slate-500 mt-0.5 ml-4">
+                            <p className="text-[11px] font-bold text-sky-400 mt-0.5 ml-4">
                               {rental.totalDays} day{rental.totalDays !== 1 ? 's' : ''}
                             </p>
                           </td>
@@ -210,10 +210,11 @@ const AdminRentals = () => {
 
                               <Link
                                 to={`/admin/rentals/${rental._id}`}
-                                className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors ml-1"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-primary-600 text-slate-300 hover:text-white transition-all shadow-sm border border-slate-700 hover:border-primary-500 ml-2"
                                 title="View details"
                               >
-                                <Eye className="h-3.5 w-3.5" />
+                                <Eye className="h-4 w-4" />
+                                <span className="text-xs font-bold tracking-wide">View</span>
                               </Link>
                             </div>
                           </td>

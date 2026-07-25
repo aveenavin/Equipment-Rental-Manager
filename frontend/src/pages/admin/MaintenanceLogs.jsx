@@ -439,7 +439,7 @@ const MaintenanceLogs = () => {
                                 <img
                                   src={log.equipment.images[0].url}
                                   alt={log.equipment.name}
-                                  className="h-full w-full object-cover"
+                                  className="h-full w-full object-contain p-1"
                                 />
                               ) : (
                                 <div className="h-full w-full flex items-center justify-center">

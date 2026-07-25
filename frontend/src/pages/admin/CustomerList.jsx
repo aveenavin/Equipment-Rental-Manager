@@ -294,10 +294,11 @@ const CustomerList = () => {
                           <div className="flex items-center justify-end gap-1.5">
                             <Link
                               to={`/admin/customers/${customer._id}`}
-                              className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-100 transition-colors"
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-primary-600 text-slate-300 hover:text-white transition-all shadow-sm border border-slate-700 hover:border-primary-500"
                               title="View details"
                             >
-                              <Eye className="h-3.5 w-3.5" />
+                              <Eye className="h-4 w-4" />
+                              <span className="text-xs font-bold tracking-wide">View</span>
                             </Link>
                             <button
                               onClick={() => setEditTarget(customer)}
