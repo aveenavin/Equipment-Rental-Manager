@@ -264,7 +264,7 @@ const EquipmentList = () => {
                       >
                         <button
                           onClick={() => setEditTarget(item)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-primary-600 hover:to-primary-700 text-slate-300 hover:text-white border border-slate-700 hover:border-primary-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-primary-600/20 text-[11px] sm:text-[13px] font-bold transition-all duration-300 active:scale-95"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-green-600 hover:to-green-700 text-slate-300 hover:text-white border border-slate-700 hover:border-green-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-green-600/20 text-[11px] sm:text-[13px] font-bold transition-all duration-300 active:scale-95"
                           title="Edit"
                         >
                           <Pencil className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Edit
