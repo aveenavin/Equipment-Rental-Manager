@@ -143,8 +143,8 @@ const AdminRentals = () => {
                                 )}
                               </div>
                               <div>
-                                <p className="text-[15px] font-medium text-slate-200 max-w-[150px] truncate">{rental.equipment?.name}</p>
-                                <p className="text-[12px] text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
+                                <p className="text-[13px] font-medium text-slate-200 max-w-[150px] truncate">{rental.equipment?.name}</p>
+                                <p className="text-[11px] text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
                               </div>
                             </div>
                           </td>
@@ -158,29 +158,29 @@ const AdminRentals = () => {
                                 </span>
                               </div>
                               <div>
-                                <p className="text-[14px] text-slate-300 truncate max-w-[120px]">{rental.customer?.name}</p>
-                                <p className="text-[12px] text-slate-500 truncate max-w-[120px]">{rental.customer?.email}</p>
+                                <p className="text-[13px] text-slate-300 truncate max-w-[120px]">{rental.customer?.name}</p>
+                                <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{rental.customer?.email}</p>
                               </div>
                             </div>
                           </td>
 
                           {/* Dates */}
                           <td className="px-4 py-3">
-                            <div className="flex items-center gap-1.5 text-[13px] text-slate-400">
-                              <Calendar className="h-4 w-4 shrink-0" />
+                            <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                              <Calendar className="h-3 w-3 shrink-0" />
                               <span>{fmt(rental.startDate)}</span>
                               <span className="text-slate-600">→</span>
                               <span>{fmt(rental.endDate)}</span>
                             </div>
-                            <p className="text-[13px] font-bold text-sky-400 mt-0.5 ml-5">
+                            <p className="text-[11px] font-bold text-sky-400 mt-0.5 ml-4">
                               {rental.totalDays} day{rental.totalDays !== 1 ? 's' : ''}
                             </p>
                           </td>
 
                           {/* Amount */}
                           <td className="px-4 py-3">
-                            <p className="text-[15px] font-semibold text-primary-400">₹{rental.totalAmount.toFixed(2)}</p>
-                            <p className="text-[12px] text-slate-500">+₹{rental.securityDeposit} dep.</p>
+                            <p className="text-[13px] font-semibold text-primary-400">₹{rental.totalAmount.toFixed(2)}</p>
+                            <p className="text-[11px] text-slate-500">+₹{rental.securityDeposit} dep.</p>
                           </td>
 
                           {/* Status */}

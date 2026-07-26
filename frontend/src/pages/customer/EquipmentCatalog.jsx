@@ -69,7 +69,7 @@ const EquipmentCatalog = () => {
     try {
       const res = await fetchEquipment({
         page,
-        limit: 1000,
+        limit: 12,
         search,
         category,
         status: 'available',
@@ -276,7 +276,30 @@ const EquipmentCatalog = () => {
             ))}
           </div>
 
-
+          {/* Pagination */}
+          {pagination.pages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-slate-400 px-3">
+                Page {pagination.page} of {pagination.pages}
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={page >= pagination.pages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </>
       )}
 
