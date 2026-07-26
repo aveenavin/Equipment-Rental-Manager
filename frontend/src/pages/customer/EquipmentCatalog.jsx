@@ -203,7 +203,7 @@ const EquipmentCatalog = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {equipment.map((item) => (
               <motion.div
                 key={item._id}
@@ -265,7 +265,7 @@ const EquipmentCatalog = () => {
                   {/* Book Button */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleBook(item); }}
-                    className="w-full relative z-10 group/btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(99,102,241,0.2)] hover:shadow-[0_0_25px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                    className="w-full relative z-10 group/btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                     <ShoppingCart className="h-4 w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" /> 

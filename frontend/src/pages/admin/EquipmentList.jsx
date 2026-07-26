@@ -193,7 +193,7 @@ const EquipmentList = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             >
               {equipment.map((item) => (
                 <motion.div
@@ -203,7 +203,7 @@ const EquipmentList = () => {
                   viewport={{ once: true, amount: 0.1 }}
                   transition={{ type: 'spring', stiffness: 80, damping: 20 }}
                   onClick={() => navigate(`/admin/equipment/${item._id}`)}
-                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-blue-700/50 hover:shadow-lg hover:shadow-blue-900/20 transition-all group cursor-pointer"
+                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
                 >
                   {/* Image */}
                   <div className="aspect-[3/2] w-full relative overflow-hidden rounded-t-xl">
@@ -228,7 +228,7 @@ const EquipmentList = () => {
 
                     {/* Category badge */}
                     <div className="mb-2.5 flex items-center justify-between">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
                         {item.category?.replace(/-/g, ' ')}
                       </span>
                       <div className="scale-90 origin-right">
@@ -237,7 +237,7 @@ const EquipmentList = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-3 group-hover:text-blue-400 transition-colors">
+                    <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-3 group-hover:text-orange-500 transition-colors">
                       {item.name}
                     </h3>
 
@@ -245,7 +245,7 @@ const EquipmentList = () => {
                     <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-3 shadow-inner flex items-center justify-between">
                       <div>
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
-                        <p className="text-xl font-black text-blue-400 leading-none">
+                        <p className="text-xl font-black text-orange-500 leading-none">
                           ₹{item.dailyRate}<span className="text-[11px] font-semibold text-slate-400 ml-1">/day</span>
                         </p>
                       </div>
