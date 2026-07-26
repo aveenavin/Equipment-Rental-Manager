@@ -203,7 +203,7 @@ const EquipmentList = () => {
                   viewport={{ once: true, amount: 0.1 }}
                   transition={{ type: 'spring', stiffness: 80, damping: 20 }}
                   onClick={() => navigate(`/admin/equipment/${item._id}`)}
-                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-primary-700/50 hover:shadow-lg hover:shadow-primary-900/20 transition-all group cursor-pointer"
+                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-900/20 transition-all group cursor-pointer"
                 >
                   {/* Image */}
                   <div className="aspect-[3/2] w-full relative overflow-hidden rounded-t-xl">
