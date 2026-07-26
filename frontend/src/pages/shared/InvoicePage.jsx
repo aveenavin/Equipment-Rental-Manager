@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { 
   ArrowLeft, Printer, CheckCircle, Clock, AlertCircle, 
-  XCircle, Receipt, User, Package, IndianRupee, FileText 
+  XCircle, Receipt, User, Package, IndianRupee, FileText, MapPin
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import { fetchInvoice } from '../../services/paymentService';
@@ -144,6 +144,25 @@ const InvoicePage = () => {
                   <div className="space-y-0.5 mt-1">
                     <p className="text-sm font-medium text-slate-400 print:text-slate-600">{invoice.customer?.email}</p>
                     {invoice.customer?.phone && <p className="text-sm font-medium text-slate-400 print:text-slate-600">{invoice.customer.phone}</p>}
+                    {invoice.rental?.deliveryAddress && (
+                      <div className="mt-2 pt-2 border-t border-slate-700/50 print:border-slate-200">
+                        <div className="flex items-start gap-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-orange-400 shrink-0 mt-0.5 print:hidden" />
+                          <div>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5 print:text-slate-400">Delivery Address</p>
+                            <p className="text-sm font-medium text-slate-300 print:text-slate-700 leading-snug">
+                              {invoice.rental.deliveryAddress.street}
+                            </p>
+                            <p className="text-sm font-medium text-slate-400 print:text-slate-600">
+                              {invoice.rental.deliveryAddress.city}, {invoice.rental.deliveryAddress.state} — {invoice.rental.deliveryAddress.postalCode}
+                            </p>
+                            <p className="text-xs text-slate-500 print:text-slate-400">
+                              {invoice.rental.deliveryAddress.country}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

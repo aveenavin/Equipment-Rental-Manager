@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { X, Calendar, IndianRupee, AlertCircle, Package } from 'lucide-react';
+import { X, Calendar, IndianRupee, AlertCircle, Package, MapPin } from 'lucide-react';
 import Button from '../ui/Button';
 import { createRental, fetchEquipmentAvailability } from '../../services/rentalService';
 
@@ -16,6 +16,8 @@ const isDateRangeBlocked = (start, end, bookedRanges) => {
   });
 };
 
+const EMPTY_ADDRESS = { street: '', city: '', state: '', postalCode: '', country: 'India' };
+
 const BookingModal = ({ equipment, onClose, onBooked }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -23,6 +25,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [address, setAddress] = useState(EMPTY_ADDRESS);
   const [bookedRanges, setBookedRanges] = useState([]);
   const [availabilityLoading, setAvailabilityLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,6 +56,16 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
   const isConflict =
     startDate && endDate && isDateRangeBlocked(startDate, endDate, bookedRanges);
 
+  const handleAddressChange = (field, value) => {
+    setAddress((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const isAddressComplete =
+    address.street.trim() &&
+    address.city.trim() &&
+    address.state.trim() &&
+    address.postalCode.trim();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -60,6 +73,10 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
     if (!startDate || !endDate) return setError('Please select both start and end dates.');
     if (new Date(endDate) <= new Date(startDate)) return setError('End date must be after start date.');
     if (isConflict) return setError('Selected dates overlap with an existing booking.');
+    if (!isAddressComplete) return setError('Please fill in all required delivery address fields.');
+    if (!/^\d{6}$/.test(address.postalCode.trim())) {
+      return setError('Postal code must be a valid 6-digit Indian PIN code.');
+    }
 
     setIsSubmitting(true);
     try {
@@ -68,6 +85,13 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
         startDate,
         endDate,
         notes: notes || undefined,
+        deliveryAddress: {
+          street: address.street.trim(),
+          city: address.city.trim(),
+          state: address.state.trim(),
+          postalCode: address.postalCode.trim(),
+          country: address.country.trim() || 'India',
+        },
       });
       toast.success('Rental booked successfully!');
       onBooked();
@@ -82,11 +106,22 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
     ? toDateInputValue(new Date(new Date(startDate).getTime() + 86400000))
     : toDateInputValue(new Date(today.getTime() + 86400000));
 
+  const inputCls =
+    'w-full px-3 py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500';
+
+  const canSubmit =
+    !!startDate &&
+    !!endDate &&
+    !isConflict &&
+    !availabilityLoading &&
+    isAddressComplete;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl">
+      <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-primary-900/30 border border-primary-800">
               <Package className="h-5 w-5 text-primary-400" />
@@ -101,7 +136,9 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
+        {/* Scrollable body */}
+        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5 overflow-y-auto flex-1">
+
           {error && (
             <div className="flex items-start gap-2.5 px-4 py-3 rounded-lg bg-red-950/50 border border-red-800 text-red-300 text-sm">
               <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
@@ -153,6 +190,90 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
             </div>
           </div>
 
+          {/* Delivery Address */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <MapPin className="h-4 w-4 text-orange-400 shrink-0" />
+              <span className="text-sm font-semibold text-slate-200">Delivery Address</span>
+              <span className="text-xs text-slate-500 font-medium">— where equipment will be delivered</span>
+            </div>
+
+            <div className="space-y-3 p-4 rounded-xl bg-slate-800/40 border border-slate-700/60">
+              {/* Street */}
+              <div>
+                <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                  Street Address <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={address.street}
+                  onChange={(e) => handleAddressChange('street', e.target.value)}
+                  placeholder="House / flat no., street, locality"
+                  maxLength={200}
+                  className={inputCls}
+                />
+              </div>
+
+              {/* City + State */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                    City <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={address.city}
+                    onChange={(e) => handleAddressChange('city', e.target.value)}
+                    placeholder="City"
+                    maxLength={100}
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                    State <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={address.state}
+                    onChange={(e) => handleAddressChange('state', e.target.value)}
+                    placeholder="State"
+                    maxLength={100}
+                    className={inputCls}
+                  />
+                </div>
+              </div>
+
+              {/* Postal Code + Country */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                    Postal Code <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={address.postalCode}
+                    onChange={(e) => handleAddressChange('postalCode', e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    placeholder="6-digit PIN"
+                    maxLength={6}
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">Country</label>
+                  <input
+                    type="text"
+                    value={address.country}
+                    onChange={(e) => handleAddressChange('country', e.target.value)}
+                    placeholder="Country"
+                    maxLength={100}
+                    className={inputCls}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Notes */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1.5">Notes (optional)</label>
@@ -192,7 +313,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
           )}
 
           {/* Actions */}
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-3 pt-1 shrink-0">
             <Button type="button" variant="secondary" className="flex-1" onClick={onClose} disabled={isSubmitting}>
               Cancel
             </Button>
@@ -201,7 +322,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
               variant="primary"
               className="flex-1"
               isLoading={isSubmitting}
-              disabled={!startDate || !endDate || isConflict || availabilityLoading}
+              disabled={!canSubmit}
             >
               Confirm Booking
             </Button>

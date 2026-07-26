@@ -31,6 +31,31 @@ const createRentalValidation = [
     .optional({ nullable: true })
     .trim()
     .isLength({ max: 500 }).withMessage('Notes cannot exceed 500 characters'),
+
+  body('deliveryAddress.street')
+    .trim()
+    .notEmpty().withMessage('Street address is required')
+    .isLength({ max: 200 }).withMessage('Street address cannot exceed 200 characters'),
+
+  body('deliveryAddress.city')
+    .trim()
+    .notEmpty().withMessage('City is required')
+    .isLength({ max: 100 }).withMessage('City cannot exceed 100 characters'),
+
+  body('deliveryAddress.state')
+    .trim()
+    .notEmpty().withMessage('State is required')
+    .isLength({ max: 100 }).withMessage('State cannot exceed 100 characters'),
+
+  body('deliveryAddress.postalCode')
+    .trim()
+    .notEmpty().withMessage('Postal code is required')
+    .matches(/^\d{6}$/).withMessage('Postal code must be a valid 6-digit Indian PIN code'),
+
+  body('deliveryAddress.country')
+    .optional({ nullable: true })
+    .trim()
+    .isLength({ max: 100 }).withMessage('Country cannot exceed 100 characters'),
 ];
 
 const updateRentalStatusValidation = [

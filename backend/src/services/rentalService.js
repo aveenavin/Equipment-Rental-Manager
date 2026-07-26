@@ -33,7 +33,7 @@ const EQUIPMENT_STATUS_MAP = {
  * - Snapshots pricing at time of booking
  */
 const createRental = async ({ customerId, body }) => {
-  const { equipment: equipmentId, startDate, endDate, notes } = body;
+  const { equipment: equipmentId, startDate, endDate, notes, deliveryAddress } = body;
 
   const equipment = await Equipment.findById(equipmentId);
   if (!equipment) throw new AppError('Equipment not found.', 404);
@@ -70,6 +70,7 @@ const createRental = async ({ customerId, body }) => {
     rentalCost,
     securityDeposit: equipment.securityDeposit,
     totalAmount,
+    deliveryAddress,
     notes: notes || null,
   });
 

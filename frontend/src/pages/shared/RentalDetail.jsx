@@ -4,8 +4,8 @@ import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Package, Calendar, DollarSign, User,
-  CheckCircle, Truck, RotateCcw, XCircle, ChevronDown, ExternalLink,
-  FileText, PlusCircle, ArrowDownLeft, ArrowUpRight, Clock, MapPin, Hash, ShieldCheck, Mail, Phone, CreditCard
+  CheckCircle, Truck, RotateCcw, ChevronDown, ExternalLink,
+  FileText, PlusCircle, ArrowDownLeft, ArrowUpRight, Clock, MapPin, Hash, ShieldCheck, Mail, Phone, CreditCard, Home
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
@@ -514,6 +514,27 @@ const RentalDetail = () => {
                   <InfoRow label="Duration" value={`${rental.totalDays} Day${rental.totalDays !== 1 ? 's' : ''}`} icon={Clock} valueClass="text-sky-400 font-bold text-base" />
                 </div>
               </SectionCard>
+
+              {rental.deliveryAddress && (
+                <SectionCard title="Delivery Address" icon={Home}>
+                  <div className="flex items-start gap-2.5 mt-1">
+                    <div className="p-1.5 rounded-lg bg-slate-800 shrink-0 mt-0.5">
+                      <MapPin className="h-4 w-4 text-orange-400" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-semibold text-slate-200 leading-snug">
+                        {rental.deliveryAddress.street}
+                      </p>
+                      <p className="text-sm text-slate-400">
+                        {rental.deliveryAddress.city}, {rental.deliveryAddress.state} — {rental.deliveryAddress.postalCode}
+                      </p>
+                      <p className="text-xs text-slate-500 font-medium">
+                        {rental.deliveryAddress.country}
+                      </p>
+                    </div>
+                  </div>
+                </SectionCard>
+              )}
 
               <SectionCard title="Cost Breakdown" icon={DollarSign}>
                 <div className="space-y-1">
