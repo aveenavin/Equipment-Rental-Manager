@@ -260,21 +260,21 @@ const EquipmentList = () => {
                     {canManage && (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="flex gap-2"
+                        className="flex gap-2.5 mt-2"
                       >
                         <button
                           onClick={() => setEditTarget(item)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-800 hover:bg-primary-900/50 text-slate-300 hover:text-primary-400 border border-slate-700 hover:border-primary-700/50 text-xs font-bold transition-all duration-200"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-primary-600 hover:to-primary-700 text-slate-300 hover:text-white border border-slate-700 hover:border-primary-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-primary-600/20 text-[13px] font-bold transition-all duration-300 active:scale-95"
                           title="Edit"
                         >
-                          <Pencil className="h-3.5 w-3.5" /> Edit
+                          <Pencil className="h-4 w-4" /> Edit
                         </button>
                         <button
                           onClick={() => setDeleteTarget(item)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-800 hover:bg-red-900/50 text-slate-300 hover:text-red-400 border border-slate-700 hover:border-red-700/50 text-xs font-bold transition-all duration-200"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-red-600 hover:to-red-700 text-slate-300 hover:text-white border border-slate-700 hover:border-red-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-red-600/20 text-[13px] font-bold transition-all duration-300 active:scale-95"
                           title="Delete"
                         >
-                          <Trash2 className="h-3.5 w-3.5" /> Delete
+                          <Trash2 className="h-4 w-4" /> Delete
                         </button>
                       </div>
                     )}
