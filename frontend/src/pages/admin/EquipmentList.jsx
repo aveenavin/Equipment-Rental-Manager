@@ -228,31 +228,31 @@ const EquipmentList = () => {
 
                     {/* Category badge */}
                     <div className="mb-2.5 flex items-center justify-between">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
+                      <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
                         {item.category?.replace(/-/g, ' ')}
                       </span>
-                      <div className="scale-90 origin-right">
+                      <div className="scale-[0.8] sm:scale-90 origin-right">
                         <ConditionBadge condition={item.condition} />
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-3 group-hover:text-orange-500 transition-colors">
+                    <h3 className="font-bold text-slate-100 text-[15px] sm:text-[17px] leading-snug line-clamp-2 mb-3 group-hover:text-orange-500 transition-colors">
                       {item.name}
                     </h3>
 
                     {/* Pricing box */}
-                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-3 shadow-inner flex items-center justify-between">
+                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-2 sm:p-3 mb-3 shadow-inner flex items-center justify-between">
                       <div>
-                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
-                        <p className="text-xl font-black text-orange-500 leading-none">
-                          ₹{item.dailyRate}<span className="text-[11px] font-semibold text-slate-400 ml-1">/day</span>
+                        <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
+                        <p className="text-lg sm:text-xl font-black text-orange-500 leading-none">
+                          ₹{item.dailyRate}<span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 ml-1">/day</span>
                         </p>
                       </div>
-                      <div className="w-[1px] h-8 bg-slate-800 mx-2" />
+                      <div className="w-[1px] h-6 sm:h-8 bg-slate-800 mx-1.5 sm:mx-2" />
                       <div className="text-right">
-                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
-                        <p className="text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
+                        <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
+                        <p className="text-xs sm:text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
                       </div>
                     </div>
 
@@ -260,21 +260,21 @@ const EquipmentList = () => {
                     {canManage && (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="flex gap-2.5 mt-2"
+                        className="flex flex-col sm:flex-row gap-2 sm:gap-2.5 mt-1 sm:mt-2"
                       >
                         <button
                           onClick={() => setEditTarget(item)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-primary-600 hover:to-primary-700 text-slate-300 hover:text-white border border-slate-700 hover:border-primary-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-primary-600/20 text-[13px] font-bold transition-all duration-300 active:scale-95"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-primary-600 hover:to-primary-700 text-slate-300 hover:text-white border border-slate-700 hover:border-primary-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-primary-600/20 text-[11px] sm:text-[13px] font-bold transition-all duration-300 active:scale-95"
                           title="Edit"
                         >
-                          <Pencil className="h-4 w-4" /> Edit
+                          <Pencil className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Edit
                         </button>
                         <button
                           onClick={() => setDeleteTarget(item)}
-                          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-red-600 hover:to-red-700 text-slate-300 hover:text-white border border-slate-700 hover:border-red-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-red-600/20 text-[13px] font-bold transition-all duration-300 active:scale-95"
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-b from-slate-800 to-slate-800/80 hover:from-red-600 hover:to-red-700 text-slate-300 hover:text-white border border-slate-700 hover:border-red-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:shadow-lg hover:shadow-red-600/20 text-[11px] sm:text-[13px] font-bold transition-all duration-300 active:scale-95"
                           title="Delete"
                         >
-                          <Trash2 className="h-4 w-4" /> Delete
+                          <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Delete
                         </button>
                       </div>
                     )}

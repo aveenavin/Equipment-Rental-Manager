@@ -237,38 +237,38 @@ const EquipmentCatalog = () => {
                   
                   {/* Category */}
                   <div className="mb-2.5">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
+                    <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
                       {item.category?.replace(/-/g, ' ')}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-4 group-hover:text-orange-500 transition-colors">
+                  <h3 className="font-bold text-slate-100 text-[15px] sm:text-[17px] leading-snug line-clamp-2 mb-4 group-hover:text-orange-500 transition-colors">
                     {item.name}
                   </h3>
 
                   {/* Pricing Box */}
-                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 shadow-inner flex items-center justify-between">
+                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-2 sm:p-3 mb-4 shadow-inner flex items-center justify-between">
                     <div>
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
-                      <p className="text-xl font-black text-orange-500 leading-none">
-                        ₹{item.dailyRate}<span className="text-[11px] font-semibold text-slate-400 ml-1">/day</span>
+                      <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
+                      <p className="text-lg sm:text-xl font-black text-orange-500 leading-none">
+                        ₹{item.dailyRate}<span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 ml-1">/day</span>
                       </p>
                     </div>
-                    <div className="w-[1px] h-8 bg-slate-800 mx-2" />
+                    <div className="w-[1px] h-6 sm:h-8 bg-slate-800 mx-1.5 sm:mx-2" />
                     <div className="text-right">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
-                      <p className="text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
+                      <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
+                      <p className="text-xs sm:text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
                     </div>
                   </div>
 
                   {/* Book Button */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleBook(item); }}
-                    className="w-full relative z-10 group/btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                    className="w-full relative z-10 group/btn flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[13px] sm:text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
-                    <ShoppingCart className="h-4 w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" /> 
+                    <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" /> 
                     <span className="relative z-10 tracking-wide">Book Now</span>
                   </button>
                 </div>
