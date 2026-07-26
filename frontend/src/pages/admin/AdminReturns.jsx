@@ -141,8 +141,8 @@ const AdminReturns = () => {
                               )}
                             </div>
                             <div>
-                              <p className="text-[13px] font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
-                              <p className="text-[11px] text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-[15px] font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
+                              <p className="text-[12px] text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>
@@ -156,16 +156,16 @@ const AdminReturns = () => {
                               </span>
                             </div>
                             <div>
-                              <p className="text-[13px] text-slate-300 truncate max-w-[120px]">{ret.customer?.name}</p>
-                              <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{ret.customer?.email}</p>
+                              <p className="text-[14px] text-slate-300 truncate max-w-[120px]">{ret.customer?.name}</p>
+                              <p className="text-[12px] text-slate-500 truncate max-w-[120px]">{ret.customer?.email}</p>
                             </div>
                           </div>
                         </td>
 
                         {/* Return Date */}
                         <td className="px-4 py-3">
-                          <p className="text-[13px] text-slate-300">{fmt(ret.returnDate)}</p>
-                          <p className="text-[11px] text-slate-500">by {ret.processedBy?.name}</p>
+                          <p className="text-[14px] text-slate-300">{fmt(ret.returnDate)}</p>
+                          <p className="text-[12px] text-slate-500">by {ret.processedBy?.name}</p>
                         </td>
 
                         {/* Condition */}

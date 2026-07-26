@@ -152,8 +152,8 @@ const AdminPayments = () => {
                                 </span>
                               </div>
                               <div>
-                                <p className="text-[13px] text-slate-200 truncate max-w-[120px]">{p.customer?.name}</p>
-                                <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{p.customer?.email}</p>
+                                <p className="text-[14px] text-slate-200 truncate max-w-[120px]">{p.customer?.name}</p>
+                                <p className="text-[12px] text-slate-500 truncate max-w-[120px]">{p.customer?.email}</p>
                               </div>
                             </div>
                           </td>
@@ -165,27 +165,27 @@ const AdminPayments = () => {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="text-[13px] text-slate-400 flex items-center gap-1.5">
+                            <span className="text-[14px] text-slate-400 flex items-center gap-1.5">
                               <span>{METHOD_ICONS[p.paymentMethod]}</span>
                               <span className="capitalize">{p.paymentMethod?.replace('_', ' ')}</span>
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="text-[13px] text-slate-300">{fmt(p.paidAt)}</p>
+                            <p className="text-[14px] text-slate-300">{fmt(p.paidAt)}</p>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="text-[13px] text-slate-300">{p.recordedBy?.name}</p>
-                            <p className="text-[11px] text-slate-500 capitalize">{p.recordedBy?.role}</p>
+                            <p className="text-[14px] text-slate-300">{p.recordedBy?.name}</p>
+                            <p className="text-[12px] text-slate-500 capitalize">{p.recordedBy?.role}</p>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-[13px] ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
+                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-[15px] ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
                               {p.direction === 'outbound'
-                                ? <ArrowUpRight className="h-3 w-3" />
-                                : <ArrowDownLeft className="h-3 w-3" />}
+                                ? <ArrowUpRight className="h-4 w-4" />
+                                : <ArrowDownLeft className="h-4 w-4" />}
                               ₹{p.amount.toFixed(2)}
                             </div>
                             {p.transactionId && (
-                              <p className="text-[11px] font-mono text-slate-500 mt-0.5">{p.transactionId}</p>
+                              <p className="text-[12px] font-mono text-slate-500 mt-0.5">{p.transactionId}</p>
                             )}
                           </td>
                         </tr>

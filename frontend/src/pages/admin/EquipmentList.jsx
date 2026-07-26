@@ -68,7 +68,7 @@ const EquipmentList = () => {
   const loadEquipment = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetchEquipment({ page: 1, limit: 1000, search, category, status, sort: 'newest' });
+      const res = await fetchEquipment({ page, limit: 1000, search, category, status, sort: 'newest' });
       setEquipment(res.data.data.equipment);
       setPagination(res.data.data.pagination);
     } catch {

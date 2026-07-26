@@ -68,7 +68,7 @@ const EquipmentCatalog = () => {
     setIsLoading(true);
     try {
       const res = await fetchEquipment({
-        page: 1,
+        page,
         limit: 1000,
         search,
         category,
@@ -84,10 +84,7 @@ const EquipmentCatalog = () => {
     }
   }, [page, search, category]);
 
-  useEffect(() => { 
-    loadEquipment();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [loadEquipment]);
+  useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -278,6 +275,8 @@ const EquipmentCatalog = () => {
               </motion.div>
             ))}
           </div>
+
+
         </>
       )}
 
