@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { Plus, Search, Filter, Eye, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
+import { Plus, Search, Filter, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import { StatusBadge, ConditionBadge } from '../../components/equipment/EquipmentBadges';
@@ -189,67 +189,97 @@ const EquipmentList = () => {
           </div>
         ) : (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 80, damping: 20 }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
             >
               {equipment.map((item) => (
-                <div 
-                  key={item._id} 
+                <motion.div
+                  key={item._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ type: 'spring', stiffness: 80, damping: 20 }}
                   onClick={() => navigate(`/admin/equipment/${item._id}`)}
-                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-slate-600 hover:shadow-xl transition-all duration-300 group cursor-pointer"
+                  className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
                 >
                   {/* Image */}
                   <div className="aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
                     {item.images?.[0] ? (
-                      <img src={item.images[0].url} alt={item.name} className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300" />
+                      <img
+                        src={item.images[0].url}
+                        alt={item.name}
+                        className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-800/50">
-                        <Package className="h-10 w-10 text-slate-600" />
+                        <Package className="h-12 w-12 text-slate-600" />
                       </div>
                     )}
-                    <div className="absolute top-2 right-2 scale-90 origin-top-right z-10">
+                    <div className="absolute top-2 right-2 z-10">
                       <StatusBadge status={item.status} />
                     </div>
                   </div>
 
-                  {/* Info */}
-                    <div className="p-3.5 flex flex-col flex-1">
-                      <h3 className="font-medium text-slate-100 text-[16px] leading-tight line-clamp-2 mb-1.5 tracking-tight">{item.name}</h3>
-                      <p className="text-xs font-semibold text-slate-400 tracking-wide capitalize mb-2">{item.category?.replace('-', ' ')}</p>
-                    <div className="flex items-center gap-2 mb-3 scale-90 origin-left">
-                      <ConditionBadge condition={item.condition} />
-                    </div>
-                      <div className="mt-auto pt-2.5 border-t border-slate-800 flex items-center justify-between">
-                        <div>
-                          <p className="text-[17px] font-bold text-primary-400">₹{item.dailyRate}<span className="text-xs font-semibold text-slate-500 ml-1">/day</span></p>
-                          <p className="text-xs font-medium text-slate-500 mt-0.5">Dep: <span className="font-semibold text-slate-400">₹{item.securityDeposit}</span></p>
-                        </div>
-                      <div className="flex gap-1">
-                        {canManage && (
-                          <>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); setEditTarget(item); }}
-                              className="p-1.5 rounded-md bg-slate-800 hover:bg-primary-900/50 text-slate-400 hover:text-primary-400 transition-colors relative z-10"
-                              title="Edit"
-                            >
-                              <Pencil className="h-3.5 w-3.5" />
-                            </button>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); setDeleteTarget(item); }}
-                              className="p-1.5 rounded-md bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-400 transition-colors relative z-10"
-                              title="Delete"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </>
-                        )}
+                  {/* Card body */}
+                  <div className="p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
+
+                    {/* Category badge */}
+                    <div className="mb-2.5 flex items-center justify-between">
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
+                        {item.category?.replace(/-/g, ' ')}
+                      </span>
+                      <div className="scale-90 origin-right">
+                        <ConditionBadge condition={item.condition} />
                       </div>
                     </div>
+
+                    {/* Title */}
+                    <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-4 group-hover:text-orange-500 transition-colors">
+                      {item.name}
+                    </h3>
+
+                    {/* Pricing box */}
+                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 shadow-inner flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
+                        <p className="text-xl font-black text-orange-500 leading-none">
+                          ₹{item.dailyRate}<span className="text-[11px] font-semibold text-slate-400 ml-1">/day</span>
+                        </p>
+                      </div>
+                      <div className="w-[1px] h-8 bg-slate-800 mx-2" />
+                      <div className="text-right">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
+                        <p className="text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
+                      </div>
+                    </div>
+
+                    {/* Admin action row */}
+                    {canManage && (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex gap-2"
+                      >
+                        <button
+                          onClick={() => setEditTarget(item)}
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-800 hover:bg-primary-900/50 text-slate-300 hover:text-primary-400 border border-slate-700 hover:border-primary-700/50 text-xs font-bold transition-all duration-200"
+                          title="Edit"
+                        >
+                          <Pencil className="h-3.5 w-3.5" /> Edit
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(item)}
+                          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-slate-800 hover:bg-red-900/50 text-slate-300 hover:text-red-400 border border-slate-700 hover:border-red-700/50 text-xs font-bold transition-all duration-200"
+                          title="Delete"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Delete
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
 
