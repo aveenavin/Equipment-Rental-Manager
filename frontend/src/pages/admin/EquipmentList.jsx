@@ -206,7 +206,7 @@ const EquipmentList = () => {
                   className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
                 >
                   {/* Image */}
-                  <div className="aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
+                  <div className="aspect-[3/2] w-full relative overflow-hidden rounded-t-xl">
                     {item.images?.[0] ? (
                       <img
                         src={item.images[0].url}
@@ -224,7 +224,7 @@ const EquipmentList = () => {
                   </div>
 
                   {/* Card body */}
-                  <div className="p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
+                  <div className="p-3.5 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
 
                     {/* Category badge */}
                     <div className="mb-2.5 flex items-center justify-between">
@@ -237,12 +237,12 @@ const EquipmentList = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-4 group-hover:text-orange-500 transition-colors">
+                    <h3 className="font-bold text-slate-100 text-[17px] leading-snug line-clamp-2 mb-3 group-hover:text-orange-500 transition-colors">
                       {item.name}
                     </h3>
 
                     {/* Pricing box */}
-                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-4 shadow-inner flex items-center justify-between">
+                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-3 mb-3 shadow-inner flex items-center justify-between">
                       <div>
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
                         <p className="text-xl font-black text-orange-500 leading-none">
