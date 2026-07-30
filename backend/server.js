@@ -36,8 +36,9 @@ if (
   !process.env.CLOUDINARY_API_KEY ||
   !process.env.CLOUDINARY_API_SECRET
 ) {
-  console.warn(' CLOUDINARY WARNING:');
-
+  console.warn('⚠️  CLOUDINARY WARNING:');
+  console.warn('Cloudinary credentials are missing or still using placeholder values.');
+  console.warn('Image uploads will fail until valid credentials are provided in .env.');
 }
 
 const app = require('./src/app');

@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// oxlint-disable-next-line react/only-export-components -- useAuth is intentionally co-located with its context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

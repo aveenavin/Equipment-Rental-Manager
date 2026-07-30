@@ -9,7 +9,7 @@ A production-ready, full-stack equipment rental management platform built with t
 | Layer | Technology |
 |---|---|
 | Frontend | React 19 (Vite), Tailwind CSS v4, React Router v6, Axios |
-| Backend | Node.js, Express.js v5 |
+| Backend | Node.js, Express.js v4 |
 | Database | MongoDB (Atlas), Mongoose ODM |
 | Authentication | JWT (Access + Refresh Tokens), bcryptjs |
 | File Uploads | Multer, Cloudinary |
@@ -25,7 +25,7 @@ A production-ready, full-stack equipment rental management platform built with t
 - **Booking Lifecycle** — `Pending → Confirmed → Checked Out → Returned`
 - **Return Inspection** — Damage recording, automatic late fee calculation, deposit refunds
 - **Maintenance Logging** — Equipment status locked during active maintenance
-- **Payment Integration** — Stripe-ready with simulated payment mode for demos
+- **Payment Tracking** — Record, categorize, and reconcile payments with invoice generation
 - **Admin BI Dashboard** — Revenue charts and equipment utilization analytics
 - **Secure by Default** — httpOnly cookies, Helmet headers, rate limiting, NoSQL injection protection
 
@@ -48,7 +48,7 @@ equipment-rental-manager/
 - Node.js >= 18.x
 - MongoDB Atlas URI (or local MongoDB replica set)
 - Cloudinary account
-- Stripe account (optional — simulated mode available)
+- Gmail account with App Password (for email verification)
 
 ### Installation
 
@@ -91,12 +91,11 @@ Base URL: `http://localhost:5000/api/v1`
 | Auth | `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`, `POST /auth/refresh`, `GET /auth/me`, `GET /auth/verify/:token`, `POST /auth/resend-verification` |
 | Equipment | `GET /equipment`, `POST /equipment`, `GET /equipment/:id`, `PATCH /equipment/:id`, `DELETE /equipment/:id` |
 | Rentals | `GET /rentals`, `POST /rentals`, `GET /rentals/:id`, `PATCH /rentals/:id/status`, `PATCH /rentals/:id/cancel`, `GET /rentals/availability/:equipmentId` |
-| Returns | `GET /returns`, `POST /returns`, `GET /returns/:id` |
+| Returns | `GET /returns`, `POST /returns`, `GET /returns/:id`, `GET /returns/rental/:rentalId` |
 | Maintenance | `GET /maintenance`, `POST /maintenance`, `GET /maintenance/:id`, `PATCH /maintenance/:id/complete` |
-| Payments | `GET /payments`, `POST /payments`, `GET /payments/:id` |
+| Payments | `GET /payments`, `POST /payments`, `GET /payments/:id`, `GET /payments/rental/:rentalId`, `GET /payments/invoice/:rentalId` |
 | Customers | `GET /customers`, `GET /customers/:id`, `PATCH /customers/:id`, `DELETE /customers/:id` |
 | Dashboard | `GET /dashboard` |
-| Invoice | `GET /invoice/:rentalId` |
 
 ---
 
@@ -128,13 +127,7 @@ The backend is deployed to **Render** and the frontend to **Vercel**. Since they
 
 ### Backend → Render
 
-**Option A — Blueprint (recommended)**
-1. Push this repo to GitHub.
-2. Render Dashboard → **New → Blueprint** → connect your repo.
-3. Render detects `render.yaml` and creates the service automatically.
-4. Go to the created service → **Environment** → add all `sync: false` secrets.
-
-**Option B — Manual**
+**Setup**
 1. Render Dashboard → **New → Web Service** → connect your repo.
 2. Set **Root Directory**: `backend` | **Build**: `npm install` | **Start**: `npm start`
 3. Add all environment variables from `backend/.env.production.example`.
