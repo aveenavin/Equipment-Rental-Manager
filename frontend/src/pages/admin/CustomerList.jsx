@@ -139,6 +139,12 @@ const CustomerList = () => {
 
   useEffect(() => { loadCustomers(); }, [loadCustomers]);
 
+  useEffect(() => {
+    const main = document.querySelector('main');
+    if (main) main.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }, [page]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     setSearch(searchInput);
@@ -271,20 +277,20 @@ const CustomerList = () => {
                               </span>
                             </div>
                             <div>
-                              <p className="font-medium text-slate-200 text-[13px] truncate max-w-[150px]">{customer.name}</p>
-                              <p className="text-[11px] text-slate-500 font-mono">{customer._id.slice(-8)}</p>
+                              <p className="font-medium text-slate-200 text-sm truncate max-w-[150px]">{customer.name}</p>
+                              <p className="text-xs text-slate-500 font-mono">{customer._id.slice(-8)}</p>
                             </div>
                           </div>
                         </td>
                         <td className="px-4 py-3">
-                          <p className="text-[13px] text-slate-300 truncate max-w-[150px]">{customer.email}</p>
-                          <p className="text-[11px] text-slate-500 mt-0.5">{customer.phone || '—'}</p>
+                          <p className="text-sm text-slate-300 truncate max-w-[150px]">{customer.email}</p>
+                          <p className="text-xs text-slate-500 mt-0.5">{customer.phone || '—'}</p>
                         </td>
                         <td className="px-4 py-3">
                           <div className="scale-90 origin-left"><StatusPill status={customer.status} /></div>
                         </td>
                         <td className="px-4 py-3">
-                          <p className="text-[13px] text-slate-400">
+                          <p className="text-sm text-slate-400">
                             {new Date(customer.createdAt).toLocaleDateString('en-IN', {
                               year: 'numeric', month: 'short', day: 'numeric',
                             })}

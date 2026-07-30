@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import {
   IndianRupee, ArrowDownLeft, ArrowUpRight,
-  ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight, Search, X,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import { fetchPayments } from '../../services/paymentService';
@@ -38,6 +38,8 @@ const AdminPayments = () => {
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
 
   const load = useCallback(async () => {
@@ -45,6 +47,7 @@ const AdminPayments = () => {
     try {
       const params = { page, limit: 20 };
       if (typeFilter) params.paymentType = typeFilter;
+      if (search) params.search = search;
       const res = await fetchPayments(params);
       setPayments(res.data.data.payments);
       setPagination(res.data.data.pagination);
@@ -53,9 +56,21 @@ const AdminPayments = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, typeFilter]);
+  }, [page, typeFilter, search]);
 
   useEffect(() => { load(); }, [load]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(searchInput);
+    setPage(1);
+  };
+
+  const clearSearch = () => {
+    setSearchInput('');
+    setSearch('');
+    setPage(1);
+  };
 
   // Revenue stats
   const inboundTotal = payments.filter((p) => p.direction === 'inbound').reduce((s, p) => s + p.amount, 0);
@@ -86,7 +101,33 @@ const AdminPayments = () => {
           </div>
         </div>
 
-        {/* Type filter tabs */}
+        {/* Search & Type filter tabs */}
+        <div className="flex flex-col md:flex-row gap-2.5 mb-5">
+          <form onSubmit={handleSearch} className="flex gap-2 flex-1">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search by customer name or email..."
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
+              />
+              {searchInput && (
+                <button type="button" onClick={clearSearch} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+
         <div className="flex flex-wrap gap-2.5 mb-6">
           {FILTER_TABS.map((f) => (
             <button
@@ -152,8 +193,8 @@ const AdminPayments = () => {
                                 </span>
                               </div>
                               <div>
-                                <p className="text-[13px] text-slate-200 truncate max-w-[120px]">{p.customer?.name}</p>
-                                <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{p.customer?.email}</p>
+                                <p className="text-sm text-slate-200 truncate max-w-[120px]">{p.customer?.name}</p>
+                                <p className="text-xs text-slate-500 truncate max-w-[120px]">{p.customer?.email}</p>
                               </div>
                             </div>
                           </td>
@@ -165,27 +206,27 @@ const AdminPayments = () => {
                             </div>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="text-[13px] text-slate-400 flex items-center gap-1.5">
+                            <span className="text-sm text-slate-400 flex items-center gap-1.5">
                               <span>{METHOD_ICONS[p.paymentMethod]}</span>
                               <span className="capitalize">{p.paymentMethod?.replace('_', ' ')}</span>
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="text-[13px] text-slate-300">{fmt(p.paidAt)}</p>
+                            <p className="text-sm text-slate-300">{fmt(p.paidAt)}</p>
                           </td>
                           <td className="px-4 py-3">
-                            <p className="text-[13px] text-slate-300">{p.recordedBy?.name}</p>
-                            <p className="text-[11px] text-slate-500 capitalize">{p.recordedBy?.role}</p>
+                            <p className="text-sm text-slate-300">{p.recordedBy?.name}</p>
+                            <p className="text-xs text-slate-500 capitalize">{p.recordedBy?.role}</p>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-[13px] ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
+                            <div className={`flex items-center justify-end gap-1.5 font-semibold text-sm ${p.direction === 'outbound' ? 'text-red-400' : 'text-emerald-400'}`}>
                               {p.direction === 'outbound'
                                 ? <ArrowUpRight className="h-3 w-3" />
                                 : <ArrowDownLeft className="h-3 w-3" />}
                               ₹{p.amount.toFixed(2)}
                             </div>
                             {p.transactionId && (
-                              <p className="text-[11px] font-mono text-slate-500 mt-0.5">{p.transactionId}</p>
+                              <p className="text-xs font-mono text-slate-500 mt-0.5">{p.transactionId}</p>
                             )}
                           </td>
                         </tr>

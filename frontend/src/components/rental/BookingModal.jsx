@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { X, Calendar, IndianRupee, AlertCircle, Package, MapPin } from 'lucide-react';
+import { X, Calendar, IndianRupee, AlertCircle, Package, MapPin, Phone } from 'lucide-react';
 import Button from '../ui/Button';
 import { createRental, fetchEquipmentAvailability } from '../../services/rentalService';
 
@@ -26,6 +26,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
   const [endDate, setEndDate] = useState('');
   const [notes, setNotes] = useState('');
   const [address, setAddress] = useState(EMPTY_ADDRESS);
+  const [contactNumber, setContactNumber] = useState('');
   const [bookedRanges, setBookedRanges] = useState([]);
   const [availabilityLoading, setAvailabilityLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,6 +78,9 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
     if (!/^\d{6}$/.test(address.postalCode.trim())) {
       return setError('Postal code must be a valid 6-digit Indian PIN code.');
     }
+    if (!/^[6-9]\d{9}$/.test(contactNumber)) {
+      return setError('Please enter a valid 10-digit Indian mobile number.');
+    }
 
     setIsSubmitting(true);
     try {
@@ -92,6 +96,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
           postalCode: address.postalCode.trim(),
           country: address.country.trim() || 'India',
         },
+        contactNumber,
       });
       toast.success('Rental booked successfully!');
       onBooked();
@@ -114,7 +119,8 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
     !!endDate &&
     !isConflict &&
     !availabilityLoading &&
-    isAddressComplete;
+    isAddressComplete &&
+    contactNumber.length === 10;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
@@ -272,6 +278,29 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Contact Number */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Phone className="h-4 w-4 text-emerald-400 shrink-0" />
+              <span className="text-sm font-semibold text-slate-200">Contact Number</span>
+              <span className="text-red-400">*</span>
+            </div>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+              <input
+                type="tel"
+                value={contactNumber}
+                onChange={(e) => setContactNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                placeholder="10-digit mobile number"
+                maxLength={10}
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            {contactNumber && contactNumber.length === 10 && !/^[6-9]/.test(contactNumber) && (
+              <p className="text-xs text-red-400 mt-1.5">Number must start with 6, 7, 8, or 9</p>
+            )}
           </div>
 
           {/* Notes */}

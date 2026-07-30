@@ -27,8 +27,8 @@ const createLogValidation = [
 
 const completeLogValidation = [
   body('technicianNotes')
+    .optional({ nullable: true })
     .trim()
-    .notEmpty().withMessage('Technician notes are required to complete a maintenance log')
     .isLength({ max: 2000 }).withMessage('Technician notes cannot exceed 2000 characters'),
 
   body('actualCost')
@@ -41,6 +41,10 @@ const listLogsValidation = [
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 and 50'),
   query('status').optional().isIn(['open', 'completed']).withMessage('Status must be open or completed'),
   query('equipment').optional().isMongoId().withMessage('Invalid equipment ID'),
+  query('search')
+    .optional()
+    .trim()
+    .isLength({ max: 100 }).withMessage('Search query cannot exceed 100 characters'),
 ];
 
 module.exports = { createLogValidation, completeLogValidation, listLogsValidation };

@@ -144,6 +144,9 @@ const InvoicePage = () => {
                   <div className="space-y-0.5 mt-1">
                     <p className="text-sm font-medium text-slate-400 print:text-slate-600">{invoice.customer?.email}</p>
                     {invoice.customer?.phone && <p className="text-sm font-medium text-slate-400 print:text-slate-600">{invoice.customer.phone}</p>}
+                    {invoice.rental?.contactNumber && (
+                      <p className="text-sm font-medium text-emerald-400 print:text-slate-600">📞 {invoice.rental.contactNumber}</p>
+                    )}
                     {invoice.rental?.deliveryAddress && (
                       <div className="mt-2 pt-2 border-t border-slate-700/50 print:border-slate-200">
                         <div className="flex items-start gap-1.5">

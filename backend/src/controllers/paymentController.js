@@ -31,8 +31,8 @@ const listPayments = catchAsync(async (req, res) => {
     return res.status(200).json({ status: 'success', data: result });
   }
 
-  const { page, limit, paymentType, direction, rental } = req.query;
-  const result = await paymentService.listAllPayments({ page, limit, paymentType, direction, rentalId: rental });
+  const { page, limit, paymentType, direction, rental, search } = req.query;
+  const result = await paymentService.listAllPayments({ page, limit, paymentType, direction, rentalId: rental, search });
   res.status(200).json({ status: 'success', data: result });
 });
 

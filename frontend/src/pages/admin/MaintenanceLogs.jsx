@@ -3,9 +3,11 @@ import { toast } from 'react-hot-toast';
 import {
   Wrench, CheckCircle, ChevronLeft, ChevronRight,
   Package, Plus, X, ClipboardList,
+  Search, Activity,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import Button from '../../components/ui/Button';
+import CustomDropdown from '../../components/ui/CustomDropdown';
 import {
   fetchMaintenanceLogs,
   createMaintenanceLog,
@@ -219,7 +221,6 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.technicianNotes.trim()) return toast.error('Technician notes are required.');
 
     setSubmitting(true);
     try {
@@ -260,7 +261,7 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
         {/* Body */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
           <div>
-            <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Technician Notes *</label>
+            <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Technician Notes (optional)</label>
             <textarea
               name="technicianNotes"
               value={form.technicianNotes}
@@ -269,7 +270,6 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
               maxLength={2000}
               placeholder="Describe the work completed, parts replaced, or resolution…"
               className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 resize-none"
-              required
             />
           </div>
 
@@ -302,11 +302,19 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
 };
 
 // ─── Main Page ─────────────────────────────────────────────────────────────────
+const MAINTENANCE_STATUSES = [
+  { value: '', label: 'All Statuses' },
+  { value: 'open', label: 'Open' },
+  { value: 'completed', label: 'Completed' },
+];
+
 const MaintenanceLogs = () => {
   const [logs, setLogs] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [completeTarget, setCompleteTarget] = useState(null);
@@ -314,7 +322,7 @@ const MaintenanceLogs = () => {
   const loadLogs = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params = { page, limit: 15 };
+      const params = { page, limit: 15, search };
       if (statusFilter) params.status = statusFilter;
       const res = await fetchMaintenanceLogs(params);
       setLogs(res.data.data.logs);
@@ -324,9 +332,21 @@ const MaintenanceLogs = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, statusFilter]);
+  }, [page, statusFilter, search]);
 
   useEffect(() => { loadLogs(); }, [loadLogs]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(searchInput);
+    setPage(1);
+  };
+
+  const clearSearch = () => {
+    setSearchInput('');
+    setSearch('');
+    setPage(1);
+  };
 
   const handleCreated = () => {
     setShowCreateModal(false);
@@ -362,27 +382,40 @@ const MaintenanceLogs = () => {
           </Button>
         </div>
 
-        {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2.5 mb-6">
-          {[
-            { value: '', label: 'All Logs' },
-            { value: 'open', label: 'Open' },
-            { value: 'completed', label: 'Completed' },
-          ].map((f) => (
+        {/* Search & Filters */}
+        <div className="flex flex-col md:flex-row gap-2.5 mb-5">
+          <form onSubmit={handleSearch} className="flex gap-2 flex-1">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search by equipment, description..."
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
+              />
+              {searchInput && (
+                <button type="button" onClick={clearSearch} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             <button
-              key={f.value}
-              onClick={() => { setStatusFilter(f.value); setPage(1); }}
-              className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 transform flex items-center gap-1.5 ${
-                statusFilter === f.value
-                  ? 'bg-gradient-to-r from-[#4558be] to-indigo-500 text-white font-bold shadow-md shadow-indigo-500/30 border border-indigo-400/50 -translate-y-0.5'
-                  : 'bg-white text-gray-600 font-semibold border border-gray-200 shadow-sm hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md hover:-translate-y-0.5'
-              }`}
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
             >
-              {f.value === 'open' && <Wrench className={`h-3.5 w-3.5 ${statusFilter === f.value ? 'text-white' : 'text-gray-400'}`} />}
-              {f.value === 'completed' && <CheckCircle className={`h-3.5 w-3.5 ${statusFilter === f.value ? 'text-white' : 'text-gray-400'}`} />}
-              {f.label}
+              Search
             </button>
-          ))}
+          </form>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <CustomDropdown
+              icon={Activity}
+              value={statusFilter}
+              options={MAINTENANCE_STATUSES}
+              onChange={(val) => { setStatusFilter(val); setPage(1); }}
+            />
+          </div>
         </div>
 
         {/* Table */}

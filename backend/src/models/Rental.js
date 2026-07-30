@@ -91,6 +91,14 @@ const rentalSchema = new mongoose.Schema(
       },
     },
 
+    // Contact number for this specific booking
+    contactNumber: {
+      type: String,
+      trim: true,
+      match: [/^[6-9]\d{9}$/, 'Must be a valid 10-digit Indian mobile number'],
+      default: null,
+    },
+
     notes: {
       type: String,
       trim: true,

@@ -4,9 +4,11 @@ import { toast } from 'react-hot-toast';
 import {
   FileText, ChevronLeft, ChevronRight,
   Eye, CheckCircle, Truck, RotateCcw, Calendar,
+  Search, X, Activity,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
+import CustomDropdown from '../../components/ui/CustomDropdown';
 import { fetchRentals, updateRentalStatus } from '../../services/rentalService';
 import { motion } from 'framer-motion';
 
@@ -19,21 +21,29 @@ const QUICK_ACTIONS = {
   checked_out: { label: 'Return', icon: RotateCcw, next: 'returned', variant: 'text-emerald-600 hover:text-emerald-700' },
 };
 
-
-const STATUS_TABS = ['', 'pending', 'confirmed', 'checked_out', 'returned', 'cancelled'];
+const RENTAL_STATUSES = [
+  { value: '', label: 'All Statuses' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'confirmed', label: 'Confirmed' },
+  { value: 'checked_out', label: 'Checked Out' },
+  { value: 'returned', label: 'Returned' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
 
 const AdminRentals = () => {
   const [rentals, setRentals] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
   const [updatingId, setUpdatingId] = useState(null);
 
   const loadRentals = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetchRentals({ page, limit: 15, status: statusFilter });
+      const res = await fetchRentals({ page, limit: 15, status: statusFilter, search });
       setRentals(res.data.data.rentals);
       setPagination(res.data.data.pagination);
     } catch {
@@ -41,9 +51,21 @@ const AdminRentals = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, statusFilter]);
+  }, [page, statusFilter, search]);
 
   useEffect(() => { loadRentals(); }, [loadRentals]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(searchInput);
+    setPage(1);
+  };
+
+  const clearSearch = () => {
+    setSearchInput('');
+    setSearch('');
+    setPage(1);
+  };
 
   const handleQuickAction = async (rental, nextStatus) => {
     setUpdatingId(rental._id);
@@ -70,20 +92,40 @@ const AdminRentals = () => {
           </p>
         </div>
 
-        {/* Status filter tabs */}
-        <div className="flex flex-wrap gap-2.5 mb-6">
-          {STATUS_TABS.map((s) => (
+        {/* Search & Filters */}
+        <div className="flex flex-col md:flex-row gap-2.5 mb-5">
+          <form onSubmit={handleSearch} className="flex gap-2 flex-1">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search by equipment, customer..."
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
+              />
+              {searchInput && (
+                <button type="button" onClick={clearSearch} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             <button
-              key={s}
-              onClick={() => { setStatusFilter(s); setPage(1); }}
-              className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 transform ${statusFilter === s
-                ? 'bg-gradient-to-r from-[#4558be] to-indigo-500 text-white font-bold shadow-md shadow-indigo-500/30 border border-indigo-400/50 -translate-y-0.5'
-                : 'bg-white text-gray-600 font-semibold border border-gray-200 shadow-sm hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md hover:-translate-y-0.5'
-                }`}
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
             >
-              {s === '' ? 'All' : s.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+              Search
             </button>
-          ))}
+          </form>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <CustomDropdown
+              icon={Activity}
+              value={statusFilter}
+              options={RENTAL_STATUSES}
+              onChange={(val) => { setStatusFilter(val); setPage(1); }}
+            />
+          </div>
         </div>
 
         {/* Table */}
@@ -143,8 +185,8 @@ const AdminRentals = () => {
                                 )}
                               </div>
                               <div>
-                                <p className="text-[13px] font-medium text-slate-200 max-w-[150px] truncate">{rental.equipment?.name}</p>
-                                <p className="text-[11px] text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
+                                <p className="text-sm font-medium text-slate-200 max-w-[150px] truncate">{rental.equipment?.name}</p>
+                                <p className="text-xs text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
                               </div>
                             </div>
                           </td>
@@ -158,29 +200,29 @@ const AdminRentals = () => {
                                 </span>
                               </div>
                               <div>
-                                <p className="text-[13px] text-slate-300 truncate max-w-[120px]">{rental.customer?.name}</p>
-                                <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{rental.customer?.email}</p>
+                                <p className="text-sm text-slate-300 truncate max-w-[120px]">{rental.customer?.name}</p>
+                                <p className="text-xs text-slate-500 truncate max-w-[120px]">{rental.customer?.email}</p>
                               </div>
                             </div>
                           </td>
 
                           {/* Dates */}
                           <td className="px-4 py-3">
-                            <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                            <div className="flex items-center gap-1.5 text-xs text-slate-400">
                               <Calendar className="h-3 w-3 shrink-0" />
                               <span>{fmt(rental.startDate)}</span>
                               <span className="text-slate-600">→</span>
                               <span>{fmt(rental.endDate)}</span>
                             </div>
-                            <p className="text-[11px] font-bold text-sky-400 mt-0.5 ml-4">
+                            <p className="text-xs font-bold text-sky-400 mt-0.5 ml-4">
                               {rental.totalDays} day{rental.totalDays !== 1 ? 's' : ''}
                             </p>
                           </td>
 
                           {/* Amount */}
                           <td className="px-4 py-3">
-                            <p className="text-[13px] font-semibold text-primary-400">₹{rental.totalAmount.toFixed(2)}</p>
-                            <p className="text-[11px] text-slate-500">+₹{rental.securityDeposit} dep.</p>
+                            <p className="text-sm font-semibold text-primary-400">₹{rental.totalAmount.toFixed(2)}</p>
+                            <p className="text-xs text-slate-500">+₹{rental.securityDeposit} dep.</p>
                           </td>
 
                           {/* Status */}

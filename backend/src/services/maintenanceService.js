@@ -152,12 +152,28 @@ const getMaintenanceLogById = async (id) => {
 };
 
 /**
- * List maintenance logs with pagination and filtering.
+ * List maintenance logs with pagination, filtering, and search.
+ *
+ * Search: matches equipment name or log description.
  */
-const listMaintenanceLogs = async ({ page = 1, limit = 15, status, equipmentId }) => {
+const listMaintenanceLogs = async ({ page = 1, limit = 15, status, equipmentId, search }) => {
   const filter = {};
   if (status) filter.status = status;
   if (equipmentId) filter.equipment = equipmentId;
+
+  // Search across referenced Equipment names and log description
+  if (search && search.trim()) {
+    const regex = new RegExp(search.trim(), 'i');
+
+    const matchedEquipment = await Equipment.find({ name: regex }).select('_id').lean();
+
+    const orConditions = [{ description: regex }];
+    if (matchedEquipment.length) {
+      orConditions.push({ equipment: { $in: matchedEquipment.map((e) => e._id) } });
+    }
+
+    filter.$and = [...(filter.$and || []), { $or: orConditions }];
+  }
 
   const pageNum = parseInt(page, 10);
   const limitNum = parseInt(limit, 10);

@@ -21,8 +21,8 @@ const processReturn = catchAsync(async (req, res) => {
 
 // GET /api/v1/returns
 const getAllReturns = catchAsync(async (req, res) => {
-  const { page, limit, isDamaged, equipment } = req.query;
-  const result = await returnService.listReturns({ page, limit, isDamaged, equipmentId: equipment });
+  const { page, limit, isDamaged, equipment, search } = req.query;
+  const result = await returnService.listReturns({ page, limit, isDamaged, equipmentId: equipment, search });
 
   res.status(200).json({ status: 'success', data: result });
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Plus, Search, Filter, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
@@ -80,6 +80,12 @@ const EquipmentList = () => {
 
   useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
+  useEffect(() => {
+    const main = document.querySelector('main');
+    if (main) main.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }, [page]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     setSearch(searchInput);
@@ -115,7 +121,7 @@ const EquipmentList = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
-      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
@@ -260,7 +266,7 @@ const EquipmentList = () => {
                     {canManage && (
                       <div
                         onClick={(e) => e.stopPropagation()}
-                        className="flex flex-col sm:flex-row gap-2 sm:gap-2.5 mt-1 sm:mt-2"
+                        className="flex flex-row gap-2 sm:gap-2.5 mt-1 sm:mt-2"
                       >
                         <button
                           onClick={() => setEditTarget(item)}
@@ -310,6 +316,96 @@ const EquipmentList = () => {
           </>
         )}
       </div>
+
+      {/* ── Footer ────────────────────────────────────────────────────── */}
+      <footer className="border-t border-gray-400 pt-12 pb-8 mt-16 mx-4 sm:mx-8 lg:mx-12 xl:mx-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+          {/* About */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xl">🔧</span>
+              <span className="font-black text-gray-800 text-lg tracking-tight">EquipRental Admin</span>
+            </div>
+            <p className="text-gray-500 text-sm leading-relaxed">
+              Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+            </p>
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-5">
+              {['𝕏', 'in', 'f', '▶'].map((s, i) => (
+                <button
+                  key={i}
+                  className="w-8 h-8 rounded-lg bg-white border border-gray-400 hover:border-amber-500/50 hover:bg-amber-50 text-gray-500 hover:text-amber-500 text-xs font-bold flex items-center justify-center transition-all duration-200"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-gray-700 font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Dashboard', path: '/admin' },
+                { label: 'Equipment', path: '/admin/equipment' },
+                { label: 'Rentals', path: '/admin/rentals' },
+                { label: 'Customers', path: '/admin/customers' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.path}
+                    onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    className="text-gray-500 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h4 className="text-gray-700 font-bold text-sm uppercase tracking-widest mb-4">Support</h4>
+            <ul className="space-y-2.5 text-sm text-gray-500">
+              <li className="flex items-start gap-2"><span>📧</span> 73aveen@gmail.com</li>
+              <li className="flex items-start gap-2"><span>📞</span> +91 9xxxxxxx</li>
+              <li className="flex items-start gap-2"><span>📍</span> Bhopal, Madhya Pradesh, India</li>
+              <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-gray-700 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Admin Policies', path: '/admin/policies' },
+                { label: 'Security Overview', path: '/admin/security' },
+                { label: 'API Documentation', path: '/admin/api' },
+                { label: 'System Status', path: '/admin/status' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.path}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-gray-500 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-gray-400 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400">
+          <span>© {new Date().getFullYear()} EquipRental Admin. All rights reserved.</span>
+          <span className="flex items-center gap-1">Built with <span className="text-amber-500">♥</span> for professionals</span>
+        </div>
+      </footer>
 
       {/* Create Modal */}
       {showCreateModal && (

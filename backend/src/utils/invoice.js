@@ -135,6 +135,7 @@ const buildInvoice = async (rentalId, requestingUser) => {
       status: rental.status,
       notes: rental.notes,
       deliveryAddress: rental.deliveryAddress,
+      contactNumber: rental.contactNumber,
     },
 
     lineItems,

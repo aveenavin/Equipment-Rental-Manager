@@ -41,16 +41,16 @@ const SectionCard = ({ title, icon: Icon, children, className = "" }) => (
   <motion.div 
     initial={{ opacity: 0, y: 15 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-5 shadow-xl relative overflow-hidden ${className}`}
+    className={`bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-xl relative overflow-hidden ${className}`}
   >
     <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
-      <Icon className="w-24 h-24" />
+      <Icon className="w-16 h-16 sm:w-24 sm:h-24" />
     </div>
     <div className="flex items-center gap-3 mb-4 relative z-10">
       <div className="p-2 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-600/10 border border-primary-500/30">
         <Icon className="h-4 w-4 text-primary-400" />
       </div>
-      <h3 className="text-base font-bold text-slate-100 tracking-tight">{title}</h3>
+      <h3 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight">{title}</h3>
     </div>
     <div className="relative z-10">
       {children}
@@ -163,56 +163,56 @@ const RentalDetail = () => {
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-500/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">
-        <Link to={backPath} className="inline-flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors mb-6 bg-slate-900/50 px-4 py-2 rounded-xl border border-slate-800 backdrop-blur-md w-fit">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 relative z-10">
+        <Link to={backPath} className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors mb-4 sm:mb-6 bg-slate-900/50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-slate-800 backdrop-blur-md w-fit">
           <ArrowLeft className="h-4 w-4" /> Back to {isCustomer ? 'My Rentals' : 'All Rentals'}
         </Link>
 
         {/* TWO COLUMN LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8">
           
           {/* ======================= */}
           {/* LEFT COLUMN: MAIN CONTENT */}
           {/* ======================= */}
-          <div className="lg:col-span-8 flex flex-col gap-6">
+          <div className="lg:col-span-8 flex flex-col gap-3 sm:gap-6">
             
             {/* HERO CARD (Redesigned) */}
             <motion.div 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="w-full rounded-[2.5rem] bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 shadow-2xl overflow-hidden relative"
+              className="w-full rounded-xl sm:rounded-[2.5rem] bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 shadow-2xl overflow-hidden relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-transparent to-transparent pointer-events-none" />
-              <div className="p-8 md:p-10 flex flex-col sm:flex-row items-center sm:items-start gap-8 relative z-10">
+              <div className="p-4 sm:p-8 md:p-10 flex flex-row items-start gap-3 sm:gap-8 relative z-10">
                 
                 {/* Image Box */}
                 {canManage && rental.equipment ? (
-                  <Link to={`/admin/equipment/${rental.equipment._id}`} className="w-32 h-32 sm:w-40 sm:h-40 shrink-0 rounded-3xl bg-slate-800/80 p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
+                  <Link to={`/admin/equipment/${rental.equipment._id}`} className="w-24 h-24 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
                     {rental.equipment.images?.[0] ? (
                       <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl group-hover:scale-105 transition-transform" />
                     ) : (
-                      <Package className="h-16 w-16 text-slate-600 group-hover:scale-105 transition-transform" />
+                      <Package className="h-10 w-10 sm:h-16 sm:w-16 text-slate-600 group-hover:scale-105 transition-transform" />
                     )}
                   </Link>
                 ) : (
-                  <div className="w-32 h-32 sm:w-40 sm:h-40 shrink-0 rounded-3xl bg-slate-800/80 p-3 border border-slate-700/50 shadow-inner flex items-center justify-center">
+                  <div className="w-24 h-24 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center">
                     {rental.equipment?.images?.[0] ? (
                       <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl" />
                     ) : (
-                      <Package className="h-16 w-16 text-slate-600" />
+                      <Package className="h-10 w-10 sm:h-16 sm:w-16 text-slate-600" />
                     )}
                   </div>
                 )}
                 
                 {/* Title and Metadata */}
-                <div className="flex flex-col items-center sm:items-start text-center sm:text-left flex-1">
-                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-3">
+                <div className="flex flex-col items-start text-left flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <RentalStatusBadge status={rental.status} />
                     <span className="px-3 py-1 rounded-full bg-slate-800/80 text-xs font-mono font-bold text-primary-400 border border-slate-700/50 flex items-center gap-1.5">
                       <Hash className="h-3 w-3" /> {rental._id.slice(-8).toUpperCase()}
                     </span>
                   </div>
-                  <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">
+                  <h1 className="text-lg sm:text-3xl md:text-4xl font-black tracking-tight mb-1 sm:mb-2">
                     {canManage && rental.equipment ? (
                       <Link to={`/admin/equipment/${rental.equipment._id}`} className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-2 group">
                         {rental.equipment.name}
@@ -222,54 +222,85 @@ const RentalDetail = () => {
                       <span className="text-primary-400">{rental.equipment?.name}</span>
                     )}
                   </h1>
-                  <p className="text-primary-400 font-medium capitalize tracking-wide text-sm mb-4">
+                  <p className="text-primary-400 font-medium capitalize tracking-wide text-xs sm:text-sm mb-2 sm:mb-4">
                     {rental.equipment?.category?.replace(/-/g, ' ')}
                   </p>
-                  <div className="flex items-center gap-2 text-xs font-medium text-slate-400 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800/80">
-                    <Clock className="h-3.5 w-3.5 text-slate-500" /> Booked: {fmtTime(rental.createdAt)}
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-medium text-red-500/80 bg-slate-900/50 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-800/80">
+                    <Clock className="h-3.5 w-3.5 text-red-400" /> Booked: {fmtTime(rental.createdAt)}
                   </div>
                 </div>
               </div>
             </motion.div>
 
-            {/* STATUS TIMELINE */}
-            <SectionCard title="Status Timeline" icon={RotateCcw}>
-              <div className="relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-700/50 pl-8">
-                <div className="relative mb-4">
-                  <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-primary-500 ring-4 ring-primary-500/20" />
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Booked</p>
-                  <p className="text-sm font-medium text-slate-200">{fmtTime(rental.createdAt)}</p>
+            {/* CUSTOMER PROFILE (moved from sidebar) */}
+            {canManage && (
+              <SectionCard title="Customer Profile" icon={User}>
+                <div className="space-y-1">
+                  
+                  <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
+                    <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+                      <div className="p-1 rounded-lg bg-slate-800"><User className="h-4 w-4 text-primary-400" /></div>
+                      <span className="text-sm font-medium">Name</span>
+                    </div>
+                    <span className="text-lg font-black text-right text-slate-100">{rental.customer?.name}</span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
+                    <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+                      <div className="p-1 rounded-lg bg-slate-800"><Mail className="h-4 w-4 text-primary-400" /></div>
+                      <span className="text-sm font-medium">Email</span>
+                    </div>
+                    <span className="text-lg font-black text-right text-primary-400">{rental.customer?.email}</span>
+                  </div>
+
+                  {rental.contactNumber && (
+                    <div className="flex justify-between items-center py-2 group">
+                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
+                        <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-emerald-400" /></div>
+                        <span className="text-sm font-medium">Booking Contact</span>
+                      </div>
+                      <span className="text-lg font-black text-right text-slate-200">{rental.contactNumber}</span>
+                    </div>
+                  )}
+
                 </div>
-                {rental.confirmedAt && (
-                  <div className="relative mb-4">
-                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-blue-500 ring-4 ring-blue-500/20" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Confirmed</p>
-                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.confirmedAt)}</p>
+              </SectionCard>
+            )}
+
+            {/* Contact number for customer view (non-admin) */}
+            {!canManage && rental.contactNumber && (
+              <SectionCard title="Booking Contact" icon={Phone}>
+                <div className="flex justify-between items-center py-2">
+                  <div className="flex items-center gap-2.5 text-slate-400">
+                    <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-emerald-400" /></div>
+                    <span className="text-sm font-medium">Contact Number</span>
                   </div>
-                )}
-                {rental.checkedOutAt && (
-                  <div className="relative mb-4">
-                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-amber-500 ring-4 ring-amber-500/20" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Checked Out</p>
-                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.checkedOutAt)}</p>
+                  <span className="text-lg font-black text-slate-200">{rental.contactNumber}</span>
+                </div>
+              </SectionCard>
+            )}
+
+            {/* DELIVERY ADDRESS (moved from sidebar) */}
+            {rental.deliveryAddress && (
+              <SectionCard title="Delivery Address" icon={Home}>
+                <div className="flex items-start gap-2.5 mt-1">
+                  <div className="p-1.5 rounded-lg bg-slate-800 shrink-0 mt-0.5">
+                    <MapPin className="h-4 w-4 text-orange-400" />
                   </div>
-                )}
-                {rental.returnedAt && (
-                  <div className="relative mb-4">
-                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Returned</p>
-                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.returnedAt)}</p>
+                  <div className="space-y-0.5">
+                    <p className="text-sm font-semibold text-slate-200 leading-snug">
+                      {rental.deliveryAddress.street}
+                    </p>
+                    <p className="text-sm text-slate-400">
+                      {rental.deliveryAddress.city}, {rental.deliveryAddress.state} — {rental.deliveryAddress.postalCode}
+                    </p>
+                    <p className="text-xs text-slate-500 font-medium">
+                      {rental.deliveryAddress.country}
+                    </p>
                   </div>
-                )}
-                {rental.cancelledAt && (
-                  <div className="relative mb-0">
-                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-red-500 ring-4 ring-red-500/20" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Cancelled</p>
-                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.cancelledAt)}</p>
-                  </div>
-                )}
-              </div>
-            </SectionCard>
+                </div>
+              </SectionCard>
+            )}
 
             {/* ADDITIONAL NOTES */}
             {rental.notes && (
@@ -284,7 +315,7 @@ const RentalDetail = () => {
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="w-full rounded-[2rem] bg-slate-900/60 backdrop-blur-md border border-slate-700/50 shadow-2xl p-6"
+              className="w-full rounded-xl sm:rounded-[2rem] bg-slate-900/60 backdrop-blur-md border border-slate-700/50 shadow-2xl p-3 sm:p-6"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b border-slate-800 pb-4">
                 <div className="flex items-center gap-3">
@@ -292,7 +323,7 @@ const RentalDetail = () => {
                     <CreditCard className="h-6 w-6 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-100 tracking-tight">Financials & Payments</h2>
+                    <h2 className="text-lg sm:text-2xl font-bold text-slate-100 tracking-tight">Financials & Payments</h2>
                     <p className="text-sm text-slate-400 font-medium mt-0.5">Track all transactions for this booking</p>
                   </div>
                 </div>
@@ -312,17 +343,17 @@ const RentalDetail = () => {
               {paymentsLoading ? (
                 <div className="flex justify-center py-10"><Spinner size="lg" /></div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-5">
                   
                   {/* Summary Metrics */}
-                  <div className="md:col-span-1 lg:col-span-5 flex flex-col gap-3">
+                  <div className="md:col-span-5 flex flex-col gap-2 sm:gap-3">
                     <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-emerald-900/20 border border-emerald-500/20 relative overflow-hidden group">
                       <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform"><ArrowDownLeft className="w-16 h-16" /></div>
                       <p className="text-sm font-bold text-emerald-400/80 uppercase tracking-widest mb-1 relative z-10">Total Paid</p>
-                      <p className="text-3xl font-black text-emerald-400 relative z-10">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
+                      <p className="text-xl sm:text-3xl font-black text-emerald-400 relative z-10">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-2 sm:gap-3">
                       <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 relative overflow-hidden">
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Total Due</p>
                         <p className="text-xl font-black text-slate-200">₹{(rental.totalAmount || 0).toFixed(2)}</p>
@@ -347,7 +378,7 @@ const RentalDetail = () => {
                   </div>
 
                   {/* Payment List */}
-                  <div className="md:col-span-1 lg:col-span-7 bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden">
+                  <div className="md:col-span-7 bg-slate-900/50 rounded-xl sm:rounded-2xl border border-slate-800 overflow-hidden">
                     <div className="px-5 py-3 border-b border-slate-800 bg-slate-900">
                       <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Transaction History</h3>
                     </div>
@@ -391,10 +422,10 @@ const RentalDetail = () => {
           {/* ======================= */}
           {/* RIGHT COLUMN: SIDEBAR   */}
           {/* ======================= */}
-          <div className="lg:col-span-4 flex flex-col gap-6 relative z-50">
+          <div className="lg:col-span-4 flex flex-col gap-3 sm:gap-6 relative z-50">
             
             {/* STICKY CONTAINER FOR SIDEBAR */}
-            <div className="sticky top-8 flex flex-col gap-6">
+            <div className="sticky top-8 flex flex-col gap-3 sm:gap-6">
               
               {/* QUICK ACTIONS */}
               <motion.div 
@@ -475,37 +506,44 @@ const RentalDetail = () => {
                 </div>
               </motion.div>
 
-              {canManage && (
-                <SectionCard title="Customer Profile" icon={User}>
-                  <div className="space-y-1">
-                    
-                    <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
-                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
-                        <div className="p-1 rounded-lg bg-slate-800"><User className="h-4 w-4 text-primary-400" /></div>
-                        <span className="text-sm font-medium">Name</span>
-                      </div>
-                      <span className="text-lg font-black text-right text-slate-100">{rental.customer?.name}</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
-                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
-                        <div className="p-1 rounded-lg bg-slate-800"><Mail className="h-4 w-4 text-primary-400" /></div>
-                        <span className="text-sm font-medium">Email</span>
-                      </div>
-                      <span className="text-lg font-black text-right text-primary-400">{rental.customer?.email}</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-2 group">
-                      <div className="flex items-center gap-2.5 text-slate-400 group-hover:text-slate-300 transition-colors">
-                        <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-primary-400" /></div>
-                        <span className="text-sm font-medium">Phone</span>
-                      </div>
-                      <span className="text-lg font-black text-right text-slate-200">{rental.customer?.phone || '—'}</span>
-                    </div>
-
+              {/* STATUS TIMELINE (moved from main content) */}
+              <SectionCard title="Status Timeline" icon={RotateCcw}>
+                <div className="relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-700/50 pl-8">
+                  <div className="relative mb-4">
+                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-primary-500 ring-4 ring-primary-500/20" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Booked</p>
+                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.createdAt)}</p>
                   </div>
-                </SectionCard>
-              )}
+                  {rental.confirmedAt && (
+                    <div className="relative mb-4">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-blue-500 ring-4 ring-blue-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Confirmed</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.confirmedAt)}</p>
+                    </div>
+                  )}
+                  {rental.checkedOutAt && (
+                    <div className="relative mb-4">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-amber-500 ring-4 ring-amber-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Checked Out</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.checkedOutAt)}</p>
+                    </div>
+                  )}
+                  {rental.returnedAt && (
+                    <div className="relative mb-4">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Returned</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.returnedAt)}</p>
+                    </div>
+                  )}
+                  {rental.cancelledAt && (
+                    <div className="relative mb-0">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-red-500 ring-4 ring-red-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Cancelled</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.cancelledAt)}</p>
+                    </div>
+                  )}
+                </div>
+              </SectionCard>
 
               <SectionCard title="Rental Period" icon={Calendar}>
                 <div className="space-y-1">
@@ -515,26 +553,7 @@ const RentalDetail = () => {
                 </div>
               </SectionCard>
 
-              {rental.deliveryAddress && (
-                <SectionCard title="Delivery Address" icon={Home}>
-                  <div className="flex items-start gap-2.5 mt-1">
-                    <div className="p-1.5 rounded-lg bg-slate-800 shrink-0 mt-0.5">
-                      <MapPin className="h-4 w-4 text-orange-400" />
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-semibold text-slate-200 leading-snug">
-                        {rental.deliveryAddress.street}
-                      </p>
-                      <p className="text-sm text-slate-400">
-                        {rental.deliveryAddress.city}, {rental.deliveryAddress.state} — {rental.deliveryAddress.postalCode}
-                      </p>
-                      <p className="text-xs text-slate-500 font-medium">
-                        {rental.deliveryAddress.country}
-                      </p>
-                    </div>
-                  </div>
-                </SectionCard>
-              )}
+
 
               <SectionCard title="Cost Breakdown" icon={DollarSign}>
                 <div className="space-y-1">

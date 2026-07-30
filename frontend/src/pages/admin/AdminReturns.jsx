@@ -4,8 +4,10 @@ import { toast } from 'react-hot-toast';
 import {
   RotateCcw, Eye, AlertTriangle, CheckCircle,
   ChevronLeft, ChevronRight, Package,
+  Search, X, Activity,
 } from 'lucide-react';
 import Spinner from '../../components/ui/Spinner';
+import CustomDropdown from '../../components/ui/CustomDropdown';
 import { fetchReturns } from '../../services/returnService';
 import { motion } from 'framer-motion';
 
@@ -27,17 +29,25 @@ const ConditionBadge = ({ condition }) => {
   );
 };
 
+const DAMAGE_FILTERS = [
+  { value: '', label: 'All Returns' },
+  { value: 'false', label: 'Clean Returns' },
+  { value: 'true', label: 'Damaged' },
+];
+
 const AdminReturns = () => {
   const [returns, setReturns] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
   const [damageFilter, setDamageFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [page, setPage] = useState(1);
 
   const loadReturns = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params = { page, limit: 15 };
+      const params = { page, limit: 15, search };
       if (damageFilter !== '') params.isDamaged = damageFilter;
       const res = await fetchReturns(params);
       setReturns(res.data.data.returns);
@@ -47,9 +57,21 @@ const AdminReturns = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, damageFilter]);
+  }, [page, damageFilter, search]);
 
   useEffect(() => { loadReturns(); }, [loadReturns]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearch(searchInput);
+    setPage(1);
+  };
+
+  const clearSearch = () => {
+    setSearchInput('');
+    setSearch('');
+    setPage(1);
+  };
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
@@ -63,26 +85,40 @@ const AdminReturns = () => {
           </p>
         </div>
 
-        {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2.5 mb-6">
-          {[
-            { value: '', label: 'All Returns' },
-            { value: 'false', label: 'Clean Returns' },
-            { value: 'true', label: 'Damaged' },
-          ].map((f) => (
+        {/* Search & Filters */}
+        <div className="flex flex-col md:flex-row gap-2.5 mb-5">
+          <form onSubmit={handleSearch} className="flex gap-2 flex-1">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-[#4558be] transition-colors duration-200" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search by equipment, customer..."
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
+              />
+              {searchInput && (
+                <button type="button" onClick={clearSearch} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 hover:bg-white rounded-md transition-colors duration-200">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             <button
-              key={f.value}
-              onClick={() => { setDamageFilter(f.value); setPage(1); }}
-              className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 transform flex items-center gap-1.5 ${damageFilter === f.value
-                ? 'bg-gradient-to-r from-[#4558be] to-indigo-500 text-white font-bold shadow-md shadow-indigo-500/30 border border-indigo-400/50 -translate-y-0.5'
-                : 'bg-white text-gray-600 font-semibold border border-gray-200 shadow-sm hover:border-indigo-300 hover:text-indigo-600 hover:shadow-md hover:-translate-y-0.5'
-                }`}
+              type="submit"
+              className="px-6 py-2.5 bg-gradient-to-b from-[#6071dd] to-[#4558be] border border-[#7a8bea] text-white text-[13px] font-bold rounded-xl shadow-[0_2px_10px_-2px_rgba(69,88,190,0.5),inset_0_1px_2px_rgba(255,255,255,0.4)] hover:from-[#6a7be5] hover:to-[#4d61cf] hover:shadow-[0_5px_15px_-3px_rgba(69,88,190,0.6)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-300 focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/30"
             >
-              {f.value === 'true' && <AlertTriangle className={`h-3.5 w-3.5 ${damageFilter === f.value ? 'text-white' : 'text-gray-400'}`} />}
-              {f.value === 'false' && <CheckCircle className={`h-3.5 w-3.5 ${damageFilter === f.value ? 'text-white' : 'text-gray-400'}`} />}
-              {f.label}
+              Search
             </button>
-          ))}
+          </form>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <CustomDropdown
+              icon={Activity}
+              value={damageFilter}
+              options={DAMAGE_FILTERS}
+              onChange={(val) => { setDamageFilter(val); setPage(1); }}
+            />
+          </div>
         </div>
 
         {/* Table */}
@@ -141,8 +177,8 @@ const AdminReturns = () => {
                               )}
                             </div>
                             <div>
-                              <p className="text-[13px] font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
-                              <p className="text-[11px] text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-sm font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
+                              <p className="text-xs text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>
@@ -156,16 +192,16 @@ const AdminReturns = () => {
                               </span>
                             </div>
                             <div>
-                              <p className="text-[13px] text-slate-300 truncate max-w-[120px]">{ret.customer?.name}</p>
-                              <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{ret.customer?.email}</p>
+                              <p className="text-sm text-slate-300 truncate max-w-[120px]">{ret.customer?.name}</p>
+                              <p className="text-xs text-slate-500 truncate max-w-[120px]">{ret.customer?.email}</p>
                             </div>
                           </div>
                         </td>
 
                         {/* Return Date */}
                         <td className="px-4 py-3">
-                          <p className="text-[13px] text-slate-300">{fmt(ret.returnDate)}</p>
-                          <p className="text-[11px] text-slate-500">by {ret.processedBy?.name}</p>
+                          <p className="text-sm text-slate-300">{fmt(ret.returnDate)}</p>
+                          <p className="text-xs text-slate-500">by {ret.processedBy?.name}</p>
                         </td>
 
                         {/* Condition */}

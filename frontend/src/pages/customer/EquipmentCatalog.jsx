@@ -86,6 +86,13 @@ const EquipmentCatalog = () => {
 
   useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
+  useEffect(() => {
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [page]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     setSearch(searchInput);

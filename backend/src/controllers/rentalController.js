@@ -3,13 +3,14 @@ const rentalService = require('../services/rentalService');
 
 // GET /api/v1/rentals
 const getAllRentals = catchAsync(async (req, res) => {
-  const { page, limit, status, equipment } = req.query;
+  const { page, limit, status, equipment, search } = req.query;
   const result = await rentalService.listRentals({
     requestingUser: req.user,
     page,
     limit,
     status,
     equipmentId: equipment,
+    search,
   });
 
   res.status(200).json({ status: 'success', data: result });

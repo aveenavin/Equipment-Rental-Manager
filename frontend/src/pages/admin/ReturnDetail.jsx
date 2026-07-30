@@ -171,7 +171,7 @@ const ReturnDetail = () => {
             </div>
             <InfoRow label="Name" value={record.customer?.name} />
             <InfoRow label="Email" value={record.customer?.email} />
-            <InfoRow label="Phone" value={record.customer?.phone} />
+            <InfoRow label="Booking Contact" value={record.rental?.contactNumber || '—'} />
           </div>
 
           {/* Rental Summary */}

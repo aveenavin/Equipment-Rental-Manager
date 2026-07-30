@@ -33,7 +33,7 @@ const EQUIPMENT_STATUS_MAP = {
  * - Snapshots pricing at time of booking
  */
 const createRental = async ({ customerId, body }) => {
-  const { equipment: equipmentId, startDate, endDate, notes, deliveryAddress } = body;
+  const { equipment: equipmentId, startDate, endDate, notes, deliveryAddress, contactNumber } = body;
 
   const equipment = await Equipment.findById(equipmentId);
   if (!equipment) throw new AppError('Equipment not found.', 404);
@@ -71,6 +71,7 @@ const createRental = async ({ customerId, body }) => {
     securityDeposit: equipment.securityDeposit,
     totalAmount,
     deliveryAddress,
+    contactNumber,
     notes: notes || null,
   });
 
@@ -165,8 +166,10 @@ const getRentalById = async ({ rentalId, requestingUser }) => {
 /**
  * List rentals with filtering, search, and pagination.
  * Customers only see their own. Admin/Staff see all.
+ *
+ * Search: matches equipment name, customer name/email, or rental ID suffix.
  */
-const listRentals = async ({ requestingUser, page = 1, limit = 15, status, equipmentId }) => {
+const listRentals = async ({ requestingUser, page = 1, limit = 15, status, equipmentId, search }) => {
   const filter = {};
 
   if (requestingUser.role === 'customer') {
@@ -175,6 +178,41 @@ const listRentals = async ({ requestingUser, page = 1, limit = 15, status, equip
 
   if (status) filter.status = status;
   if (equipmentId) filter.equipment = equipmentId;
+
+  // Search across referenced Equipment names, Customer names/emails, and rental ID suffix
+  if (search && search.trim()) {
+    const regex = new RegExp(search.trim(), 'i');
+
+    const [matchedEquipment, matchedUsers] = await Promise.all([
+      Equipment.find({ name: regex }).select('_id').lean(),
+      mongoose.model('User').find({
+        $or: [{ name: regex }, { email: regex }],
+      }).select('_id').lean(),
+    ]);
+
+    const orConditions = [];
+    if (matchedEquipment.length) {
+      orConditions.push({ equipment: { $in: matchedEquipment.map((e) => e._id) } });
+    }
+    if (matchedUsers.length) {
+      orConditions.push({ customer: { $in: matchedUsers.map((u) => u._id) } });
+    }
+
+    // Match rental ID suffix (last 6 chars, as shown in the UI)
+    if (/^[a-f0-9]+$/i.test(search.trim())) {
+      orConditions.push({ _id: { $regex: `${search.trim()}$`, $options: 'i' } });
+    }
+
+    if (orConditions.length) {
+      filter.$and = [...(filter.$and || []), { $or: orConditions }];
+    } else {
+      // Search matched nothing — return empty
+      return {
+        rentals: [],
+        pagination: { total: 0, page: 1, limit: parseInt(limit, 10), pages: 0 },
+      };
+    }
+  }
 
   const pageNum = parseInt(page, 10);
   const limitNum = parseInt(limit, 10);

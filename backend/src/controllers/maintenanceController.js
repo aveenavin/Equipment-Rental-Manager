@@ -33,12 +33,13 @@ const completeLog = catchAsync(async (req, res) => {
 
 // GET /api/v1/maintenance
 const getAllLogs = catchAsync(async (req, res) => {
-  const { page, limit, status, equipment } = req.query;
+  const { page, limit, status, equipment, search } = req.query;
   const result = await maintenanceService.listMaintenanceLogs({
     page,
     limit,
     status,
     equipmentId: equipment,
+    search,
   });
 
   res.status(200).json({ status: 'success', data: result });

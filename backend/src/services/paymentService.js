@@ -104,11 +104,30 @@ const getPaymentById = async (paymentId) => {
 /**
  * List all payments with optional filters. Admin/Staff only.
  */
-const listAllPayments = async ({ page = 1, limit = 20, paymentType, direction, rentalId }) => {
+const listAllPayments = async ({ page = 1, limit = 20, paymentType, direction, rentalId, search }) => {
   const filter = {};
   if (paymentType) filter.paymentType = paymentType;
   if (direction) filter.direction = direction;
   if (rentalId) filter.rental = rentalId;
+
+  // Search across customer name/email
+  if (search && search.trim()) {
+    const regex = new RegExp(search.trim(), 'i');
+    const mongoose = require('mongoose');
+    const matchedUsers = await mongoose.model('User').find({
+      $or: [{ name: regex }, { email: regex }],
+    }).select('_id').lean();
+
+    if (matchedUsers.length) {
+      filter.customer = { $in: matchedUsers.map((u) => u._id) };
+    } else {
+      // No matching users — return empty
+      return {
+        payments: [],
+        pagination: { total: 0, page: 1, limit: parseInt(limit, 10), pages: 0 },
+      };
+    }
+  }
 
   const pageNum = Math.max(1, parseInt(page, 10));
   const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10)));

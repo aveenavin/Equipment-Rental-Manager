@@ -32,6 +32,11 @@ const createRentalValidation = [
     .trim()
     .isLength({ max: 500 }).withMessage('Notes cannot exceed 500 characters'),
 
+  body('contactNumber')
+    .trim()
+    .notEmpty().withMessage('Contact number is required')
+    .matches(/^[6-9]\d{9}$/).withMessage('Must be a valid 10-digit Indian mobile number'),
+
   body('deliveryAddress.street')
     .trim()
     .notEmpty().withMessage('Street address is required')
@@ -77,6 +82,10 @@ const listRentalsValidation = [
     .optional()
     .isIn(['pending', 'confirmed', 'checked_out', 'returned', 'cancelled', ''])
     .withMessage('Invalid status filter'),
+  query('search')
+    .optional()
+    .trim()
+    .isLength({ max: 100 }).withMessage('Search query cannot exceed 100 characters'),
 ];
 
 module.exports = { createRentalValidation, updateRentalStatusValidation, listRentalsValidation };

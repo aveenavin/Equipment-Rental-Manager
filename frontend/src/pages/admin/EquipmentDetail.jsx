@@ -69,13 +69,13 @@ const EquipmentDetail = () => {
 
   return (
     <div className={`min-h-screen ${canManage ? 'bg-slate-950' : 'bg-[#EBE8E1]'} text-slate-100 relative overflow-hidden pb-10`}>
-      
+
       {/* Background Ambience */}
       {canManage && (
         <div className="fixed top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-primary-900/20 to-transparent pointer-events-none" />
       )}
       <div className="fixed bottom-0 left-0 w-full h-[30vh] bg-gradient-to-t from-slate-900/80 to-transparent pointer-events-none" />
-      
+
       {/* Glow Orbs */}
       {canManage ? (
         <>
@@ -92,19 +92,19 @@ const EquipmentDetail = () => {
         </>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative z-10 h-[calc(100vh-2rem)] flex flex-col">
-        
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative z-10 lg:h-[calc(100vh-2rem)] flex flex-col">
+
 
 
         {/* FULL WIDTH STACKED LAYOUT */}
         <div className="flex flex-col gap-6 flex-1 min-h-0">
-          
+
           {/* TOP ROW: Image + Pricing */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 shrink-0">
-            
+
             {/* LEFT COLUMN: IMAGE */}
             <div className="lg:col-span-5 h-[350px] lg:h-auto flex flex-col gap-4">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex-1 rounded-[2.5rem] bg-white shadow-[0_0_50px_rgba(255,255,255,0.05)] border-4 border-slate-800 overflow-hidden relative group flex items-center justify-center min-h-0"
@@ -141,7 +141,7 @@ const EquipmentDetail = () => {
 
             {/* RIGHT COLUMN: HEADER & PRICING */}
             <div className="lg:col-span-7 h-full flex flex-col gap-4 relative z-50">
-              
+
               {/* ADMIN ACTIONS / NAVIGATION */}
               <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between shrink-0">
                 <Link
@@ -150,7 +150,7 @@ const EquipmentDetail = () => {
                 >
                   <ArrowLeft className="h-4 w-4" /> Back to Inventory
                 </Link>
-                
+
                 {canManage && (
                   <div className="flex gap-2">
                     <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 rounded-xl border-slate-700 font-bold" onClick={() => setShowEditModal(true)}>
@@ -220,15 +220,15 @@ const EquipmentDetail = () => {
           </div>
 
           {/* BOTTOM ROW: DETAILS (FULL WIDTH) */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-gradient-to-b from-slate-900/80 to-slate-950/90 backdrop-blur-xl border border-slate-800 shadow-2xl rounded-[2rem] p-6 sm:p-8 flex-1 flex flex-col min-h-0 relative overflow-hidden group">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-gradient-to-b from-slate-900/80 to-slate-950/90 backdrop-blur-xl border border-slate-800 shadow-2xl rounded-[2rem] p-6 sm:p-8 lg:flex-1 flex flex-col lg:min-h-0 relative overflow-hidden group">
             {/* Ambient inner glow */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-500/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
-            
+
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 shrink-0 relative z-10">
               <FileText className="h-3.5 w-3.5" /> Details
             </h3>
-            
+
             {/* Watermark Icon to fill empty space */}
             <Package className="absolute -bottom-12 -right-8 w-64 h-64 text-slate-800/20 -rotate-12 pointer-events-none z-0" />
 
@@ -239,6 +239,96 @@ const EquipmentDetail = () => {
 
         </div>
       </div>
+
+      {/* ── Footer ────────────────────────────────────────────────────── */}
+      <footer className="border-t border-slate-700 pt-12 pb-8 mt-16 mx-4 sm:mx-8 lg:mx-12 xl:mx-16 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+          {/* About */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xl">🔧</span>
+              <span className="font-black text-slate-200 text-lg tracking-tight">EquipRental Admin</span>
+            </div>
+            <p className="text-slate-400 text-sm leading-relaxed">
+              Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+            </p>
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-5">
+              {['𝕏', 'in', 'f', '▶'].map((s, i) => (
+                <button
+                  key={i}
+                  className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 hover:border-amber-500/50 hover:bg-slate-700 text-slate-400 hover:text-amber-500 text-xs font-bold flex items-center justify-center transition-all duration-200"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-slate-300 font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Dashboard', path: '/admin' },
+                { label: 'Equipment', path: '/admin/equipment' },
+                { label: 'Rentals', path: '/admin/rentals' },
+                { label: 'Customers', path: '/admin/customers' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.path}
+                    onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    className="text-slate-400 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h4 className="text-slate-300 font-bold text-sm uppercase tracking-widest mb-4">Support</h4>
+            <ul className="space-y-2.5 text-sm text-slate-400">
+              <li className="flex items-start gap-2"><span>📧</span> 73aveen@gmail.com</li>
+              <li className="flex items-start gap-2"><span>📞</span> +91 9xxxxxxx</li>
+              <li className="flex items-start gap-2"><span>📍</span> Bhopal, Madhya Pradesh, India</li>
+              <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-slate-300 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Admin Policies', path: '/admin/policies' },
+                { label: 'Security Overview', path: '/admin/security' },
+                { label: 'API Documentation', path: '/admin/api' },
+                { label: 'System Status', path: '/admin/status' }
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.path}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-slate-400 hover:text-amber-500 text-sm font-medium transition-colors duration-200 text-left"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-slate-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <span>© {new Date().getFullYear()} EquipRental Admin. All rights reserved.</span>
+          <span className="flex items-center gap-1">Built with <span className="text-amber-500">♥</span> for professionals</span>
+        </div>
+      </footer>
 
       <AnimatePresence>
         {showEditModal && (

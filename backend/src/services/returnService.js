@@ -134,7 +134,7 @@ const processReturn = async ({
  */
 const getReturnById = async (id) => {
   const record = await Return.findById(id)
-    .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount status notes')
+    .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount status notes contactNumber')
     .populate('equipment', 'name category images condition status')
     .populate('customer', 'name email phone')
     .populate('processedBy', 'name role')
@@ -149,7 +149,7 @@ const getReturnById = async (id) => {
  */
 const getReturnByRentalId = async (rentalId) => {
   const record = await Return.findOne({ rental: rentalId })
-    .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount status notes')
+    .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount status notes contactNumber')
     .populate('equipment', 'name category images condition status')
     .populate('customer', 'name email phone')
     .populate('processedBy', 'name role')
@@ -161,13 +161,44 @@ const getReturnByRentalId = async (rentalId) => {
 
 /**
  * List all return records with pagination, filterable by damage status.
+ *
+ * Search: matches equipment name or customer name/email.
  */
-const listReturns = async ({ page = 1, limit = 15, isDamaged, equipmentId }) => {
+const listReturns = async ({ page = 1, limit = 15, isDamaged, equipmentId, search }) => {
   const filter = {};
   if (isDamaged !== undefined && isDamaged !== '') {
     filter.isDamaged = isDamaged === 'true' || isDamaged === true;
   }
   if (equipmentId) filter.equipment = equipmentId;
+
+  // Search across referenced Equipment names and Customer names/emails
+  if (search && search.trim()) {
+    const regex = new RegExp(search.trim(), 'i');
+
+    const [matchedEquipment, matchedUsers] = await Promise.all([
+      Equipment.find({ name: regex }).select('_id').lean(),
+      mongoose.model('User').find({
+        $or: [{ name: regex }, { email: regex }],
+      }).select('_id').lean(),
+    ]);
+
+    const orConditions = [];
+    if (matchedEquipment.length) {
+      orConditions.push({ equipment: { $in: matchedEquipment.map((e) => e._id) } });
+    }
+    if (matchedUsers.length) {
+      orConditions.push({ customer: { $in: matchedUsers.map((u) => u._id) } });
+    }
+
+    if (orConditions.length) {
+      filter.$and = [...(filter.$and || []), { $or: orConditions }];
+    } else {
+      return {
+        returns: [],
+        pagination: { total: 0, page: 1, limit: parseInt(limit, 10), pages: 0 },
+      };
+    }
+  }
 
   const pageNum = parseInt(page, 10);
   const limitNum = parseInt(limit, 10);
