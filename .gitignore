@@ -22,6 +22,8 @@ node_modules/
 .env.production.local
 .interview_prep.md
 .implementation_plan.md
+.mock_interview_qa.md
+.walkthrough.md
 # -----------------------------------------------------------------------------
 # Build Outputs
 # -----------------------------------------------------------------------------
