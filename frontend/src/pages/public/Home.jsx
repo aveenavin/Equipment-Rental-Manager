@@ -29,7 +29,7 @@ const Home = () => {
     <div className="relative overflow-hidden bg-slate-950 text-slate-100">
 
       {/* ── HERO SECTION ─────────────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      <section className="relative min-h-[70vh] sm:min-h-[92vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
 
         {/* Grid overlay */}
         <div className="absolute inset-0 hero-grid pointer-events-none" />
@@ -47,7 +47,7 @@ const Home = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           {/* Headline */}
-          <motion.h1 variants={fadeInUp} className="text-5xl sm:text-7xl font-black tracking-tighter leading-[1.05] mb-6">
+          <motion.h1 variants={fadeInUp} className="text-4xl sm:text-7xl font-black tracking-tighter leading-[1.05] mb-3 sm:mb-6">
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">Professional Equipment</span>
             <span className="block text-primary-500">
               Rental, Simplified.
@@ -55,21 +55,21 @@ const Home = () => {
           </motion.h1>
 
           {/* Sub-headline */}
-          <motion.p variants={fadeInUp} className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+          <motion.p variants={fadeInUp} className="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-10">
             Manage inventory, track reservations, calculate dynamic pricing, and maintain machinery health — all in one beautifully designed system.
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
+          <motion.div variants={fadeInUp} className="flex flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-14">
             {/* Primary CTA */}
             <div className="relative group">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-xl blur opacity-50 group-hover:opacity-80 transition-all duration-500" />
               <Link
                 to="/register"
-                className="relative flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-base tracking-wide shadow-xl shadow-orange-900/40 transition-all duration-200 active:scale-95 overflow-hidden group/btn"
+                className="relative flex items-center gap-2.5 px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm sm:text-base tracking-wide shadow-xl shadow-orange-900/40 transition-all duration-200 active:scale-95 overflow-hidden group/btn"
               >
                 <span className="absolute inset-0 w-[40%] h-full bg-gradient-to-r from-transparent via-white/25 to-transparent animate-btn-shine pointer-events-none" />
-                <span className="relative z-10 flex items-center gap-2">
+                <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
                   Get Started Free
                   <ArrowRight className="h-5 w-5 group-hover/btn:translate-x-1 transition-transform duration-200" />
                 </span>
@@ -79,14 +79,14 @@ const Home = () => {
             {/* Ghost CTA */}
             <Link
               to="/login"
-              className="group flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-white/5 hover:bg-orange-500/10 text-slate-300 hover:text-orange-500 font-semibold text-base backdrop-blur-md border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-black/20"
+              className="group flex items-center gap-2.5 px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-white/5 hover:bg-orange-500/10 text-slate-300 hover:text-orange-500 font-semibold text-sm sm:text-base backdrop-blur-md border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-black/20 whitespace-nowrap"
             >
               Sign in to Portal
             </Link>
           </motion.div>
 
           {/* Social proof bar */}
-          <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
+          <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-sm text-slate-300">
             {[
               { icon: Package, text: '500+ Equipment Listed' },
               { icon: Users, text: '1,200+ Happy Customers' },
@@ -118,12 +118,12 @@ const Home = () => {
           <motion.div variants={fadeInUp} className="text-center mb-14">
             <div className="flex items-center justify-center gap-4 mb-5">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-orange-500/60"></div>
-              <span className="text-sm font-bold uppercase tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500">
                 Why EquipRental
               </span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-orange-500/60"></div>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
               <span className="text-slate-100">
                 Everything you need,
               </span>{' '}

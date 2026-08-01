@@ -28,20 +28,23 @@ const PublicLayout = () => {
             <span>EquipRental</span>
           </Link>
 
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-1.5 sm:gap-2">
             {isAuthenticated ? (
               <>
                 <Link
                   to={dashboardPath}
-                  className="flex items-center gap-1.5 text-sm font-medium text-slate-300 hover:text-slate-100 transition-colors"
+                  className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-orange-500/15 hover:border-orange-500/30 text-slate-300 hover:text-orange-400 text-xs sm:text-sm font-medium transition-all duration-200 shadow-md shadow-black/25"
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
                 </Link>
-                <Button variant="secondary" size="sm" onClick={handleLogout} className="flex items-center gap-1.5">
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </Button>
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-red-500/15 hover:border-red-500/30 text-slate-300 hover:text-red-400 text-xs sm:text-sm font-medium transition-all duration-200 active:scale-95 shadow-md shadow-black/25"
+                  >
+                    <LogOut className="h-3.5 w-3.5" />
+                    Logout
+                  </button>
               </>
             ) : (
               <>

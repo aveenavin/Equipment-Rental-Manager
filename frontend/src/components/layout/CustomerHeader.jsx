@@ -36,15 +36,13 @@ const CustomerHeader = ({ title, setMobileOpen }) => {
 
         <div className="flex items-center gap-3.5">
           <span className="text-[13px] font-medium text-orange-100 hidden sm:block">{user?.name}</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={logout}
-            className="flex items-center gap-1.5 !text-white hover:bg-orange-700 transition-colors h-8 px-2.5 text-xs"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Logout</span>
-          </Button>
+          <button
+              onClick={logout}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-white/10 hover:bg-red-500/20 hover:border-red-500/30 text-white/80 hover:text-red-300 text-xs font-medium transition-all duration-200 active:scale-95 shadow-md shadow-black/25"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
         </div>
       </div>
     </header>
