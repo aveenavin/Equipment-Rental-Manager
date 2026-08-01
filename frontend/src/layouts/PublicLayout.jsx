@@ -57,7 +57,7 @@ const PublicLayout = () => {
 
                 {/* Get Started — shine sweep + scale + arrow bounce */}
                 <Link to="/register" className="shrink-0">
-                  <button className="group relative flex items-center shrink-0 flex-nowrap gap-1 sm:gap-2 px-2 py-1.5 sm:px-5 sm:py-2 rounded-lg bg-orange-500 hover:bg-orange-600 active:scale-95 hover:-translate-y-0.5 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-200 overflow-hidden">
+                  <button className="group relative flex items-center shrink-0 flex-nowrap gap-1 sm:gap-2 px-2 py-2.5 sm:px-4 sm:py-2 rounded-lg bg-orange-500 hover:bg-orange-600 active:scale-95 hover:-translate-y-0.5 text-white text-xs sm:text-sm font-bold tracking-wide shadow-md hover:shadow-xl hover:shadow-orange-500/40 transition-all duration-200 overflow-hidden">
                     {/* Continuous looping shine */}
                     <span className="absolute inset-0 w-[40%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-btn-shine pointer-events-none" />
                     <span className="relative z-10 flex items-center shrink-0 flex-nowrap gap-1 sm:gap-2">
