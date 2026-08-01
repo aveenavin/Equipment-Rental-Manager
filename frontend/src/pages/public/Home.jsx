@@ -66,7 +66,7 @@ const Home = () => {
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-xl blur opacity-50 group-hover:opacity-80 transition-all duration-500" />
               <Link
                 to="/register"
-                className="relative flex items-center justify-center shrink-0 flex-nowrap gap-1.5 sm:gap-2.5 px-1.5 py-3 sm:px-4 sm:py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-[11px] sm:text-base tracking-wide shadow-xl shadow-orange-900/40 transition-all duration-200 active:scale-95 overflow-hidden group/btn"
+                className="relative flex items-center justify-center shrink-0 flex-nowrap gap-1.5 sm:gap-2.5 px-1.5 py-3 sm:px-4 sm:py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] sm:text-base tracking-wide shadow-xl shadow-orange-900/40 transition-all duration-200 active:scale-95 overflow-hidden group/btn"
               >
                 <span className="absolute inset-0 w-[40%] h-full bg-gradient-to-r from-transparent via-white/25 to-transparent animate-btn-shine pointer-events-none" />
                 <span className="relative z-10 flex items-center shrink-0 flex-nowrap gap-1 sm:gap-2">
@@ -79,7 +79,7 @@ const Home = () => {
             {/* Ghost CTA */}
             <Link
               to="/login"
-              className="group flex items-center justify-center shrink-0 flex-nowrap gap-1.5 sm:gap-2.5 px-3 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-white/5 hover:bg-orange-500/10 text-slate-300 hover:text-orange-500 font-semibold text-[11px] sm:text-base backdrop-blur-md border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-black/20"
+              className="group flex items-center justify-center shrink-0 flex-nowrap gap-1.5 sm:gap-2.5 px-3 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-white/5 hover:bg-orange-500/10 text-slate-300 hover:text-orange-500 font-semibold text-[13px] sm:text-base backdrop-blur-md border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-black/20"
             >
               <span className="whitespace-nowrap">Sign&nbsp;in&nbsp;to&nbsp;Portal</span>
             </Link>
