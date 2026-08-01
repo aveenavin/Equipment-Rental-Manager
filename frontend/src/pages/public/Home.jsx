@@ -106,16 +106,15 @@ const Home = () => {
 
       {/* ── FEATURE SECTION ──────────────────────────────────────────────── */}
       <section className="relative py-24 px-4 sm:px-6 lg:px-8">
-        <motion.div 
-          className="max-w-5xl mx-auto"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
+        <div className="max-w-5xl mx-auto">
 
           {/* Section header */}
-          <motion.div variants={fadeInUp} className="text-center mb-14">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
+            viewport={{ once: true, amount: 0.2 }}
+            className="text-center mb-14"
+          >
             <div className="flex items-center justify-center gap-4 mb-5">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-orange-500/60"></div>
               <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500">
@@ -163,10 +162,20 @@ const Home = () => {
                 title: 'Billing & Invoicing',
                 desc: 'Integrated deposits, dynamic late-fee tracking, and auto-generated PDF invoices in one seamless flow.',
               },
-            ].map(({ icon: Icon, gradient, border, iconBg, iconColor, title, desc }) => (
+            ].map(({ icon: Icon, gradient, border, iconBg, iconColor, title, desc }, index) => (
               <motion.div
                 key={title}
-                variants={fadeInUp}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                whileInView={{ 
+                  opacity: 1, 
+                  x: 0,
+                  transition: { 
+                    duration: 0.4, 
+                    ease: 'easeOut',
+                    delay: index * 0.1 
+                  } 
+                }}
+                viewport={{ once: true, amount: 0.2 }}
                 className={`group relative bg-gradient-to-b ${gradient} to-transparent bg-slate-900/80 border ${border} rounded-2xl p-7 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/50 transition-all duration-300 overflow-hidden backdrop-blur-sm`}
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -178,7 +187,7 @@ const Home = () => {
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
     </div>
