@@ -60,18 +60,18 @@ const Home = () => {
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div variants={fadeInUp} className="flex flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-14">
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-14">
             {/* Primary CTA */}
-            <div className="relative group">
+            <div className="relative group shrink-0">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-xl blur opacity-50 group-hover:opacity-80 transition-all duration-500" />
               <Link
                 to="/register"
-                className="relative flex items-center gap-2.5 px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm sm:text-base tracking-wide shadow-xl shadow-orange-900/40 transition-all duration-200 active:scale-95 overflow-hidden group/btn"
+                className="relative flex items-center justify-center shrink-0 flex-nowrap gap-1.5 sm:gap-2.5 px-3 py-2 sm:px-8 sm:py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-[11px] sm:text-base tracking-wide shadow-xl shadow-orange-900/40 transition-all duration-200 active:scale-95 overflow-hidden group/btn"
               >
                 <span className="absolute inset-0 w-[40%] h-full bg-gradient-to-r from-transparent via-white/25 to-transparent animate-btn-shine pointer-events-none" />
-                <span className="relative z-10 flex items-center gap-2 whitespace-nowrap">
-                  Get Started Free
-                  <ArrowRight className="h-5 w-5 group-hover/btn:translate-x-1 transition-transform duration-200" />
+                <span className="relative z-10 flex items-center shrink-0 flex-nowrap gap-1 sm:gap-2">
+                  <span className="whitespace-nowrap">Get&nbsp;Started&nbsp;Free</span>
+                  <ArrowRight className="h-3.5 w-3.5 sm:h-5 sm:w-5 shrink-0 group-hover/btn:translate-x-1 transition-transform duration-200" />
                 </span>
               </Link>
             </div>
@@ -79,9 +79,9 @@ const Home = () => {
             {/* Ghost CTA */}
             <Link
               to="/login"
-              className="group flex items-center gap-2.5 px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-white/5 hover:bg-orange-500/10 text-slate-300 hover:text-orange-500 font-semibold text-sm sm:text-base backdrop-blur-md border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-black/20 whitespace-nowrap"
+              className="group flex items-center justify-center shrink-0 flex-nowrap gap-1.5 sm:gap-2.5 px-3 py-2 sm:px-8 sm:py-3.5 rounded-xl bg-white/5 hover:bg-orange-500/10 text-slate-300 hover:text-orange-500 font-semibold text-[11px] sm:text-base backdrop-blur-md border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-black/20"
             >
-              Sign in to Portal
+              <span className="whitespace-nowrap">Sign&nbsp;in&nbsp;to&nbsp;Portal</span>
             </Link>
           </motion.div>
 
