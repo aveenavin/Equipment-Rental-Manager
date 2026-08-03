@@ -111,7 +111,7 @@ where customers can explore available items, book what they need, and manage the
           </motion.div>
 
           {/* CTA Buttons */}
-          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-14">
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-16 sm:mb-24">
             {/* Primary CTA */}
             <div className="relative group shrink-0">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-xl blur opacity-50 group-hover:opacity-80 transition-all duration-500" />
@@ -137,14 +137,14 @@ where customers can explore available items, book what they need, and manage the
           </motion.div>
 
           {/* Social proof bar */}
-          <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-sm text-slate-300">
+          <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center gap-3 sm:gap-8 text-xs sm:text-sm text-slate-300">
             {[
               { icon: Package, text: '500+ Items Listed' },
               { icon: Users, text: '1,200+ Happy Customers' },
               { icon: TrendingUp, text: '98% Satisfaction Rate' },
             ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2">
-                <Icon className="h-4 w-4 text-orange-500/70" />
+              <div key={text} className="flex items-center gap-1.5 sm:gap-2">
+                <Icon className="h-3 w-3 sm:h-4 sm:w-4 text-orange-500/70" />
                 <span>{text}</span>
               </div>
             ))}
@@ -156,7 +156,7 @@ where customers can explore available items, book what they need, and manage the
       </section>
 
       {/* ── FEATURE SECTION ──────────────────────────────────────────────── */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-4 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
 
           {/* Section header */}
@@ -166,12 +166,12 @@ where customers can explore available items, book what they need, and manage the
             viewport={{ once: true, amount: 0.2 }}
             className="text-center mb-14"
           >
-            <div className="flex items-center justify-center gap-4 mb-5">
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-orange-500/60"></div>
-              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500">
+            <div className="flex items-center justify-center gap-2 sm:gap-4 mb-5">
+              <div className="h-px w-6 sm:w-12 bg-gradient-to-r from-transparent to-orange-500/60"></div>
+              <span className="text-[10px] sm:text-sm font-bold uppercase tracking-widest sm:tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500 whitespace-nowrap">
                 Why RentAll Platform
               </span>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-orange-500/60"></div>
+              <div className="h-px w-6 sm:w-12 bg-gradient-to-l from-transparent to-orange-500/60"></div>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
               <span className="text-slate-100">

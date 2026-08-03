@@ -22,10 +22,10 @@ const PublicLayout = () => {
         <div className="w-full px-2 sm:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between gap-1">
           <Link
             to="/"
-            className="flex items-center gap-1 sm:gap-2 font-bold text-base sm:text-xl text-slate-100 hover:text-primary-400 transition-colors shrink-0"
+            className="flex items-center gap-1 sm:gap-2 font-bold text-[13px] sm:text-xl text-slate-100 hover:text-primary-400 transition-colors shrink-0"
           >
-            <Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-accent-500 shrink-0" />
-            <span className="shrink-0 truncate max-w-[120px] sm:max-w-none">RentAll Platform</span>
+            <Wrench className="h-4 w-4 sm:h-6 sm:w-6 text-accent-500 shrink-0" />
+            <span className="shrink-0 whitespace-nowrap">RentAll Platform</span>
           </Link>
 
           <nav className="flex items-center gap-2 sm:gap-2 shrink-0">
