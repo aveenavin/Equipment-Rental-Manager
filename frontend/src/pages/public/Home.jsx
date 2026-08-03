@@ -91,7 +91,7 @@ const Home = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           {/* Headline */}
-          <motion.h1 variants={fadeInUp} className="text-4xl sm:text-7xl font-black tracking-tighter leading-[1.05] mb-3 sm:mb-6">
+          <motion.h1 variants={fadeInUp} className="text-[42px] leading-[1.1] sm:text-7xl font-black tracking-tighter sm:leading-[1.05] mb-3 sm:mb-6">
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">Complete Rental</span>
             <span className="block text-primary-500">
               Management Platform
@@ -111,7 +111,7 @@ where customers can explore available items, book what they need, and manage the
           </motion.div>
 
           {/* CTA Buttons */}
-          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-16 sm:mb-24">
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-28 sm:mb-40">
             {/* Primary CTA */}
             <div className="relative group shrink-0">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-xl blur opacity-50 group-hover:opacity-80 transition-all duration-500" />

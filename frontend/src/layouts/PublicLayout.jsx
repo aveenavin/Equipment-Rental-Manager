@@ -85,7 +85,7 @@ const PublicLayout = () => {
             <Wrench className="h-4 w-4 text-accent-500" />
             <span>Rental Management Platform</span>
           </div>
-          <p className="text-xs text-orange-600">
+          <p className="text-[10px] sm:text-xs text-slate-500 text-center sm:text-left">
             &copy; {new Date().getFullYear()} Rental Management Platform. Built with MERN stack.
           </p>
         </div>
