@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, Calendar, Zap, ArrowRight, Package, TrendingUp, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -24,12 +24,56 @@ const staggerContainer = {
   }
 };
 
+const TypewriterText = ({ text }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  useEffect(() => {
+    let timeout;
+    
+    // Smooth, slightly randomized typing speed for an organic feel
+    const typingSpeed = Math.floor(Math.random() * 40) + 50; // 50-90ms
+    const deletingSpeed = 25; // Fast, consistent delete
+    
+    if (!isDeleting && displayText.length < text.length) {
+      timeout = setTimeout(() => {
+        setDisplayText(text.slice(0, displayText.length + 1));
+      }, typingSpeed);
+    } else if (isDeleting && displayText.length > 0) {
+      timeout = setTimeout(() => {
+        setDisplayText(text.slice(0, displayText.length - 1));
+      }, deletingSpeed);
+    } else if (!isDeleting && displayText.length === text.length) {
+      timeout = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2500);
+    } else if (isDeleting && displayText.length === 0) {
+      timeout = setTimeout(() => {
+        setIsDeleting(false);
+      }, 800);
+    }
+    
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, text]);
+
+  return (
+    <span className="inline-flex items-center min-h-[1.5em]">
+      {displayText}
+      <motion.span 
+        animate={{ opacity: [1, 0, 1] }} 
+        transition={{ repeat: Infinity, duration: 0.9, ease: "easeInOut" }}
+        className="w-[2px] h-[1.1em] bg-orange-500 ml-[4px]"
+      />
+    </span>
+  );
+};
+
 const Home = () => {
   return (
     <div className="relative overflow-hidden bg-slate-950 text-slate-100">
 
       {/* ── HERO SECTION ─────────────────────────────────────────────────── */}
-      <section className="relative min-h-[70vh] sm:min-h-[92vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      <section className="relative min-h-[70vh] sm:min-h-[92vh] flex flex-col items-center justify-center text-center px-2 overflow-hidden">
 
         {/* Grid overlay */}
         <div className="absolute inset-0 hero-grid pointer-events-none" />
@@ -48,16 +92,23 @@ const Home = () => {
         >
           {/* Headline */}
           <motion.h1 variants={fadeInUp} className="text-4xl sm:text-7xl font-black tracking-tighter leading-[1.05] mb-3 sm:mb-6">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">Professional Equipment</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">Complete Rental</span>
             <span className="block text-primary-500">
-              Rental, Simplified.
+              Management Platform
             </span>
           </motion.h1>
 
           {/* Sub-headline */}
-          <motion.p variants={fadeInUp} className="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-10">
-            Manage inventory, track reservations, calculate dynamic pricing, and maintain machinery health — all in one beautifully designed system.
+          <motion.p variants={fadeInUp} className="text-[10px] sm:text-sm text-slate-300 font-light tracking-wide max-w-2xl mx-auto leading-snug sm:leading-relaxed mb-6 sm:mb-10 px-2 sm:px-0">
+where customers can explore available items, book what they need, and manage their rentals, while businesses can manage inventory, bookings, returns, availability, and payments, all in one place.
           </motion.p>
+
+          {/* Typewriter Text */}
+          <motion.div variants={fadeInUp} className="mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-5 text-[10px] sm:text-sm font-bold uppercase tracking-widest sm:tracking-[0.15em] text-slate-300 whitespace-nowrap overflow-hidden w-full max-w-full px-2">
+            <span className="w-3 sm:w-16 h-[1px] bg-gradient-to-r from-transparent to-orange-500/50 shrink-0"></span>
+            <span className="shrink-0"><TypewriterText text="Rent Anything. Manage Everything." /></span>
+            <span className="w-3 sm:w-16 h-[1px] bg-gradient-to-l from-transparent to-orange-500/50 shrink-0"></span>
+          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-14">
@@ -88,7 +139,7 @@ const Home = () => {
           {/* Social proof bar */}
           <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-sm text-slate-300">
             {[
-              { icon: Package, text: '500+ Equipment Listed' },
+              { icon: Package, text: '500+ Items Listed' },
               { icon: Users, text: '1,200+ Happy Customers' },
               { icon: TrendingUp, text: '98% Satisfaction Rate' },
             ].map(({ icon: Icon, text }) => (
@@ -118,7 +169,7 @@ const Home = () => {
             <div className="flex items-center justify-center gap-4 mb-5">
               <div className="h-px w-12 bg-gradient-to-r from-transparent to-orange-500/60"></div>
               <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500">
-                Why EquipRental
+                Why RentAll Platform
               </span>
               <div className="h-px w-12 bg-gradient-to-l from-transparent to-orange-500/60"></div>
             </div>

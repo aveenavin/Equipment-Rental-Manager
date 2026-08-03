@@ -1,4 +1,4 @@
-# Equipment Rental Manager
+# Rental Management Platform
 
 A production-ready, full-stack equipment rental management platform built with the MERN stack. Designed to manage inventory, bookings, inspections, maintenance, and payments for equipment rental businesses.
 

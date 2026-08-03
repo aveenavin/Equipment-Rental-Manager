@@ -247,7 +247,7 @@ const EquipmentDetail = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xl">🔧</span>
-              <span className="font-black text-slate-200 text-lg tracking-tight">EquipRental Admin</span>
+              <span className="font-black text-slate-200 text-lg tracking-tight">RentAll Platform Admin</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed">
               Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
@@ -325,7 +325,7 @@ const EquipmentDetail = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-slate-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-          <span>© {new Date().getFullYear()} EquipRental Admin. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} RentAll Platform Admin. All rights reserved.</span>
           <span className="flex items-center gap-1">Built with <span className="text-amber-500">♥</span> for professionals</span>
         </div>
       </footer>

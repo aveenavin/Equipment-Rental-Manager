@@ -1,7 +1,7 @@
 {
   "name": "equipment-rental-manager-backend",
   "version": "1.0.0",
-  "description": "REST API for the Equipment Rental Manager application",
+  "description": "REST API for the Rental Management Platform application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

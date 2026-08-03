@@ -114,7 +114,7 @@ const InvoicePage = () => {
                 </div>
               </div>
               <div className="sm:text-right">
-                <h2 className="text-xl font-bold text-slate-100 tracking-tight print:text-slate-900">EquipRental</h2>
+                <h2 className="text-xl font-bold text-slate-100 tracking-tight print:text-slate-900">RentAll Platform</h2>
                 <p className="text-slate-400 text-sm print:text-slate-600 font-medium">Premium Equipment Services</p>
                 <div className="mt-3 flex sm:justify-end">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border ${statusCfg.cls} print:border-2 print:shadow-none`}>
@@ -301,7 +301,7 @@ const InvoicePage = () => {
           {/* Footer */}
           <div className="px-6 sm:px-8 py-5 bg-slate-900/50 print:bg-transparent text-center border-t border-slate-800/60 print:border-slate-200 mt-auto">
             <p className="text-[11px] font-medium text-slate-500 print:text-slate-500 max-w-lg mx-auto">
-              Thank you for choosing EquipRental. For questions concerning this invoice, please contact our support team.
+              Thank you for choosing RentAll Platform. For questions concerning this invoice, please contact our support team.
             </p>
             <div className="mt-3 inline-flex items-center justify-center px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 print:border-none print:bg-transparent">
               <p className="text-[10px] font-mono font-bold text-slate-400 print:text-slate-400">Ref: {invoice.invoiceNumber}</p>

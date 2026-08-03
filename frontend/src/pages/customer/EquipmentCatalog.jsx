@@ -322,14 +322,14 @@ const EquipmentCatalog = () => {
         />
       )}
 
-      {/* ── Why Choose EquipRental? ─────────────────────────────────────── */}
+      {/* ── Why Choose RentAll Platform? ─────────────────────────────────────── */}
       <div className="mt-20 mb-16">
         <div className="text-center mb-10">
           <span className="inline-block px-4 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold uppercase tracking-widest mb-4">
             Why Us
           </span>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-100">
-            Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">EquipRental?</span>
+            Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">RentAll Platform?</span>
           </h2>
           <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto">
             Everything you need for a seamless equipment rental experience.
@@ -436,7 +436,7 @@ const EquipmentCatalog = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xl">🔧</span>
-              <span className="font-black text-slate-100 text-lg tracking-tight">EquipRental</span>
+              <span className="font-black text-slate-100 text-lg tracking-tight">RentAll Platform</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed">
               Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
@@ -515,7 +515,7 @@ const EquipmentCatalog = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-slate-300/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-          <span>© {new Date().getFullYear()} EquipRental. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} RentAll Platform. All rights reserved.</span>
           <span className="flex items-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
         </div>
       </footer>

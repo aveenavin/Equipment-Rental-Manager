@@ -354,7 +354,7 @@ const CustomerDashboard = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-xl">🔧</span>
-              <span className="font-black text-slate-100 text-lg tracking-tight">EquipRental</span>
+              <span className="font-black text-slate-100 text-lg tracking-tight">RentAll Platform</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed">
               Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
@@ -431,7 +431,7 @@ const CustomerDashboard = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-slate-300/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-          <span>© {new Date().getFullYear()} EquipRental. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} RentAll Platform. All rights reserved.</span>
           <span className="flex items-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
         </div>
       </footer>

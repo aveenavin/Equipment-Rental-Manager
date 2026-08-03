@@ -23,7 +23,7 @@ const CustomerHeader = ({ title, setMobileOpen }) => {
             <Package className="h-4 w-4 text-white" />
           </div>
 
-          <span className="font-bold text-white hidden sm:block text-[14px]">EquipRental</span>
+          <span className="font-bold text-white hidden sm:block text-[14px]">RentAll Platform</span>
 
           <span className="hidden sm:inline-flex items-center justify-center px-2 py-[3px] rounded bg-black/20 text-[10px] font-bold text-white/90 tracking-wide uppercase">
             Customer

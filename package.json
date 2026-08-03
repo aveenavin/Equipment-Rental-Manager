@@ -1,7 +1,7 @@
 {
   "name": "equipment-rental-manager",
   "version": "1.0.0",
-  "description": "Equipment Rental Manager — MERN stack monorepo",
+  "description": "Rental Management Platform — MERN stack monorepo",
   "private": true,
   "scripts": {
     "dev:backend": "npm run dev --prefix backend",

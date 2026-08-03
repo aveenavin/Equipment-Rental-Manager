@@ -25,7 +25,7 @@ const PublicLayout = () => {
             className="flex items-center gap-1 sm:gap-2 font-bold text-base sm:text-xl text-slate-100 hover:text-primary-400 transition-colors shrink-0"
           >
             <Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-accent-500 shrink-0" />
-            <span className="shrink-0 truncate max-w-[120px] sm:max-w-none">EquipRental</span>
+            <span className="shrink-0 truncate max-w-[120px] sm:max-w-none">RentAll Platform</span>
           </Link>
 
           <nav className="flex items-center gap-2 sm:gap-2 shrink-0">
@@ -83,10 +83,10 @@ const PublicLayout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 font-bold text-slate-500">
             <Wrench className="h-4 w-4 text-accent-500" />
-            <span>Equipment Rental Manager</span>
+            <span>Rental Management Platform</span>
           </div>
           <p className="text-xs text-orange-600">
-            &copy; {new Date().getFullYear()} Equipment Rental Manager. Built with MERN stack.
+            &copy; {new Date().getFullYear()} Rental Management Platform. Built with MERN stack.
           </p>
         </div>
       </footer>

@@ -78,7 +78,7 @@ const send = async ({ to, subject, html }) => {
 const sendVerificationEmail = async (email, name, verifyUrl) => {
   await send({
     to: email,
-    subject: 'Verify your EquipRental account',
+    subject: 'Verify your RentAll Platform account',
     html: buildVerificationHtml(name, verifyUrl),
   });
 };
@@ -94,7 +94,7 @@ const sendVerificationEmail = async (email, name, verifyUrl) => {
 const sendResendVerificationEmail = async (email, name, verifyUrl) => {
   await send({
     to: email,
-    subject: 'Your new EquipRental verification link',
+    subject: 'Your new RentAll Platform verification link',
     html: buildResendHtml(name, verifyUrl),
   });
 };
@@ -167,7 +167,7 @@ const buildVerificationHtml = (name, verifyUrl) => `
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #334155;">
               <p style="margin:0;color:#475569;font-size:12px;">
-                &copy; ${new Date().getFullYear()} Equipment Rental Manager. All rights reserved.
+                &copy; ${new Date().getFullYear()} Rental Management Platform. All rights reserved.
               </p>
             </td>
           </tr>
@@ -245,7 +245,7 @@ const buildResendHtml = (name, verifyUrl) => `
           <tr>
             <td style="padding:20px 40px;border-top:1px solid #334155;">
               <p style="margin:0;color:#475569;font-size:12px;">
-                &copy; ${new Date().getFullYear()} Equipment Rental Manager. All rights reserved.
+                &copy; ${new Date().getFullYear()} Rental Management Platform. All rights reserved.
               </p>
             </td>
           </tr>
