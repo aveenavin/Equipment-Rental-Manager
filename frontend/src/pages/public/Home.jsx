@@ -73,7 +73,7 @@ const Home = () => {
     <div className="relative overflow-hidden bg-slate-950 text-slate-100">
 
       {/* ── HERO SECTION ─────────────────────────────────────────────────── */}
-      <section className="relative min-h-[70vh] sm:min-h-[92vh] flex flex-col items-center justify-center text-center px-2 overflow-hidden">
+      <section className="relative min-h-[70vh] sm:min-h-[92vh] flex flex-col items-center justify-center text-center px-2 pt-24 sm:pt-0 overflow-hidden">
 
         {/* Grid overlay */}
         <div className="absolute inset-0 hero-grid pointer-events-none" />

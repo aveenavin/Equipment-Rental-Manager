@@ -123,14 +123,14 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #fdba74;
-  /* orange-300 */
+  background: #ea580c;
+  /* orange-600 (dark orange) */
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #fb923c;
-  /* orange-400 */
+  background: #c2410c;
+  /* orange-700 (darker orange) */
 }
 
 /* ── Focus Visible ── */
