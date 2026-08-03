@@ -1,25 +1,24 @@
 'use strict';
 
-const nodemailer = require('nodemailer');
-
-// ─── Transport ─────────────────────────────────────────────────────────────────
+// ─── Brevo Configuration ───────────────────────────────────────────────────────
 
 /**
- * Lazily create and cache the Nodemailer transporter.
- * The transporter is created once per process and reused across all calls.
+ * Validate that all required Brevo env vars are present.
+ * Called once on the first send attempt.
+ *
  * Required env vars:
- *   SMTP_HOST  — e.g. smtp.gmail.com
- *   SMTP_PORT  — e.g. 465 (SSL) or 587 (TLS/STARTTLS)
- *   SMTP_USER  — your full Gmail address
- *   SMTP_PASS  — Gmail App Password (NOT your account password)
- *   SMTP_FROM  — display name + address, e.g. EquipRental <noreply@gmail.com>
+ *   BREVO_API_KEY      — Brevo v3 API key
+ *   BREVO_SENDER_EMAIL — verified sender email address
+ *   BREVO_SENDER_NAME  — display name for the sender
  */
-let _transporter = null;
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
-const getTransporter = () => {
-  if (_transporter) return _transporter;
+let _validated = false;
 
-  const required = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'];
+const validateConfig = () => {
+  if (_validated) return;
+
+  const required = ['BREVO_API_KEY', 'BREVO_SENDER_EMAIL', 'BREVO_SENDER_NAME'];
   const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length) {
@@ -28,38 +27,43 @@ const getTransporter = () => {
     );
   }
 
-  const port = parseInt(process.env.SMTP_PORT, 10);
-
-  _transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port,
-    // Port 465 → implicit SSL; anything else → STARTTLS upgrade
-    secure: port === 465,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  return _transporter;
+  _validated = true;
 };
 
 // ─── Internal send helper ───────────────────────────────────────────────────────
 
 /**
- * Send an email via Nodemailer and throw on failure.
+ * Send an email via the Brevo transactional email REST API and throw on failure.
  *
  * @param {{ to: string, subject: string, html: string }} options
  */
 const send = async ({ to, subject, html }) => {
-  const transporter = getTransporter();
+  validateConfig();
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM,
-    to,
-    subject,
-    html,
+  const response = await fetch(BREVO_API_URL, {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'content-type': 'application/json',
+      'api-key': process.env.BREVO_API_KEY,
+    },
+    body: JSON.stringify({
+      sender: {
+        name: process.env.BREVO_SENDER_NAME,
+        email: process.env.BREVO_SENDER_EMAIL,
+      },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
   });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(
+      `[emailService] Brevo API error (${response.status}): ${body.message || response.statusText}`
+    );
+  }
 };
 
 // ─── Public API ────────────────────────────────────────────────────────────────
