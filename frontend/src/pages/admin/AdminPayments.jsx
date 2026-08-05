@@ -78,7 +78,7 @@ const AdminPayments = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-gray-800">
-      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
+      <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 py-6">
 
         <div className="mb-5">
           <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 drop-shadow-sm pb-1">Payment Ledger</h1>

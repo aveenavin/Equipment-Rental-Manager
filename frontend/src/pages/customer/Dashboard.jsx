@@ -144,7 +144,7 @@ const CustomerDashboard = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.42, type: 'spring', stiffness: 80, damping: 20 }}
-            className="mt-[40px] sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-5 sm:gap-4 w-full"
+            className="mt-[50px] sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-5 sm:gap-4 w-full"
           >
             <Link
               to="/catalog"

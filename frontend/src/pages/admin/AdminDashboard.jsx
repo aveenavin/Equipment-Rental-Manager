@@ -87,7 +87,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-gray-800">
-      <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 py-6 space-y-5">
+      <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 py-6 space-y-5">
         {/* Page heading */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
           <div>

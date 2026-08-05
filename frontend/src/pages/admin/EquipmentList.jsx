@@ -121,7 +121,7 @@ const EquipmentList = () => {
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-slate-100">
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-2 sm:px-4 lg:px-6 py-6">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
@@ -199,7 +199,7 @@ const EquipmentList = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4"
             >
               {equipment.map((item) => (
                 <motion.div
