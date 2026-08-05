@@ -375,7 +375,7 @@ const MyRentals = () => {
     .reduce((s, r) => s + (r.rentalCost || 0), 0);
 
   return (
-    <div className="py-6 px-4 sm:py-8 sm:px-6 lg:px-8 max-w-[1600px] mx-auto w-full">
+    <div className="py-6 px-2 sm:py-8 sm:px-4 lg:px-6 max-w-[1600px] mx-auto w-full">
 
       {/* ── Page header ─────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-8 pb-6 border-b border-slate-800/60">

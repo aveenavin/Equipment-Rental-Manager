@@ -144,7 +144,7 @@ const CustomerDashboard = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.42, type: 'spring', stiffness: 80, damping: 20 }}
-            className="mt-[30px] sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full"
+            className="mt-[40px] sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-5 sm:gap-4 w-full"
           >
             <Link
               to="/catalog"
@@ -349,34 +349,34 @@ const CustomerDashboard = () => {
       </div>
 
       {/* ── Footer ────────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-300/20 pt-12 pb-8 mt-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+      <footer className="border-t border-slate-300/20 pt-8 sm:pt-12 pb-6 sm:pb-8 mt-10 sm:mt-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-10 mb-8 sm:mb-10">
           {/* About */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-xl">🔧</span>
-              <span className="font-black text-slate-100 text-lg tracking-tight">RentAll Platform</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+              <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform</span>
             </div>
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
               Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
             </p>
-            {/* Social icons */}
-            <div className="flex items-center gap-3 mt-5">
-              {['𝕏', 'in', 'f', '▶'].map((s, i) => (
-                <button
-                  key={i}
-                  className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 hover:border-orange-500/50 hover:bg-slate-700 text-slate-400 hover:text-orange-400 text-xs font-bold flex items-center justify-center transition-all duration-200"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Contact</h4>
+            <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-slate-500">
+              <li className="flex items-start gap-1.5 sm:gap-2"><span>📧</span> 73aveen@gmail.com</li>
+              <li className="flex items-start gap-1.5 sm:gap-2"><span>📞</span> +91 9xxxxxxx</li>
+              <li className="flex items-start gap-1.5 sm:gap-2"><span>📍</span> indore, MP, India</li>
+              <li className="flex items-start gap-1.5 sm:gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
+            </ul>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Quick Links</h4>
-            <ul className="space-y-2.5">
+            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Quick Links</h4>
+            <ul className="space-y-2 sm:space-y-2.5">
               {[
                 { label: 'Browse Catalog', path: '/catalog' },
                 { label: 'My Rentals', path: '/my-rentals' },
@@ -386,30 +386,19 @@ const CustomerDashboard = () => {
                   <Link
                     to={l.path}
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left"
+                    className="group inline-flex items-center text-slate-500 hover:text-orange-400 text-xs sm:text-sm font-medium transition-colors duration-200 text-left"
                   >
-                    {l.label}
+                    <span className="group-hover:translate-x-1 transition-all duration-200 underline underline-offset-[3px] decoration-slate-500/60 group-hover:decoration-orange-400/80">{l.label}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Contact</h4>
-            <ul className="space-y-2.5 text-sm text-slate-500">
-              <li className="flex items-start gap-2"><span>📧</span> 73aveen@gmail.com</li>
-              <li className="flex items-start gap-2"><span>📞</span> +91 9xxxxxxx</li>
-              <li className="flex items-start gap-2"><span>📍</span> Bhopal, Madhya Pradesh, India</li>
-              <li className="flex items-start gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
-            </ul>
-          </div>
-
           {/* Legal */}
           <div>
-            <h4 className="text-slate-200 font-bold text-sm uppercase tracking-widest mb-4">Legal</h4>
-            <ul className="space-y-2.5">
+            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Legal</h4>
+            <ul className="space-y-2 sm:space-y-2.5">
               {[
                 { label: 'Privacy Policy', path: '/privacy' },
                 { label: 'Terms & Conditions', path: '/terms' },
@@ -420,9 +409,9 @@ const CustomerDashboard = () => {
                   <Link 
                     to={l.path}
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="text-slate-500 hover:text-orange-400 text-sm font-medium transition-colors duration-200 text-left"
+                    className="group inline-flex items-center text-slate-500 hover:text-orange-400 text-xs sm:text-sm font-medium transition-colors duration-200 text-left"
                   >
-                    {l.label}
+                    <span className="group-hover:translate-x-1 transition-all duration-200 underline underline-offset-[3px] decoration-slate-500/60 group-hover:decoration-orange-400/80">{l.label}</span>
                   </Link>
                 </li>
               ))}
@@ -431,9 +420,9 @@ const CustomerDashboard = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-slate-300/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
+        <div className="border-t border-slate-300/20 pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-[10px] sm:text-xs text-slate-600 text-center sm:text-left">
           <span>© {new Date().getFullYear()} RentAll Platform. All rights reserved.</span>
-          <span className="flex items-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
+          <span className="flex items-center justify-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
         </div>
       </footer>
 
