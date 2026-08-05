@@ -30,24 +30,25 @@ const CountUp = ({ to }) => {
   return <motion.span>{rounded}</motion.span>;
 };
 
-const StatCard = ({ icon: Icon, label, value, gradient, shadowColor: _shadowColor, index: _index = 0, isLoading = false }) => (
+const StatCard = ({ icon: Icon, label, value, gradient, shadowColor, index: _index = 0, isLoading = false }) => (
   <div
-    className={`relative overflow-hidden flex items-center p-4 rounded-2xl bg-gradient-to-br ${gradient} shadow-2xl transition-all duration-300`}
+    className={`group relative overflow-hidden flex items-center p-2.5 sm:p-3 rounded-[14px] bg-gradient-to-br ${gradient} ${shadowColor || 'shadow-2xl'} transition-all duration-500 hover:-translate-y-1 border border-white/20`}
   >
     {/* Decorative inner glass effect */}
-    <div className="absolute inset-0 bg-white/5 opacity-0 transition-opacity duration-300" />
-    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/20 rounded-full blur-2xl transition-colors duration-500" />
+    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-500" />
+    <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/30 rounded-full blur-3xl transition-all duration-500 group-hover:scale-125" />
+    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-black/10 rounded-full blur-2xl transition-all duration-500 group-hover:scale-125" />
 
-    <div className="p-3 rounded-xl bg-black/10 shrink-0 shadow-inner mr-4 relative z-10 backdrop-blur-sm transition-all duration-300">
-      <Icon className="h-5 w-5 text-white" />
+    <div className="p-2 rounded-[10px] bg-white/20 shrink-0 shadow-[inset_0_1px_2px_rgba(255,255,255,0.5)] backdrop-blur-md transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 mr-3 relative z-10">
+      <Icon className="h-4 w-4 text-white drop-shadow-md" />
     </div>
 
-    <div className="flex flex-col relative z-10">
-      <p className="text-[11px] text-white/80 font-bold uppercase tracking-wider leading-tight mb-1">{label}</p>
+    <div className="flex flex-col relative z-10 min-w-0 flex-1">
+      <p className="text-[9px] sm:text-[10px] text-white/90 font-bold uppercase tracking-widest leading-none mb-1 truncate">{label}</p>
       {isLoading ? (
-        <div className="h-6 w-16 bg-white/20 rounded animate-pulse" />
+        <div className="h-5 w-12 bg-white/30 rounded-md animate-pulse" />
       ) : (
-        <p className="text-2xl font-black tracking-tight text-white drop-shadow-sm leading-none">
+        <p className="text-lg sm:text-xl font-black tracking-tight text-white drop-shadow-lg leading-none">
           <CountUp to={value || 0} />
         </p>
       )}
@@ -106,14 +107,14 @@ const CustomerDashboard = () => {
   }, []);
 
   return (
-    <div className="py-6 px-4 sm:py-8 sm:px-6 lg:px-8 max-w-[1600px] mx-auto w-full space-y-8">
+    <div className="py-6 px-2 sm:py-8 sm:px-4 lg:px-6 max-w-[1600px] mx-auto w-full space-y-5 sm:space-y-8">
 
       {/* ── Hero Section ──────────────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-        className="relative rounded-[24px] overflow-hidden bg-slate-900 border border-slate-800 p-8 sm:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8"
+        className="relative rounded-[24px] overflow-hidden bg-slate-900 border border-slate-800 pt-5 px-5 pb-8 sm:p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8"
       >
         {/* Background Gradients */}
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -127,36 +128,36 @@ const CustomerDashboard = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, type: 'spring', stiffness: 80, damping: 20 }}
-            className="text-3xl sm:text-4xl tracking-tight leading-tight"
+            className="text-3xl sm:text-5xl tracking-tight leading-tight"
           >
-            <span className="font-bold text-slate-300">Welcome back,</span> <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-800">{user?.name?.split(' ')[0] || 'User'}</span>
+            <span className="font-light text-slate-400 text-xl sm:text-4xl">Welcome back,</span> <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-800">{user?.name?.split(' ')[0] || 'User'}</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.28, type: 'spring', stiffness: 80, damping: 20 }}
-            className="text-slate-400 text-[15px] sm:text-base mt-3 max-w-xl leading-relaxed"
+            className="text-slate-400/90 text-[12px] sm:text-[14px] font-medium tracking-wide mt-[18px] max-w-xl leading-relaxed"
           >
-            Manage your equipment rentals, browse the latest available inventory, and track your active bookings all in one highly functional space.
+            Explore available equipment, book what you need, and manage your rentals and active bookings, all in one place.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.42, type: 'spring', stiffness: 80, damping: 20 }}
-            className="mt-8 flex flex-wrap items-center gap-4"
+            className="mt-[30px] sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full"
           >
             <Link
               to="/catalog"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-orange-800 text-white px-7 py-3.5 rounded-xl font-bold shadow-[0_4px_20px_rgba(234,88,12,0.3)] hover:shadow-[0_4px_25px_rgba(234,88,12,0.5)] hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-flex items-center justify-center w-full sm:w-auto gap-2 bg-gradient-to-r from-orange-600 to-orange-800 text-white px-5 py-3 sm:px-7 sm:py-3.5 rounded-xl text-[14px] sm:text-base font-bold shadow-[0_4px_20px_rgba(234,88,12,0.3)] hover:shadow-[0_4px_25px_rgba(234,88,12,0.5)] hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap shrink-0"
             >
-              <Package className="h-5 w-5" />
+              <Package className="h-[18px] w-[18px] sm:h-5 sm:w-5 shrink-0" />
               New Booking
             </Link>
             <Link
               to="/my-rentals"
-              className="inline-flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 px-7 py-3.5 rounded-xl font-bold transition-all duration-300 hover:-translate-y-0.5 shadow-sm"
+              className="inline-flex items-center justify-center w-full sm:w-auto gap-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 px-5 py-3 sm:px-7 sm:py-3.5 rounded-xl text-[14px] sm:text-base font-bold transition-all duration-300 hover:-translate-y-0.5 shadow-sm whitespace-nowrap shrink-0"
             >
-              <ClipboardList className="h-5 w-5 text-slate-400" />
+              <ClipboardList className="h-[18px] w-[18px] sm:h-5 sm:w-5 text-slate-400 shrink-0" />
               View Rentals
             </Link>
           </motion.div>
@@ -164,7 +165,7 @@ const CustomerDashboard = () => {
       </motion.div>
 
       {/* ── Summary Stats ───────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         <StatCard
           icon={Box}
           label="Available Equipment"
@@ -211,27 +212,27 @@ const CustomerDashboard = () => {
           <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none translate-y-1/3 -translate-x-1/3" />
 
-          <div className="p-6 relative z-10 border-b border-blue-500/10 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-inner">
-                <Activity className="h-5 w-5 text-blue-400" />
+          <div className="py-3 px-4 sm:p-6 relative z-10 border-b border-blue-500/10 flex items-center justify-between">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-blue-500/10 rounded-xl border border-blue-500/20 shadow-inner">
+                <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
               </div>
-              <h2 className="text-xl tracking-tight">
+              <h2 className="text-lg sm:text-xl tracking-tight">
                 <span className="font-bold text-slate-300">Recent</span> <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Activity</span>
               </h2>
             </div>
-            <Link to="/my-rentals" className="text-sm font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors group">
-              View All <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <Link to="/my-rentals" className="text-xs sm:text-sm font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors group">
+              View All <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
           <div className="flex-1 p-0 relative z-10">
             {isLoading ? (
-              <div className="flex justify-center items-center h-56">
-                <Spinner className="h-8 w-8 text-blue-500" />
+              <div className="flex justify-center items-center h-28 sm:h-56">
+                <Spinner className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
               </div>
             ) : recentRentals.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-56 text-slate-500">
+              <div className="flex flex-col items-center justify-center h-28 sm:h-56 text-slate-500">
                 <ClipboardList className="h-12 w-12 mb-4 opacity-30" />
                 <p className="font-medium text-slate-400">No recent activity found.</p>
               </div>
@@ -241,32 +242,32 @@ const CustomerDashboard = () => {
                   <Link
                     key={rental._id}
                     to={`/my-rentals/${rental._id}`}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-5 hover:bg-blue-500/5 transition-colors group gap-4"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between py-2.5 px-3 sm:p-5 hover:bg-blue-500/5 transition-colors group gap-2 sm:gap-4"
                   >
-                    <div className="flex items-center gap-5">
-                      <div className="h-14 w-14 rounded-xl bg-slate-950 border border-blue-500/20 overflow-hidden shrink-0 relative group-hover:border-blue-500/50 transition-colors duration-300">
+                    <div className="flex items-center gap-2.5 sm:gap-5">
+                      <div className="h-10 w-10 sm:h-14 sm:w-14 rounded-[10px] sm:rounded-xl bg-slate-950 border border-blue-500/20 overflow-hidden shrink-0 relative group-hover:border-blue-500/50 transition-colors duration-300">
                         {rental.equipment?.images?.[0] ? (
-                          <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform duration-500" />
+                          <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1.5 sm:p-2 group-hover:scale-110 transition-transform duration-500" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Package className="h-6 w-6 text-slate-600" />
+                            <Package className="h-5 w-5 sm:h-6 sm:w-6 text-slate-600" />
                           </div>
                         )}
                       </div>
                       <div>
-                        <h4 className="text-[15.5px] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400 group-hover:from-neutral-800 group-hover:to-neutral-800 transition-all duration-300 truncate max-w-[200px] sm:max-w-xs drop-shadow-sm">
+                        <h4 className="text-[13px] sm:text-[15.5px] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400 group-hover:from-neutral-800 group-hover:to-neutral-800 transition-all duration-300 truncate max-w-[200px] sm:max-w-xs drop-shadow-sm">
                           {rental.equipment?.name || 'Unknown Equipment'}
                         </h4>
-                        <div className="flex items-center gap-2.5 mt-1.5 text-[13px] text-slate-400 font-medium">
-                          <span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5 text-slate-500" /> {fmt(rental.startDate)}</span>
+                        <div className="flex items-center gap-1.5 sm:gap-2.5 mt-0.5 sm:mt-1.5 text-[11px] sm:text-[13px] text-slate-400 font-medium">
+                          <span className="flex items-center gap-1 sm:gap-1.5"><Calendar className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-slate-500" /> {fmt(rental.startDate)}</span>
                           <span>•</span>
                           <span className="text-yellow-400 font-bold tracking-wide">{fmtCurrency(rental.totalAmount)}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between sm:justify-end gap-5">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-5">
                       <RentalStatusBadge status={rental.status} />
-                      <ChevronRight className="h-5 w-5 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
                     </div>
                   </Link>
                 ))}
