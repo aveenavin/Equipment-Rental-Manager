@@ -364,7 +364,7 @@ const CustomerDashboard = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Contact</h4>
+            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Support</h4>
             <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-slate-500">
               <li className="flex items-start gap-1.5 sm:gap-2"><span>📧</span> 73aveen@gmail.com</li>
               <li className="flex items-start gap-1.5 sm:gap-2"><span>📞</span> +91 9xxxxxxx</li>

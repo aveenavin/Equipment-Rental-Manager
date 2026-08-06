@@ -78,18 +78,21 @@ const PublicLayout = () => {
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold text-slate-500">
-            <Wrench className="h-4 w-4 text-accent-500" />
-            <span>Rental Management Platform</span>
+      {/* ── Footer Wrapper (Matches Customer Dashboard) ── */}
+      <div className="w-full px-2 sm:px-4 lg:px-6 max-w-[1600px] mx-auto">
+        <footer className="border-t border-slate-300/20 pt-8 sm:pt-12 pb-6 sm:pb-8 mt-10 sm:mt-16">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 sm:mb-10">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Wrench className="h-4 w-4 text-accent-500" />
+              <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">Rental Management Platform</span>
+            </div>
           </div>
-          <p className="text-[10px] sm:text-xs text-slate-500 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Rental Management Platform. Built with MERN stack.
-          </p>
-        </div>
-      </footer>
+          <div className="border-t border-slate-300/20 pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-[10px] sm:text-xs text-slate-600 text-center sm:text-left">
+            <span>&copy; {new Date().getFullYear()} Rental Management Platform. Built with MERN stack.</span>
+            <span className="flex items-center justify-center gap-1">Built with <span className="text-orange-500">♥</span> for professionals</span>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };

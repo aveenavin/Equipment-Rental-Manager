@@ -241,7 +241,7 @@ const EquipmentCatalog = () => {
 
                 {/* Card body */}
                 <div className="p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
-                  
+
                   {/* Category */}
                   <div className="mb-2.5">
                     <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
@@ -275,7 +275,7 @@ const EquipmentCatalog = () => {
                     className="w-full relative z-10 group/btn flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[13px] sm:text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
-                    <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" /> 
+                    <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" />
                     <span className="relative z-10 tracking-wide">Book Now</span>
                   </button>
                 </div>
@@ -435,7 +435,6 @@ const EquipmentCatalog = () => {
           {/* About */}
           <div>
             <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
-              <span className="text-base sm:text-xl">🔧</span>
               <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform</span>
             </div>
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
@@ -446,11 +445,11 @@ const EquipmentCatalog = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Contact</h4>
+            <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Support</h4>
             <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-slate-500">
               <li className="flex items-start gap-1.5 sm:gap-2"><span>📧</span> 73aveen@gmail.com</li>
               <li className="flex items-start gap-1.5 sm:gap-2"><span>📞</span> +91 9xxxxxxx</li>
-              <li className="flex items-start gap-1.5 sm:gap-2"><span>📍</span> Bhopal, Madhya Pradesh, India</li>
+              <li className="flex items-start gap-1.5 sm:gap-2"><span>📍</span> indore, MP,  India</li>
               <li className="flex items-start gap-1.5 sm:gap-2"><span>🕐</span> Mon–Sat, 9 AM – 6 PM</li>
             </ul>
           </div>
@@ -465,15 +464,14 @@ const EquipmentCatalog = () => {
                 { label: 'Dashboard', path: '/dashboard' }
               ].map((l) => (
                 <li key={l.label}>
-                  <Link 
+                  <Link
                     to={l.path}
                     onClick={() => {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                     className="group inline-flex items-center text-slate-500 hover:text-orange-400 text-xs sm:text-sm font-medium transition-colors duration-200 text-left"
                   >
-                    <span className="text-slate-600 group-hover:text-orange-400 mr-1.5 transition-colors">›</span>
-                    <span className="group-hover:translate-x-1 transition-all duration-200 underline underline-offset-[3px] decoration-slate-700/70 group-hover:decoration-orange-400/80">{l.label}</span>
+                    <span className="group-hover:translate-x-1 transition-all duration-200 underline underline-offset-[3px] decoration-slate-500/60 group-hover:decoration-orange-400/80">{l.label}</span>
                   </Link>
                 </li>
               ))}
@@ -491,13 +489,12 @@ const EquipmentCatalog = () => {
                 { label: 'Cookie Policy', path: '/cookie' }
               ].map((l) => (
                 <li key={l.label}>
-                  <Link 
+                  <Link
                     to={l.path}
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     className="group inline-flex items-center text-slate-500 hover:text-orange-400 text-xs sm:text-sm font-medium transition-colors duration-200 text-left"
                   >
-                    <span className="text-slate-600 group-hover:text-orange-400 mr-1.5 transition-colors">›</span>
-                    <span className="group-hover:translate-x-1 transition-all duration-200 underline underline-offset-[3px] decoration-slate-700/70 group-hover:decoration-orange-400/80">{l.label}</span>
+                    <span className="group-hover:translate-x-1 transition-all duration-200 underline underline-offset-[3px] decoration-slate-500/60 group-hover:decoration-orange-400/80">{l.label}</span>
                   </Link>
                 </li>
               ))}
