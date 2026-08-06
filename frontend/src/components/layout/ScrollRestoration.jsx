@@ -12,19 +12,16 @@ const readPositions = () => {
 };
 
 const writePositions = (positions) => {
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
+  } catch {
+    // sessionStorage full or unavailable
+  }
 };
 
 /**
  * Returns true when navigating "up" the route tree, i.e. the destination
  * is a parent route of the source.
- *
- * Examples:
- *   /catalog/abc123       → /catalog          = true
- *   /my-rentals/abc       → /my-rentals       = true
- *   /admin/equipment/x    → /admin/equipment  = true
- *   /admin/equipment      → /admin/customers  = false  (sibling)
- *   /catalog              → /catalog/abc123   = false  (child)
  */
 const isNavigatingUp = (fromPath, toPath) => {
   return fromPath !== toPath && fromPath.startsWith(toPath + '/');
@@ -34,30 +31,31 @@ const isNavigatingUp = (fromPath, toPath) => {
  * Zero-UI component that saves and restores scroll positions for the
  * `#main-content` scroll container across route changes.
  *
- * Three key mechanisms make this work:
+ * Key mechanisms:
  *
  * 1. **Continuous scroll tracking** — Positions are saved via a scroll
- *    event listener as the user scrolls, NOT at navigation time. By the
- *    time a useEffect fires for a route change, React has already
- *    committed the new DOM and the container's scrollTop has been reset.
+ *    event listener as the user scrolls.
  *
- * 2. **useLayoutEffect navigation guard** — When React swaps the Outlet
- *    content, the browser clamps scrollTop to 0 and fires a scroll event.
- *    A useLayoutEffect sets a guard flag synchronously after DOM commit
- *    but BEFORE the browser fires the clamping scroll event, preventing
- *    the scroll handler from overwriting saved positions with 0.
+ * 2. **Snapshot backup** — A `useLayoutEffect` takes a frozen copy of
+ *    all saved positions the instant the route changes (synchronous,
+ *    before the browser fires any clamping scroll events). This snapshot
+ *    is the authoritative source for restoration — it cannot be
+ *    corrupted by DOM-swap clamping events regardless of browser/device
+ *    event ordering.
  *
- * 3. **Dual back-navigation detection** — "Back" navigation is detected
- *    via BOTH popstate (browser back/forward) AND route-hierarchy
- *    analysis (in-app <Link> to a parent route). The app uses
- *    <Link to="/my-rentals"> for back navigation, which is a history
- *    push — popstate never fires for pushes.
+ * 3. **Navigation guard** — A ref flag blocks the scroll handler from
+ *    recording during route transitions.
+ *
+ * 4. **Dual back-navigation detection** — Uses both `popstate` (browser
+ *    back/forward) and route-hierarchy analysis (in-app `<Link>` to a
+ *    parent route).
  */
 const ScrollRestoration = () => {
   const { pathname } = useLocation();
   const prevPathRef = useRef(pathname);
   const isPopRef = useRef(false);
   const positionsRef = useRef(readPositions());
+  const snapshotRef = useRef({});
   const debounceRef = useRef(null);
   const isNavigatingRef = useRef(false);
 
@@ -68,26 +66,26 @@ const ScrollRestoration = () => {
     return () => window.removeEventListener('popstate', handler);
   }, []);
 
-  // ── Navigation guard ───────────────────────────────────────────────
+  // ── Snapshot + navigation guard ────────────────────────────────────
   // useLayoutEffect runs synchronously after DOM commit but BEFORE the
-  // browser fires scroll events caused by content-swap clamping. This
-  // prevents the scroll handler from overwriting saved positions with
-  // the clamped-to-zero value.
+  // browser fires scroll events from content-swap clamping.
+  //
+  // We freeze a copy of all scroll positions here so that even if the
+  // scroll handler or ref gets corrupted by a clamping event on some
+  // browsers, we have a clean copy to restore from.
   useLayoutEffect(() => {
     if (prevPathRef.current !== pathname) {
+      snapshotRef.current = { ...positionsRef.current };
       isNavigatingRef.current = true;
     }
   }, [pathname]);
 
   // ── Continuously save scroll position while user scrolls ───────────
-  // The ref is updated synchronously (cheap); sessionStorage writes
-  // are debounced for performance.
   useEffect(() => {
     const container = document.getElementById('main-content');
     const scrollTarget = container || window;
 
     const handleScroll = () => {
-      // Skip saves triggered by content-swap clamping during navigation
       if (isNavigatingRef.current) return;
 
       const scrollTop = container ? container.scrollTop : window.scrollY;
@@ -104,7 +102,9 @@ const ScrollRestoration = () => {
     return () => {
       scrollTarget.removeEventListener('scroll', handleScroll);
       clearTimeout(debounceRef.current);
-      writePositions(positionsRef.current);
+      // Flush — use snapshot if available (immune to clamping corruption)
+      const merged = { ...positionsRef.current, ...snapshotRef.current };
+      writePositions(merged);
     };
   }, [pathname]);
 
@@ -117,7 +117,11 @@ const ScrollRestoration = () => {
     isPopRef.current = false;
 
     const shouldRestore = wasPop || isNavigatingUp(prevPath, pathname);
-    const target = shouldRestore ? (positionsRef.current[pathname] ?? 0) : 0;
+
+    // Read from snapshot (guaranteed clean) with ref fallback
+    const target = shouldRestore
+      ? (snapshotRef.current[pathname] ?? positionsRef.current[pathname] ?? 0)
+      : 0;
 
     const applyScroll = () => {
       const el = document.getElementById('main-content');
@@ -128,15 +132,13 @@ const ScrollRestoration = () => {
       }
     };
 
-    // Apply after paint, then clear the navigation guard so future
-    // user scrolls are tracked again
+    // Apply after paint, then clear the navigation guard
     const rafId = requestAnimationFrame(() => {
       applyScroll();
       isNavigatingRef.current = false;
     });
 
-    // Retry for pages with async content — the container may not be
-    // tall enough on the first frame to reach the saved position
+    // Retry for pages with async content
     let t1, t2;
     if (shouldRestore && target > 0) {
       t1 = setTimeout(applyScroll, 200);
