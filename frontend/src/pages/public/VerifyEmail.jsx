@@ -143,39 +143,39 @@ const VerifyEmail = () => {
           </div>
         </div>
 
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 shadow-xl shadow-black/30 text-center">
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-4 sm:p-8 shadow-xl shadow-black/30 text-center overflow-hidden">
           {/* Error icon */}
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-              <XCircle className="h-10 w-10 text-red-400" />
+          <div className="flex justify-center mb-4 sm:mb-6">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+              <XCircle className="h-7 w-7 sm:h-10 sm:w-10 text-red-400" />
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-100 mb-2">Verification failed</h1>
+          <h1 className="text-lg sm:text-2xl font-bold text-slate-100 mb-2">Verification failed</h1>
           <p className="text-slate-400 text-sm leading-relaxed mb-6">
             {errorMessage}
           </p>
 
           {/* Resend section */}
-          <div className="bg-slate-800/60 border border-slate-700 rounded-xl p-4 text-left mb-6">
+          <div className="bg-slate-800/60 border border-slate-700 rounded-xl p-3 sm:p-4 text-left mb-6">
             <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-3">
               Request a new link
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="email"
                 value={resendEmail}
                 onChange={(e) => setResendEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleResend()}
                 placeholder="your@email.com"
-                className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
+                className="w-full sm:flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
               />
               <Button
                 variant="primary"
                 size="sm"
                 onClick={handleResend}
                 disabled={isSending || cooldown > 0 || !resendEmail.trim()}
-                className="shrink-0"
+                className="w-full sm:w-auto shrink-0"
               >
                 {isSending ? (
                   <Spinner size="sm" />

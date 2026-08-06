@@ -81,15 +81,12 @@ const EquipmentList = () => {
 
   useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
-  const isInitialPageRef = useRef(true);
+  const prevPageRef = useRef(page);
   useEffect(() => {
-    if (isInitialPageRef.current) {
-      isInitialPageRef.current = false;
-      return;
-    }
-    const main = document.querySelector('main');
+    if (prevPageRef.current === page) return;
+    prevPageRef.current = page;
+    const main = document.getElementById('main-content');
     if (main) main.scrollTop = 0;
-    window.scrollTo(0, 0);
   }, [page]);
 
   const handleSearch = (e) => {
@@ -153,7 +150,7 @@ const EquipmentList = () => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search by name, description..."
+                placeholder="Search itmes"
                 className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
@@ -236,35 +233,35 @@ const EquipmentList = () => {
                   </div>
 
                   {/* Card body */}
-                  <div className="p-3.5 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
+                  <div className="p-1.5 sm:p-3.5 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950 min-w-0">
 
                     {/* Category badge */}
-                    <div className="mb-2.5 flex items-center justify-between">
-                      <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
+                    <div className="mb-1.5 sm:mb-2.5 flex items-center justify-between gap-1">
+                      <span className="inline-flex items-center px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20 truncate min-w-0">
                         {item.category?.replace(/-/g, ' ')}
                       </span>
-                      <div className="scale-[0.8] sm:scale-90 origin-right">
+                      <div className="scale-[0.7] sm:scale-90 origin-right shrink-0">
                         <ConditionBadge condition={item.condition} />
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-slate-100 text-[15px] sm:text-[17px] leading-snug line-clamp-2 mb-3 group-hover:text-orange-500 transition-colors">
+                    <h3 className="font-bold text-slate-100 text-[12px] sm:text-[15px] md:text-[17px] leading-snug line-clamp-2 mb-2 sm:mb-3 group-hover:text-orange-500 transition-colors">
                       {item.name}
                     </h3>
 
                     {/* Pricing box */}
-                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-2 sm:p-3 mb-3 shadow-inner flex items-center justify-between">
-                      <div>
-                        <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
-                        <p className="text-lg sm:text-xl font-black text-orange-500 leading-none">
-                          ₹{item.dailyRate}<span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 ml-1">/day</span>
+                    <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-lg sm:rounded-xl p-1.5 sm:p-3 mb-2 sm:mb-3 shadow-inner flex items-center justify-between overflow-hidden min-w-0">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
+                        <p className="text-sm sm:text-lg md:text-xl font-black text-orange-500 leading-none truncate">
+                          ₹{item.dailyRate}<span className="text-[9px] sm:text-[11px] font-semibold text-slate-400 ml-0.5 sm:ml-1">/day</span>
                         </p>
                       </div>
-                      <div className="w-[1px] h-6 sm:h-8 bg-slate-800 mx-1.5 sm:mx-2" />
-                      <div className="text-right">
-                        <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
-                        <p className="text-xs sm:text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
+                      <div className="w-[1px] h-6 sm:h-8 bg-slate-800 mx-1 sm:mx-2 shrink-0" />
+                      <div className="text-right min-w-0 flex-1">
+                        <p className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
+                        <p className="text-[11px] sm:text-sm font-bold text-slate-300 leading-none mt-1 truncate">₹{item.securityDeposit}</p>
                       </div>
                     </div>
 

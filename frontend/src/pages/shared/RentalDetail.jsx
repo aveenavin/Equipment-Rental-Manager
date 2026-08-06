@@ -41,13 +41,13 @@ const SectionCard = ({ title, icon: Icon, children, className = "" }) => (
   <motion.div 
     initial={{ opacity: 0, y: 15 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-xl relative overflow-hidden ${className}`}
+    className={`bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 shadow-xl relative overflow-hidden ${className}`}
   >
     <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
       <Icon className="w-16 h-16 sm:w-24 sm:h-24" />
     </div>
-    <div className="flex items-center gap-3 mb-4 relative z-10">
-      <div className="p-2 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-600/10 border border-primary-500/30">
+    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-4 relative z-10">
+      <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-600/10 border border-primary-500/30">
         <Icon className="h-4 w-4 text-primary-400" />
       </div>
       <h3 className="text-sm sm:text-base font-bold text-slate-100 tracking-tight">{title}</h3>
@@ -156,7 +156,7 @@ const RentalDetail = () => {
   const canProcessReturn = canManage && rental.status === 'checked_out';
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden pb-10 sm:pb-20">
       
       {/* Background Ambience */}
       <div className="fixed top-0 left-0 w-full h-[50vh] bg-gradient-to-b from-primary-900/20 to-transparent pointer-events-none" />
@@ -169,7 +169,7 @@ const RentalDetail = () => {
         </Link>
 
         {/* TWO COLUMN LAYOUT */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-8">
           
           {/* ======================= */}
           {/* LEFT COLUMN: MAIN CONTENT */}
@@ -183,11 +183,11 @@ const RentalDetail = () => {
               className="w-full rounded-xl sm:rounded-[2.5rem] bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 shadow-2xl overflow-hidden relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-transparent to-transparent pointer-events-none" />
-              <div className="p-4 sm:p-8 md:p-10 flex flex-row items-start gap-3 sm:gap-8 relative z-10">
+              <div className="p-3 sm:p-8 md:p-10 flex flex-row items-start gap-3 sm:gap-8 relative z-10">
                 
                 {/* Image Box */}
                 {canManage && rental.equipment ? (
-                  <Link to={`/admin/equipment/${rental.equipment._id}`} className="w-24 h-24 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
+                  <Link to={`/admin/equipment/${rental.equipment._id}`} className="w-20 h-20 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
                     {rental.equipment.images?.[0] ? (
                       <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl group-hover:scale-105 transition-transform" />
                     ) : (
@@ -195,7 +195,7 @@ const RentalDetail = () => {
                     )}
                   </Link>
                 ) : (
-                  <div className="w-24 h-24 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center">
+                  <div className="w-20 h-20 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center">
                     {rental.equipment?.images?.[0] ? (
                       <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl" />
                     ) : (
@@ -212,7 +212,7 @@ const RentalDetail = () => {
                       <Hash className="h-3 w-3" /> {rental._id.slice(-8).toUpperCase()}
                     </span>
                   </div>
-                  <h1 className="text-lg sm:text-3xl md:text-4xl font-black tracking-tight mb-1 sm:mb-2">
+                  <h1 className="text-base font-black tracking-tight mb-1 leading-snug">
                     {canManage && rental.equipment ? (
                       <Link to={`/admin/equipment/${rental.equipment._id}`} className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-2 group">
                         {rental.equipment.name}
@@ -311,29 +311,70 @@ const RentalDetail = () => {
               </SectionCard>
             )}
 
+            {/* STATUS TIMELINE — mobile only (shown above Financials) */}
+            <div className="lg:hidden">
+              <SectionCard title="Status Timeline" icon={RotateCcw}>
+                <div className="relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-700/50 pl-8">
+                  <div className="relative mb-4">
+                    <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-primary-500 ring-4 ring-primary-500/20" />
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Booked</p>
+                    <p className="text-sm font-medium text-slate-200">{fmtTime(rental.createdAt)}</p>
+                  </div>
+                  {rental.confirmedAt && (
+                    <div className="relative mb-4">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-blue-500 ring-4 ring-blue-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Confirmed</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.confirmedAt)}</p>
+                    </div>
+                  )}
+                  {rental.checkedOutAt && (
+                    <div className="relative mb-4">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-amber-500 ring-4 ring-amber-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Checked Out</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.checkedOutAt)}</p>
+                    </div>
+                  )}
+                  {rental.returnedAt && (
+                    <div className="relative mb-4">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Returned</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.returnedAt)}</p>
+                    </div>
+                  )}
+                  {rental.cancelledAt && (
+                    <div className="relative mb-0">
+                      <div className="absolute -left-6 top-1 w-2 h-2 rounded-full bg-red-500 ring-4 ring-red-500/20" />
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Cancelled</p>
+                      <p className="text-sm font-medium text-slate-200">{fmtTime(rental.cancelledAt)}</p>
+                    </div>
+                  )}
+                </div>
+              </SectionCard>
+            </div>
+
             {/* PAYMENTS SECTION */}
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               className="w-full rounded-xl sm:rounded-[2rem] bg-slate-900/60 backdrop-blur-md border border-slate-700/50 shadow-2xl p-3 sm:p-6"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b border-slate-800 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3 sm:mb-5 border-b border-slate-800 pb-3 sm:pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                    <CreditCard className="h-6 w-6 text-emerald-400" />
+                  <div className="p-2 sm:p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                    <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-400" />
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-2xl font-bold text-slate-100 tracking-tight">Financials & Payments</h2>
-                    <p className="text-sm text-slate-400 font-medium mt-0.5">Track all transactions for this booking</p>
+                    <h2 className="text-base sm:text-2xl font-bold text-slate-100 tracking-tight">Financials & Payments</h2>
+                    <p className="hidden sm:block text-xs sm:text-sm text-slate-400 font-medium mt-0.5">Track all transactions for this booking</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-3">
-                  <Link to={`/invoice/${rental._id}`} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-sm transition-all shadow-sm">
+                <div className="flex flex-col xs:flex-row items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
+                  <Link to={`/invoice/${rental._id}`} className="w-full xs:w-auto flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs sm:text-sm transition-all shadow-sm">
                     <FileText className="h-4 w-4 text-primary-400" /> View Invoice
                   </Link>
                   {canManage && !['cancelled'].includes(rental.status) && (
-                    <button onClick={() => setShowPaymentModal(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-600/20">
+                    <button onClick={() => setShowPaymentModal(true)} className="w-full xs:w-auto flex items-center justify-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-emerald-600/20">
                       <PlusCircle className="h-4 w-4" /> Record Payment
                     </button>
                   )}
@@ -347,28 +388,28 @@ const RentalDetail = () => {
                   
                   {/* Summary Metrics */}
                   <div className="md:col-span-5 flex flex-col gap-2 sm:gap-3">
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-emerald-900/20 border border-emerald-500/20 relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform"><ArrowDownLeft className="w-16 h-16" /></div>
-                      <p className="text-sm font-bold text-emerald-400/80 uppercase tracking-widest mb-1 relative z-10">Total Paid</p>
-                      <p className="text-xl sm:text-3xl font-black text-emerald-400 relative z-10">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
+                    <div className="p-2.5 sm:p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-emerald-900/20 border border-emerald-500/20 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform"><ArrowDownLeft className="w-12 h-12 sm:w-16 sm:h-16" /></div>
+                      <p className="text-[10px] sm:text-sm font-bold text-emerald-400/80 uppercase tracking-widest mb-0.5 sm:mb-1 relative z-10">Total Paid</p>
+                      <p className="text-lg sm:text-3xl font-black text-emerald-400 relative z-10">₹{(paymentData.summary?.netPaid || 0).toFixed(2)}</p>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                      <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 relative overflow-hidden">
-                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Total Due</p>
-                        <p className="text-xl font-black text-slate-200">₹{(rental.totalAmount || 0).toFixed(2)}</p>
+                      <div className="p-2.5 sm:p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 relative overflow-hidden">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5 sm:mb-1">Total Due</p>
+                        <p className="text-base sm:text-xl font-black text-slate-200">₹{(rental.totalAmount || 0).toFixed(2)}</p>
                       </div>
-                      <div className={`p-4 rounded-2xl border relative overflow-hidden ${
+                      <div className={`p-2.5 sm:p-4 rounded-2xl border relative overflow-hidden ${
                         (paymentData.summary?.balance || 0) > 0 
                           ? 'bg-gradient-to-br from-red-500/10 to-red-900/20 border-red-500/20' 
                           : 'bg-gradient-to-br from-blue-500/10 to-blue-900/20 border-blue-500/20'
                       }`}>
-                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${
+                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-0.5 sm:mb-1 ${
                           (paymentData.summary?.balance || 0) > 0 ? 'text-red-400/80' : 'text-blue-400/80'
                         }`}>
                           {(paymentData.summary?.balance || 0) > 0 ? 'Balance' : 'Fully Paid'}
                         </p>
-                        <p className={`text-xl font-black ${
+                        <p className={`text-base sm:text-xl font-black ${
                           (paymentData.summary?.balance || 0) > 0 ? 'text-red-400' : 'text-blue-400'
                         }`}>
                           ₹{(paymentData.summary?.balance || 0).toFixed(2)}
@@ -384,14 +425,14 @@ const RentalDetail = () => {
                     </div>
                     
                     {paymentData.payments.length === 0 ? (
-                      <div className="p-8 text-center flex flex-col items-center">
-                        <div className="w-12 h-12 rounded-full bg-slate-800/50 flex items-center justify-center mb-3"><CreditCard className="h-6 w-6 text-slate-600" /></div>
-                        <p className="text-sm font-medium text-slate-300">No payments yet</p>
+                      <div className="p-5 sm:p-8 text-center flex flex-col items-center">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-800/50 flex items-center justify-center mb-2 sm:mb-3"><CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-slate-600" /></div>
+                        <p className="text-xs sm:text-sm font-medium text-slate-300">No payments yet</p>
                       </div>
                     ) : (
                       <div className="divide-y divide-slate-800/60 max-h-[300px] overflow-y-auto custom-scrollbar">
                         {paymentData.payments.map((p) => (
-                          <div key={p._id} className="flex items-center justify-between px-5 py-3 hover:bg-slate-800/40 transition-colors group">
+                          <div key={p._id} className="flex items-center justify-between px-3 py-2 sm:px-5 sm:py-3 hover:bg-slate-800/40 transition-colors group">
                             <div className="flex items-center gap-3">
                               <div className={`p-2 rounded-full ${p.direction === 'outbound' ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
                                 {p.direction === 'outbound' ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownLeft className="h-4 w-4" />}
@@ -431,10 +472,10 @@ const RentalDetail = () => {
               <motion.div 
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-slate-900/60 backdrop-blur-md border border-primary-500/30 rounded-2xl p-5 shadow-2xl relative overflow-hidden"
+                className="order-last lg:order-none bg-slate-900/60 backdrop-blur-md border border-primary-500/30 rounded-2xl p-3 sm:p-5 shadow-2xl relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-transparent pointer-events-none" />
-                <h3 className="text-sm font-bold text-primary-400 uppercase tracking-widest mb-4 relative z-20 flex items-center gap-2">
+                <h3 className="text-sm font-bold text-primary-400 uppercase tracking-widest mb-3 sm:mb-4 relative z-20 flex items-center gap-2">
                   <RotateCcw className="h-4 w-4" /> Quick Actions
                 </h3>
                 
@@ -506,7 +547,8 @@ const RentalDetail = () => {
                 </div>
               </motion.div>
 
-              {/* STATUS TIMELINE (moved from main content) */}
+              {/* STATUS TIMELINE — desktop sidebar only */}
+              <div className="hidden lg:block">
               <SectionCard title="Status Timeline" icon={RotateCcw}>
                 <div className="relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-700/50 pl-8">
                   <div className="relative mb-4">
@@ -544,6 +586,7 @@ const RentalDetail = () => {
                   )}
                 </div>
               </SectionCard>
+              </div>
 
               <SectionCard title="Rental Period" icon={Calendar}>
                 <div className="space-y-1">

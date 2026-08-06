@@ -127,18 +127,18 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
       <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary-900/30 border border-primary-800">
-              <Package className="h-5 w-5 text-primary-400" />
+        <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-slate-800 shrink-0 gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-primary-900/30 border border-primary-800 shrink-0">
+              <Package className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400" />
             </div>
-            <div>
-              <h2 className="text-base font-semibold text-slate-100">Book Equipment</h2>
-              <p className="text-xs text-slate-400 truncate max-w-[250px]">{equipment.name}</p>
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-base font-semibold text-slate-100">Book Equipment</h2>
+              <p className="text-[10px] sm:text-xs text-slate-400 truncate max-w-[150px] sm:max-w-[250px]">{equipment.name}</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 transition-colors">
-            <X className="h-5 w-5" />
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 transition-colors shrink-0 p-1">
+            <X className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
 

@@ -74,17 +74,6 @@ const EditModal = ({ customer, onClose, onSaved }) => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">Phone</label>
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+1 234 567 8900"
-              className="w-full px-4 py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 placeholder-slate-500"
-            />
-          </div>
-
           {isAdmin && (
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1.5">Account Status</label>
@@ -140,15 +129,12 @@ const CustomerList = () => {
 
   useEffect(() => { loadCustomers(); }, [loadCustomers]);
 
-  const isInitialPageRef = useRef(true);
+  const prevPageRef = useRef(page);
   useEffect(() => {
-    if (isInitialPageRef.current) {
-      isInitialPageRef.current = false;
-      return;
-    }
-    const main = document.querySelector('main');
+    if (prevPageRef.current === page) return;
+    prevPageRef.current = page;
+    const main = document.getElementById('main-content');
     if (main) main.scrollTop = 0;
-    window.scrollTo(0, 0);
   }, [page]);
 
   const handleSearch = (e) => {
@@ -201,7 +187,7 @@ const CustomerList = () => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search by name, email, or phone..."
+                placeholder="Search customers"
                 className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
@@ -218,7 +204,7 @@ const CustomerList = () => {
             </button>
           </form>
 
-          <div className="w-[170px]">
+          <div className="w-full md:w-[170px]">
             <CustomDropdown
               icon={Activity}
               value={statusFilter}

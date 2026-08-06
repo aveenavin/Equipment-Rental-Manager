@@ -366,7 +366,7 @@ const MaintenanceLogs = () => {
       <div className="w-full px-2 sm:px-4 lg:px-6 xl:px-8 py-6">
 
         {/* Header */}
-        <div className="flex items-start justify-between mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500 drop-shadow-sm pb-1">Maintenance Logs</h1>
             <p className="text-slate-500 text-xs mt-1">
@@ -376,7 +376,7 @@ const MaintenanceLogs = () => {
           <Button
             variant="primary"
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             <Plus className="h-4 w-4" />
             New Log
@@ -466,24 +466,24 @@ const MaintenanceLogs = () => {
                     {logs.map((log) => (
                       <tr key={log._id} className="hover:bg-slate-800/40 transition-colors">
                         {/* Equipment */}
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2.5">
-                            <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <div className="flex items-center gap-2">
+                            <div className="h-7 w-8 sm:h-8 sm:w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
                               {log.equipment?.images?.[0] ? (
                                 <img
                                   src={log.equipment.images[0].url}
                                   alt={log.equipment.name}
-                                  className="h-full w-full object-contain p-1"
+                                  className="h-full w-full object-contain p-0.5 sm:p-1"
                                 />
                               ) : (
                                 <div className="h-full w-full flex items-center justify-center">
-                                  <Package className="h-4 w-4 text-slate-600" />
+                                  <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-600" />
                                 </div>
                               )}
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-slate-100 leading-tight">{log.equipment?.name}</p>
-                              <p className="text-[11px] text-slate-500 capitalize">{log.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-xs sm:text-sm font-semibold text-slate-100 leading-tight">{log.equipment?.name}</p>
+                              <p className="text-[10px] sm:text-[11px] text-slate-500 capitalize">{log.equipment?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>

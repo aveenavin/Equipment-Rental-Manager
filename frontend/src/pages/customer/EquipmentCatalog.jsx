@@ -87,12 +87,10 @@ const EquipmentCatalog = () => {
 
   useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
-  const isInitialPageRef = useRef(true);
+  const prevPageRef = useRef(page);
   useEffect(() => {
-    if (isInitialPageRef.current) {
-      isInitialPageRef.current = false;
-      return;
-    }
+    if (prevPageRef.current === page) return;
+    prevPageRef.current = page;
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
       mainContent.scrollTo({ top: 0, behavior: 'smooth' });
@@ -122,7 +120,7 @@ const EquipmentCatalog = () => {
         <h1 className="text-3xl sm:text-4xl tracking-tight drop-shadow-sm pb-1">
           <span className="font-extrabold text-slate-100">Equipment</span> <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Catalog</span>
         </h1>
-        <p className="text-slate-400 font-medium text-[15px] mt-2 max-w-xl leading-relaxed">
+        <p className="text-slate-400 font-medium text-xs sm:text-[15px] mt-1 sm:mt-2 max-w-xl leading-relaxed">
           Browse {pagination.total} available item{pagination.total !== 1 ? 's' : ''} ready to rent
         </p>
       </div>
@@ -157,11 +155,11 @@ const EquipmentCatalog = () => {
           </button>
         </form>
 
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative w-full md:w-auto" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center justify-between gap-3 min-w-[220px] px-5 py-3 rounded-[16px] bg-slate-900 border border-slate-800 hover:border-slate-600 hover:bg-slate-800/50 text-slate-100 text-[15px] font-semibold shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+            className="flex items-center justify-between gap-3 w-full md:min-w-[220px] px-5 py-3 rounded-[16px] bg-slate-900 border border-slate-800 hover:border-slate-600 hover:bg-slate-800/50 text-slate-100 text-[15px] font-semibold shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-orange-500/50"
           >
             <div className="flex items-center gap-3">
               <SlidersHorizontal className="h-4 w-4 text-orange-500" />
@@ -173,7 +171,7 @@ const EquipmentCatalog = () => {
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute z-50 right-0 mt-2 w-[220px] bg-white rounded-2xl shadow-2xl shadow-black/10 border border-slate-100 p-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute z-50 left-0 right-0 md:left-auto md:right-0 mt-2 md:w-[220px] bg-white rounded-2xl shadow-2xl shadow-black/10 border border-slate-100 p-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
               {CATEGORIES.map((c) => {
                 const Icon = c.icon;
                 const isSelected = category === c.value;
@@ -228,7 +226,7 @@ const EquipmentCatalog = () => {
                 className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
               >
                 {/* Image */}
-                <div className="aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
+                <div className="aspect-[8/5] sm:aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
                   {item.images?.[0] ? (
                     <img
                       src={item.images[0].url}
@@ -246,39 +244,39 @@ const EquipmentCatalog = () => {
                 </div>
 
                 {/* Card body */}
-                <div className="p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950">
+                <div className="p-1.5 sm:p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950 min-w-0">
 
                   {/* Category */}
-                  <div className="mb-2.5">
-                    <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
+                  <div className="mb-1.5 sm:mb-2.5">
+                    <span className="inline-flex items-center px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] font-bold uppercase tracking-wider sm:tracking-widest bg-orange-500/10 text-orange-600 border border-orange-500/20">
                       {item.category?.replace(/-/g, ' ')}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-slate-100 text-[15px] sm:text-[17px] leading-snug line-clamp-2 mb-4 group-hover:text-orange-500 transition-colors">
+                  <h3 className="font-bold text-slate-100 text-[12px] sm:text-[15px] md:text-[17px] leading-snug line-clamp-1 sm:line-clamp-2 mb-2 sm:mb-4 group-hover:text-orange-500 transition-colors">
                     {item.name}
                   </h3>
 
                   {/* Pricing Box */}
-                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-xl p-2 sm:p-3 mb-4 shadow-inner flex items-center justify-between">
-                    <div>
-                      <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
-                      <p className="text-lg sm:text-xl font-black text-orange-500 leading-none">
-                        ₹{item.dailyRate}<span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 ml-1">/day</span>
+                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-lg sm:rounded-xl p-1.5 sm:p-3 mb-2 sm:mb-4 shadow-inner flex items-center justify-between overflow-hidden min-w-0">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
+                      <p className="text-sm sm:text-lg md:text-xl font-black text-orange-500 leading-none truncate">
+                        ₹{item.dailyRate}<span className="text-[9px] sm:text-[11px] font-semibold text-slate-400 ml-0.5 sm:ml-1">/day</span>
                       </p>
                     </div>
-                    <div className="w-[1px] h-6 sm:h-8 bg-slate-800 mx-1.5 sm:mx-2" />
-                    <div className="text-right">
-                      <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
-                      <p className="text-xs sm:text-sm font-bold text-slate-300 leading-none mt-1">₹{item.securityDeposit}</p>
+                    <div className="w-[1px] h-6 sm:h-8 bg-slate-800 mx-1 sm:mx-2 shrink-0" />
+                    <div className="text-right min-w-0 flex-1">
+                      <p className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Deposit</p>
+                      <p className="text-[11px] sm:text-sm font-bold text-slate-300 leading-none mt-1 truncate">₹{item.securityDeposit}</p>
                     </div>
                   </div>
 
                   {/* Book Button */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleBook(item); }}
-                    className="w-full relative z-10 group/btn flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[13px] sm:text-sm font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                    className="w-full relative z-10 group/btn flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[11px] sm:text-sm font-bold rounded-lg sm:rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                     <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" />
@@ -425,7 +423,7 @@ const EquipmentCatalog = () => {
             >
               {stat.icon}
             </motion.span>
-            <span className={`text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r ${stat.text} tracking-tight drop-shadow-sm`}>
+            <span className={`text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r ${stat.text} tracking-tight drop-shadow-sm`}>
               <CountUp to={stat.end} suffix={stat.suffix} />
             </span>
             <span className="text-slate-300 text-xs font-semibold mt-1 tracking-wide uppercase">{stat.label}</span>

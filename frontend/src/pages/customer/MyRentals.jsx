@@ -66,19 +66,19 @@ const StatCard = ({ icon: Icon, label, value, bg, borderColor, iconColor, index 
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.3 }}
     transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
-    className={`relative overflow-hidden flex items-center p-4 rounded-2xl bg-gradient-to-br ${bg} border ${borderColor} shadow-lg hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 transition-all duration-300 group`}
+    className={`relative overflow-hidden flex items-center p-2.5 sm:p-4 rounded-2xl bg-gradient-to-br ${bg} border ${borderColor} shadow-lg hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 transition-all duration-300 group`}
   >
     {/* Decorative inner glass effect */}
     <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors duration-500" />
 
-    <div className={`p-3 rounded-xl bg-slate-900/50 shrink-0 border ${borderColor} shadow-inner mr-4 relative z-10 backdrop-blur-sm group-hover:bg-slate-900/80 transition-all duration-300`}>
-      <Icon className={`h-5 w-5 ${iconColor}`} />
+    <div className={`p-2 sm:p-3 rounded-xl bg-slate-900/50 shrink-0 border ${borderColor} shadow-inner mr-2.5 sm:mr-4 relative z-10 backdrop-blur-sm group-hover:bg-slate-900/80 transition-all duration-300`}>
+      <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${iconColor}`} />
     </div>
 
-    <div className="flex flex-col relative z-10">
-      <p className="text-[11px] text-slate-400 font-bold uppercase tracking-wider leading-tight mb-1">{label}</p>
-      <p className="text-2xl font-black tracking-tight text-black/70 drop-shadow-sm leading-none">
+    <div className="flex flex-col relative z-10 min-w-0">
+      <p className="text-[9px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider leading-tight mb-0.5 sm:mb-1 truncate">{label}</p>
+      <p className="text-base sm:text-2xl font-black tracking-tight text-black/70 drop-shadow-sm leading-none truncate">
         <CountUp to={value} isCurrency={isCurrency} />
       </p>
     </div>
@@ -160,8 +160,8 @@ const RentalCard = ({ rental, onCancel }) => {
       <div className="flex flex-col md:flex-row h-full relative z-10">
 
         {/* ── Equipment preview area ──────────────────────────────────────── */}
-        <div className="md:w-[270px] p-4 pr-2 sm:p-5 sm:pr-3 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-center bg-slate-900/30 shrink-0">
-          <div className="relative w-full flex-1 my-1 sm:my-1.5 min-h-[180px] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-slate-700/50">
+        <div className="md:w-[270px] p-2.5 pr-1.5 sm:p-5 sm:pr-3 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-center bg-slate-900/30 shrink-0">
+          <div className="relative w-full flex-1 my-1 sm:my-1.5 min-h-[96px] sm:min-h-[180px] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-slate-700/50">
             {rental.equipment?.images?.[0] ? (
               <img
                 src={rental.equipment.images[0].url}
@@ -182,20 +182,20 @@ const RentalCard = ({ rental, onCancel }) => {
         </div>
 
         {/* ── Main content ────────────────────────────────────────────────── */}
-        <div className="flex-1 flex flex-col min-w-0 p-4 pl-2 sm:p-5 sm:pl-3">
+        <div className="flex-1 flex flex-col min-w-0 p-2 pl-1.5 sm:p-5 sm:pl-3">
 
           {/* Top row: badge + details */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-3 mb-1.5 sm:mb-3">
             <div className="min-w-0">
-              <h3 className="text-[24px] font-semibold text-slate-200 tracking-tight leading-snug line-clamp-1 mb-1.5">
+              <h3 className="text-sm sm:text-base font-semibold text-slate-200 tracking-tight leading-snug line-clamp-1 mb-0.5 sm:mb-1.5">
                 {rental.equipment?.name}
               </h3>
-              <div className="flex items-center gap-2">
-                <p className="text-sm font-medium text-slate-400">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <p className="text-xs sm:text-sm font-medium text-slate-400">
                   Booking <span className="text-slate-300">#{rental._id.slice(-8).toUpperCase()}</span>
                 </p>
-                <span className="h-1 w-1 rounded-full bg-slate-600" />
-                <p className="text-sm text-slate-500">
+                <span className="hidden sm:block h-1 w-1 rounded-full bg-slate-600" />
+                <p className="text-xs sm:text-sm text-slate-500">
                   Placed on {fmt(rental.createdAt)}
                 </p>
               </div>
@@ -206,42 +206,42 @@ const RentalCard = ({ rental, onCancel }) => {
           </div>
 
           {/* Metadata grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 bg-slate-950/50 rounded-xl p-3 border border-slate-800/60 shadow-inner">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 sm:gap-3 mb-2 sm:mb-4 bg-slate-950/50 rounded-xl p-2 sm:p-3 border border-slate-800/60 shadow-inner">
             {/* Dates */}
             <div className="flex flex-col">
-              <div className="flex items-center gap-1.5 mb-1 text-slate-400">
-                <Calendar className="h-3.5 w-3.5 text-orange-400" />
-                <span className="text-xs font-bold uppercase tracking-wider">Rental Period</span>
+              <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1 text-slate-400">
+                <Calendar className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-orange-400" />
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Rental Period</span>
               </div>
-              <p className="font-semibold text-slate-200 text-sm">{fmt(rental.startDate)}</p>
-              <p className="text-slate-500 text-[13px]">to {fmt(rental.endDate)}</p>
+              <p className="font-semibold text-slate-200 text-xs sm:text-sm">{fmt(rental.startDate)}</p>
+              <p className="text-slate-500 text-[11px] sm:text-[13px]">to {fmt(rental.endDate)}</p>
             </div>
 
             {/* Duration */}
             <div className="flex flex-col sm:border-l sm:border-slate-800 sm:pl-3">
-              <div className="flex items-center gap-1.5 mb-1 text-slate-400">
-                <Clock className="h-3.5 w-3.5 text-orange-400" />
-                <span className="text-xs font-bold uppercase tracking-wider">Duration</span>
+              <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1 text-slate-400">
+                <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-orange-400" />
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Duration</span>
               </div>
-              <p className="font-semibold text-slate-200 text-sm">
+              <p className="font-semibold text-slate-200 text-xs sm:text-sm">
                 {rental.totalDays} day{rental.totalDays !== 1 ? 's' : ''}
               </p>
-              <p className="text-slate-500 text-[13px]">{fmtCurrency(rental.dailyRate)} / day</p>
+              <p className="text-slate-500 text-[11px] sm:text-[13px]">{fmtCurrency(rental.dailyRate)} / day</p>
             </div>
 
             {/* Amount */}
-            <div className="flex flex-col sm:border-l sm:border-slate-800 sm:pl-3">
-              <div className="flex items-center gap-1.5 mb-1 text-slate-400">
-                <DollarSign className="h-3.5 w-3.5 text-orange-400" />
-                <span className="text-xs font-bold uppercase tracking-wider">Total Amount</span>
+            <div className="flex flex-col col-span-2 sm:col-span-1 mt-1 sm:mt-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-800/60 sm:border-l sm:border-slate-800 sm:pl-3">
+              <div className="flex items-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1 text-slate-400">
+                <DollarSign className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-orange-400" />
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Total Amount</span>
               </div>
-              <p className="font-bold text-orange-400 text-lg leading-tight">{fmtCurrency(rental.totalAmount)}</p>
-              <p className="text-slate-500 text-xs mt-0.5">Deposit: {fmtCurrency(rental.securityDeposit)}</p>
+              <p className="font-bold text-orange-400 text-base sm:text-lg leading-tight">{fmtCurrency(rental.totalAmount)}</p>
+              <p className="text-slate-500 text-[10px] sm:text-xs mt-0.5">Deposit: {fmtCurrency(rental.securityDeposit)}</p>
             </div>
           </div>
 
           {/* Timeline and Actions row */}
-          <div className="mt-4 pt-4 border-t border-slate-800/60 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="mt-1.5 sm:mt-4 pt-1.5 sm:pt-4 border-t border-slate-800/60 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-6">
             {/* Left side: Timeline or Cancelled notice */}
             <div className="flex-1 min-w-0 md:pr-10 md:border-r md:border-slate-700">
               {rental.status !== 'cancelled' ? (
@@ -262,17 +262,17 @@ const RentalCard = ({ rental, onCancel }) => {
               {rental.status === 'pending' && (
                 <button
                   onClick={() => onCancel(rental)}
-                  className="flex items-center justify-center gap-2 text-[13.5px] font-semibold text-slate-400 hover:text-red-400 transition-colors w-full px-4 py-3 rounded-xl hover:bg-red-500/10 border border-slate-700 hover:border-red-500/30"
+                  className="flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13.5px] font-semibold text-slate-400 hover:text-red-400 transition-colors w-full px-2 py-1.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl hover:bg-red-500/10 border border-slate-700 hover:border-red-500/30"
                 >
-                  <XCircle className="h-4.5 w-4.5 shrink-0" />
+                  <XCircle className="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5 shrink-0" />
                   Cancel
                 </button>
               )}
               <Link
                 to={`/my-rentals/${rental._id}`}
-                className="flex items-center justify-center gap-2 text-[13.5px] font-semibold text-blue-500 bg-slate-800 hover:bg-slate-700 transition-all duration-200 w-full px-4 py-3 rounded-xl border border-slate-700 hover:border-slate-500 shadow-md group/link"
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13.5px] font-semibold text-blue-500 bg-slate-800 hover:bg-slate-700 transition-all duration-200 w-full px-2 py-1.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl border border-slate-700 hover:border-slate-500 shadow-md group/link"
               >
-                <ExternalLink className="h-4 w-4 text-slate-400 group-hover/link:text-orange-400 transition-colors shrink-0" />
+                <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover/link:text-orange-400 transition-colors shrink-0" />
                 View Details
               </Link>
             </div>
@@ -384,12 +384,12 @@ const MyRentals = () => {
           <h1 className="text-3xl sm:text-4xl tracking-tight drop-shadow-sm pb-1">
             <span className="font-extrabold text-slate-100">My</span> <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Rentals</span>
           </h1>
-          <p className="text-slate-400 font-medium text-[15px] mt-2 max-w-xl leading-relaxed">
+          <p className="text-slate-400 font-medium text-xs sm:text-[15px] mt-1 sm:mt-2 max-w-xl leading-relaxed">
             Track and manage all your equipment bookings. View status, details, and history in one place.
           </p>
         </div>
-        <Link to="/catalog">
-          <Button variant="primary" size="lg" className="flex items-center gap-2 shrink-0 rounded-xl shadow-lg shadow-orange-500/20 px-6">
+        <Link to="/catalog" className="w-full sm:w-auto">
+          <Button variant="primary" size="lg" className="w-full sm:w-auto flex items-center justify-center gap-2 shrink-0 rounded-xl shadow-lg shadow-orange-500/20 px-6">
             <Package className="h-5 w-5" />
             Browse Catalog
             <ArrowRight className="h-5 w-5 ml-1" />

@@ -166,20 +166,20 @@ const AdminReturns = () => {
                     {returns.map((ret) => (
                       <tr key={ret._id} className="hover:bg-slate-800/40 transition-colors">
                         {/* Equipment */}
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2.5">
-                            <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
+                        <td className="px-3 sm:px-4 py-2 sm:py-3">
+                          <div className="flex items-center gap-2">
+                            <div className="h-7 w-8 sm:h-8 sm:w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
                               {ret.equipment?.images?.[0] ? (
-                                <img src={ret.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
+                                <img src={ret.equipment.images[0].url} alt="" className="w-full h-full object-contain p-0.5 sm:p-1" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <Package className="h-4 w-4 text-slate-600" />
+                                  <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-600" />
                                 </div>
                               )}
                             </div>
                             <div>
-                              <p className="text-sm font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
-                              <p className="text-xs text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-xs sm:text-sm font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
+                              <p className="text-[10px] sm:text-xs text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>

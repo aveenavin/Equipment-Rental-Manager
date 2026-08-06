@@ -103,7 +103,7 @@ const EquipmentDetail = () => {
         </>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative z-10 lg:h-[calc(100vh-2rem)] flex flex-col">
+      <div className="max-w-7xl mx-auto px-1.5 sm:px-6 lg:px-8 pt-6 relative z-10 lg:h-[calc(100vh-2rem)] flex flex-col">
 
 
 
@@ -157,17 +157,17 @@ const EquipmentDetail = () => {
               <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between shrink-0">
                 <Link
                   to={canManage ? "/admin/equipment" : "/catalog"}
-                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-100 transition-colors bg-slate-900/50 px-4 py-2 rounded-xl border border-slate-700/50 backdrop-blur-md hover:bg-slate-800"
+                  className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-100 transition-colors bg-slate-900/50 px-4 py-2 rounded-xl border border-slate-700/50 backdrop-blur-md hover:bg-slate-800"
                 >
                   <ArrowLeft className="h-4 w-4" /> Back to Inventory
                 </Link>
 
                 {canManage && (
-                  <div className="flex gap-2">
-                    <Button variant="secondary" className="flex items-center gap-2 px-4 py-2 rounded-xl border-slate-700 font-bold" onClick={() => setShowEditModal(true)}>
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <Button variant="secondary" className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl border-slate-700 font-bold text-xs sm:text-sm" onClick={() => setShowEditModal(true)}>
                       <Pencil className="h-3.5 w-3.5" /> Edit
                     </Button>
-                    <Button variant="danger" className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold shadow-lg shadow-red-500/20" onClick={() => setShowDeleteConfirm(true)}>
+                    <Button variant="danger" className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-xl font-bold shadow-lg shadow-red-500/20 text-xs sm:text-sm" onClick={() => setShowDeleteConfirm(true)}>
                       <Trash2 className="h-3.5 w-3.5" /> Delete
                     </Button>
                   </div>
@@ -177,7 +177,7 @@ const EquipmentDetail = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-bold text-primary-400 uppercase tracking-widest mb-1.5">{equipment.category?.replace(/-/g, ' ')}</p>
-                    <h1 className="text-3xl font-black text-slate-100 leading-tight mb-3">{equipment.name}</h1>
+                    <h1 className="text-base sm:text-3xl font-black text-slate-100 leading-tight mb-3">{equipment.name}</h1>
                     <div className="flex flex-wrap gap-2">
                       <StatusBadge status={equipment.status} />
                       <ConditionBadge condition={equipment.condition} />
@@ -186,7 +186,7 @@ const EquipmentDetail = () => {
                   {equipment.serialNumber && (
                     <div className="text-right">
                       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Serial</p>
-                      <p className="text-sm font-mono font-bold text-slate-300 bg-slate-950/50 px-2 py-1 rounded border border-slate-800">{equipment.serialNumber}</p>
+                      <p className="text-[9px] sm:text-sm font-mono font-bold text-slate-300 bg-slate-950/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-slate-800 truncate max-w-[100px] sm:max-w-none">{equipment.serialNumber}</p>
                     </div>
                   )}
                 </div>
@@ -232,10 +232,10 @@ const EquipmentDetail = () => {
                 <div className="mt-1 mb-1 shrink-0 relative z-10">
                   <button
                     onClick={handleBook}
-                    className="w-full relative group/btn flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-base font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                    className="w-full relative group/btn flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2.5 sm:py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm sm:text-base font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
-                    <ShoppingCart className="h-5 w-5 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" />
+                    <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" />
                     <span className="relative z-10 tracking-wide">Book Now</span>
                   </button>
                 </div>
