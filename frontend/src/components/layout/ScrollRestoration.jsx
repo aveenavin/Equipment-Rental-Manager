@@ -123,35 +123,88 @@ const ScrollRestoration = () => {
       ? (snapshotRef.current[pathname] ?? positionsRef.current[pathname] ?? 0)
       : 0;
 
-    const applyScroll = () => {
-      const el = document.getElementById('main-content');
-      if (el) {
-        el.scrollTop = target;
-      } else {
-        window.scrollTo(0, target);
-      }
+    const el = document.getElementById('main-content');
+    let settled = false;
+    let observer = null;
+    let safetyTimeout = null;
+    let debounceTimeout = null;
+
+    // Forward navigation or target is 0 — scroll to top immediately
+    if (target === 0) {
+      requestAnimationFrame(() => {
+        if (el) {
+          el.scrollTop = 0;
+        } else {
+          window.scrollTo(0, 0);
+        }
+        isNavigatingRef.current = false;
+      });
+
+      prevPathRef.current = pathname;
+
+      return () => { isNavigatingRef.current = false; };
+    }
+
+    // ── Content-aware restoration for back navigation ──────────────
+    // Instead of blind timer retries (which overshoot on mobile when
+    // content hasn't loaded yet), we use a MutationObserver to watch
+    // for DOM changes and only restore when the container is actually
+    // tall enough to accommodate the target scroll position.
+
+    const tryRestore = () => {
+      if (settled || !el) return;
+
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        if (settled) return;
+
+        const maxScroll = el.scrollHeight - el.clientHeight;
+
+        // Only set scrollTop when content is tall enough — this
+        // prevents the "shows footer" overshoot on mobile
+        if (maxScroll >= target) {
+          el.scrollTop = target;
+          settled = true;
+          isNavigatingRef.current = false;
+          if (observer) observer.disconnect();
+          clearTimeout(safetyTimeout);
+        }
+      }, 50);
     };
 
-    // Apply after paint, then clear the navigation guard
-    const rafId = requestAnimationFrame(() => {
-      applyScroll();
-      isNavigatingRef.current = false;
-    });
+    // First attempt after paint
+    requestAnimationFrame(tryRestore);
 
-    // Retry for pages with async content
-    let t1, t2;
-    if (shouldRestore && target > 0) {
-      t1 = setTimeout(applyScroll, 200);
-      t2 = setTimeout(applyScroll, 500);
+    // Watch for DOM changes (async data loading, skeleton → real content)
+    if (el) {
+      observer = new MutationObserver(tryRestore);
+      observer.observe(el, { childList: true, subtree: true });
     }
+
+    // Safety: stop watching after 3s and do a best-effort restore
+    safetyTimeout = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        isNavigatingRef.current = false;
+        if (observer) observer.disconnect();
+        // Final best-effort — clamp to max available scroll
+        if (el) {
+          const maxScroll = el.scrollHeight - el.clientHeight;
+          if (maxScroll > 0) {
+            el.scrollTop = Math.min(target, maxScroll);
+          }
+        }
+      }
+    }, 3000);
 
     prevPathRef.current = pathname;
 
     return () => {
-      cancelAnimationFrame(rafId);
-      if (t1) clearTimeout(t1);
-      if (t2) clearTimeout(t2);
+      settled = true;
       isNavigatingRef.current = false;
+      clearTimeout(debounceTimeout);
+      clearTimeout(safetyTimeout);
+      if (observer) observer.disconnect();
     };
   }, [pathname]);
 

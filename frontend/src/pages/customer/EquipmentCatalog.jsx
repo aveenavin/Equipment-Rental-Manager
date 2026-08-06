@@ -87,7 +87,12 @@ const EquipmentCatalog = () => {
 
   useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
+  const isInitialPageRef = useRef(true);
   useEffect(() => {
+    if (isInitialPageRef.current) {
+      isInitialPageRef.current = false;
+      return;
+    }
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
       mainContent.scrollTo({ top: 0, behavior: 'smooth' });

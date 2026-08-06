@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
@@ -81,7 +81,12 @@ const EquipmentList = () => {
 
   useEffect(() => { loadEquipment(); }, [loadEquipment]);
 
+  const isInitialPageRef = useRef(true);
   useEffect(() => {
+    if (isInitialPageRef.current) {
+      isInitialPageRef.current = false;
+      return;
+    }
     const main = document.querySelector('main');
     if (main) main.scrollTop = 0;
     window.scrollTo(0, 0);
