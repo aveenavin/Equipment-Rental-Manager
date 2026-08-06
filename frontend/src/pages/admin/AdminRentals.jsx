@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
 import {
   FileText, ChevronLeft, ChevronRight,
@@ -37,7 +38,7 @@ const AdminRentals = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
   const [updatingId, setUpdatingId] = useState(null);
 
   const loadRentals = useCallback(async () => {

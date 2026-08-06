@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
 import {
   Search, X, Users, Eye, Pencil, Trash2,
@@ -118,7 +119,7 @@ const CustomerList = () => {
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
 
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);

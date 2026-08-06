@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import AdminSidebar from '../components/layout/AdminSidebar';
 import AdminHeader from '../components/layout/AdminHeader';
+import ScrollRestoration from '../components/layout/ScrollRestoration';
 
 const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,7 +33,8 @@ const AdminLayout = () => {
           lastUpdated={lastUpdated} 
           setMobileOpen={setMobileOpen} 
         />
-        <main className="flex-1 overflow-y-auto">
+        <main id="main-content" className="flex-1 overflow-y-auto">
+          <ScrollRestoration />
           <Outlet context={{ setLastUpdated }} />
         </main>
       </div>

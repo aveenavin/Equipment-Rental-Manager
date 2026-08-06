@@ -9,6 +9,7 @@ import BookingModal from '../../components/rental/BookingModal';
 import { fetchEquipment } from '../../services/equipmentService';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import useRestoredPage from '../../hooks/useRestoredPage';
 
 const CountUp = ({ to, suffix = '' }) => {
   const ref = useRef(null);
@@ -48,7 +49,7 @@ const EquipmentCatalog = () => {
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
   const [bookingTarget, setBookingTarget] = useState(null);
 
   const dropdownRef = useRef(null);

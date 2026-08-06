@@ -3,6 +3,7 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Wrench, LogOut, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
+import ScrollRestoration from '../components/layout/ScrollRestoration';
 
 const PublicLayout = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -75,6 +76,7 @@ const PublicLayout = () => {
 
       {/* Main Content */}
       <main className="flex-1">
+        <ScrollRestoration />
         <Outlet />
       </main>
 

@@ -2,18 +2,19 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Pencil, Trash2, Package, ChevronLeft, ChevronRight, X, DollarSign, Tag, FileText } from 'lucide-react';
+import { ArrowLeft, Pencil, Trash2, Package, ChevronLeft, ChevronRight, X, DollarSign, Tag, FileText, ShoppingCart } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
 import { StatusBadge, ConditionBadge } from '../../components/equipment/EquipmentBadges';
 import EquipmentForm from '../../components/equipment/EquipmentForm';
+import BookingModal from '../../components/rental/BookingModal';
 import { fetchEquipmentById, deleteEquipment } from '../../services/equipmentService';
 import { useAuth } from '../../context/AuthContext';
 
 const EquipmentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAdmin, isStaff } = useAuth();
+  const { isAuthenticated, isAdmin, isStaff } = useAuth();
   const canManage = isAdmin || isStaff;
 
   const [equipment, setEquipment] = useState(null);
@@ -22,6 +23,7 @@ const EquipmentDetail = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [bookingTarget, setBookingTarget] = useState(null);
 
   const loadEquipment = useCallback(async () => {
     setIsLoading(true);
@@ -53,6 +55,15 @@ const EquipmentDetail = () => {
   const handleEditSuccess = () => {
     setShowEditModal(false);
     loadEquipment();
+  };
+
+  const handleBook = () => {
+    if (!isAuthenticated) {
+      toast.error('Please log in to book equipment.');
+      navigate('/login');
+      return;
+    }
+    setBookingTarget(equipment);
   };
 
   if (isLoading) {
@@ -216,6 +227,20 @@ const EquipmentDetail = () => {
                 </div>
               </motion.div>
 
+              {/* Book Now Button (customer-facing) */}
+              {!canManage && equipment.status === 'available' && (
+                <div className="mt-1 mb-1 shrink-0 relative z-10">
+                  <button
+                    onClick={handleBook}
+                    className="w-full relative group/btn flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-base font-bold rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                  >
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
+                    <ShoppingCart className="h-5 w-5 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" />
+                    <span className="relative z-10 tracking-wide">Book Now</span>
+                  </button>
+                </div>
+              )}
+
             </div>
           </div>
 
@@ -270,10 +295,9 @@ const EquipmentDetail = () => {
               <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Quick Links</h4>
               <ul className="space-y-2 sm:space-y-2.5">
                 {[
-                  { label: 'Dashboard', path: '/admin' },
-                  { label: 'Equipment', path: '/admin/equipment' },
-                  { label: 'Rentals', path: '/admin/rentals' },
-                  { label: 'Customers', path: '/admin/customers' }
+                  { label: 'Browse Catalog', path: '/catalog' },
+                  { label: 'My Rentals', path: '/my-rentals' },
+                  { label: 'Dashboard', path: '/dashboard' }
                 ].map((l) => (
                   <li key={l.label}>
                     <Link
@@ -293,10 +317,10 @@ const EquipmentDetail = () => {
               <h4 className="text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-widest mb-3 sm:mb-4">Legal</h4>
               <ul className="space-y-2 sm:space-y-2.5">
                 {[
-                  { label: 'Admin Policies', path: '/admin/policies' },
-                  { label: 'Security Overview', path: '/admin/security' },
-                  { label: 'API Documentation', path: '/admin/api' },
-                  { label: 'System Status', path: '/admin/status' }
+                  { label: 'Privacy Policy', path: '/privacy' },
+                  { label: 'Terms & Conditions', path: '/terms' },
+                  { label: 'Refund Policy', path: '/refund' },
+                  { label: 'Cookie Policy', path: '/cookie' }
                 ].map((l) => (
                   <li key={l.label}>
                     <Link
@@ -319,6 +343,18 @@ const EquipmentDetail = () => {
           </div>
         </footer>
       </div>
+
+      {/* Booking Modal */}
+      {bookingTarget && (
+        <BookingModal
+          equipment={bookingTarget}
+          onClose={() => setBookingTarget(null)}
+          onBooked={() => {
+            setBookingTarget(null);
+            navigate('/my-rentals');
+          }}
+        />
+      )}
 
       <AnimatePresence>
         {showEditModal && (

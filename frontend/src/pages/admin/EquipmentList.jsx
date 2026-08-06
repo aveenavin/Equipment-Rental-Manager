@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
 import { Plus, Search, Filter, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
@@ -58,7 +59,7 @@ const EquipmentList = () => {
   const [searchInput, setSearchInput] = useState('');
   const [category, setCategory] = useState('');
   const [status, setStatus] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editTarget, setEditTarget] = useState(null);

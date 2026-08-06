@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
 import {
   RotateCcw, Eye, AlertTriangle, CheckCircle,
@@ -42,7 +43,7 @@ const AdminReturns = () => {
   const [damageFilter, setDamageFilter] = useState('');
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
 
   const loadReturns = useCallback(async () => {
     setIsLoading(true);

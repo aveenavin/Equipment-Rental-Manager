@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import CustomerSidebar from '../components/layout/CustomerSidebar';
 import CustomerHeader from '../components/layout/CustomerHeader';
+import ScrollRestoration from '../components/layout/ScrollRestoration';
 
 const CustomerLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -24,6 +25,7 @@ const CustomerLayout = () => {
           setMobileOpen={setMobileOpen}
         />
         <main id="main-content" className="flex-1 overflow-y-auto">
+          <ScrollRestoration />
           <Outlet />
         </main>
       </div>

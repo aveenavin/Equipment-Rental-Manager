@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
 import {
   IndianRupee, ArrowDownLeft, ArrowUpRight,
@@ -40,7 +41,7 @@ const AdminPayments = () => {
   const [typeFilter, setTypeFilter] = useState('');
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
 
   const load = useCallback(async () => {
     setIsLoading(true);

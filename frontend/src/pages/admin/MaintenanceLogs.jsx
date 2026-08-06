@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import useRestoredPage from '../../hooks/useRestoredPage';
 import { toast } from 'react-hot-toast';
 import {
   Wrench, CheckCircle, ChevronLeft, ChevronRight,
@@ -315,7 +316,7 @@ const MaintenanceLogs = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useRestoredPage();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [completeTarget, setCompleteTarget] = useState(null);
 
