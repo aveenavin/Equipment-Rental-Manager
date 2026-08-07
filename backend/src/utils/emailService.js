@@ -108,16 +108,28 @@ const buildVerificationHtml = (name, verifyUrl) => `
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Verify your email</title>
+  <style>
+    @media screen and (max-width: 600px) {
+      .email-container { width: 100% !important; max-width: 100% !important; border-radius: 12px !important; }
+      .wrapper { padding: 20px 10px !important; }
+      .header, .body-content, .footer { padding-left: 20px !important; padding-right: 20px !important; }
+      .header { padding-top: 24px !important; padding-bottom: 20px !important; }
+      .body-content { padding-top: 24px !important; padding-bottom: 24px !important; }
+      .title { font-size: 20px !important; }
+      .text { font-size: 14px !important; }
+      .cta-btn { padding: 12px 24px !important; font-size: 14px !important; }
+    }
+  </style>
 </head>
 <body style="margin:0;padding:0;background-color:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;padding:40px 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" class="wrapper" style="background-color:#0f172a;padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="560" cellpadding="0" cellspacing="0" style="background-color:#1e293b;border-radius:16px;border:1px solid #334155;overflow:hidden;">
+        <table width="100%" cellpadding="0" cellspacing="0" class="email-container" style="max-width:560px;background-color:#1e293b;border-radius:16px;border:1px solid #334155;overflow:hidden;">
 
           <!-- Header -->
           <tr>
-            <td style="padding:32px 40px 24px;border-bottom:1px solid #334155;">
+            <td class="header" style="padding:32px 40px 24px;border-bottom:1px solid #334155;">
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background-color:#ea580c;border-radius:10px;padding:10px 14px;">
@@ -130,9 +142,9 @@ const buildVerificationHtml = (name, verifyUrl) => `
 
           <!-- Body -->
           <tr>
-            <td style="padding:36px 40px;">
-              <h1 style="margin:0 0 8px;color:#f1f5f9;font-size:22px;font-weight:700;">Verify your email address</h1>
-              <p style="margin:0 0 24px;color:#94a3b8;font-size:15px;line-height:1.7;">
+            <td class="body-content" style="padding:36px 40px;">
+              <h1 class="title" style="margin:0 0 8px;color:#f1f5f9;font-size:22px;font-weight:700;">Verify your email address</h1>
+              <p class="text" style="margin:0 0 24px;color:#94a3b8;font-size:15px;line-height:1.7;">
                 Hi <strong style="color:#e2e8f0;">${name}</strong>, thanks for signing up.<br/>
                 Click the button below to verify your email and activate your account.
               </p>
@@ -143,6 +155,7 @@ const buildVerificationHtml = (name, verifyUrl) => `
                   <td style="border-radius:10px;background:linear-gradient(to bottom,#f97316,#ea580c);">
                     <a href="${verifyUrl}"
                        target="_blank"
+                       class="cta-btn"
                        style="display:inline-block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;border-radius:10px;">
                       Verify my email
                     </a>
@@ -150,13 +163,13 @@ const buildVerificationHtml = (name, verifyUrl) => `
                 </tr>
               </table>
 
-              <p style="margin:24px 0 0;color:#64748b;font-size:13px;line-height:1.6;">
+              <p class="text" style="margin:24px 0 0;color:#64748b;font-size:13px;line-height:1.6;">
                 This link expires in <strong style="color:#94a3b8;">30 minutes</strong>.<br/>
                 If you didn't create an account, you can safely ignore this email.
               </p>
 
               <!-- Fallback plain link -->
-              <p style="margin:20px 0 0;color:#475569;font-size:12px;word-break:break-all;">
+              <p class="text" style="margin:20px 0 0;color:#475569;font-size:12px;word-break:break-all;">
                 Button not working? Copy this link into your browser:<br/>
                 <a href="${verifyUrl}" style="color:#f97316;">${verifyUrl}</a>
               </p>
@@ -165,7 +178,7 @@ const buildVerificationHtml = (name, verifyUrl) => `
 
           <!-- Footer -->
           <tr>
-            <td style="padding:20px 40px;border-top:1px solid #334155;">
+            <td class="footer" style="padding:20px 40px;border-top:1px solid #334155;">
               <p style="margin:0;color:#475569;font-size:12px;">
                 &copy; ${new Date().getFullYear()} Rental Management Platform. All rights reserved.
               </p>
@@ -187,16 +200,28 @@ const buildResendHtml = (name, verifyUrl) => `
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New verification link</title>
+  <style>
+    @media screen and (max-width: 600px) {
+      .email-container { width: 100% !important; max-width: 100% !important; border-radius: 12px !important; }
+      .wrapper { padding: 20px 10px !important; }
+      .header, .body-content, .footer { padding-left: 20px !important; padding-right: 20px !important; }
+      .header { padding-top: 24px !important; padding-bottom: 20px !important; }
+      .body-content { padding-top: 24px !important; padding-bottom: 24px !important; }
+      .title { font-size: 20px !important; }
+      .text { font-size: 14px !important; }
+      .cta-btn { padding: 12px 24px !important; font-size: 14px !important; }
+    }
+  </style>
 </head>
 <body style="margin:0;padding:0;background-color:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;padding:40px 20px;">
+  <table width="100%" cellpadding="0" cellspacing="0" class="wrapper" style="background-color:#0f172a;padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="560" cellpadding="0" cellspacing="0" style="background-color:#1e293b;border-radius:16px;border:1px solid #334155;overflow:hidden;">
+        <table width="100%" cellpadding="0" cellspacing="0" class="email-container" style="max-width:560px;background-color:#1e293b;border-radius:16px;border:1px solid #334155;overflow:hidden;">
 
           <!-- Header -->
           <tr>
-            <td style="padding:32px 40px 24px;border-bottom:1px solid #334155;">
+            <td class="header" style="padding:32px 40px 24px;border-bottom:1px solid #334155;">
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background-color:#ea580c;border-radius:10px;padding:10px 14px;">
@@ -209,9 +234,9 @@ const buildResendHtml = (name, verifyUrl) => `
 
           <!-- Body -->
           <tr>
-            <td style="padding:36px 40px;">
-              <h1 style="margin:0 0 8px;color:#f1f5f9;font-size:22px;font-weight:700;">New verification link</h1>
-              <p style="margin:0 0 24px;color:#94a3b8;font-size:15px;line-height:1.7;">
+            <td class="body-content" style="padding:36px 40px;">
+              <h1 class="title" style="margin:0 0 8px;color:#f1f5f9;font-size:22px;font-weight:700;">New verification link</h1>
+              <p class="text" style="margin:0 0 24px;color:#94a3b8;font-size:15px;line-height:1.7;">
                 Hi <strong style="color:#e2e8f0;">${name}</strong>,<br/>
                 Here's your new verification link. Your previous link has been invalidated.
               </p>
@@ -222,6 +247,7 @@ const buildResendHtml = (name, verifyUrl) => `
                   <td style="border-radius:10px;background:linear-gradient(to bottom,#f97316,#ea580c);">
                     <a href="${verifyUrl}"
                        target="_blank"
+                       class="cta-btn"
                        style="display:inline-block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;border-radius:10px;">
                       Verify my email
                     </a>
@@ -229,12 +255,12 @@ const buildResendHtml = (name, verifyUrl) => `
                 </tr>
               </table>
 
-              <p style="margin:24px 0 0;color:#64748b;font-size:13px;line-height:1.6;">
+              <p class="text" style="margin:24px 0 0;color:#64748b;font-size:13px;line-height:1.6;">
                 This link expires in <strong style="color:#94a3b8;">30 minutes</strong>.<br/>
                 If you didn't request this, you can safely ignore this email.
               </p>
 
-              <p style="margin:20px 0 0;color:#475569;font-size:12px;word-break:break-all;">
+              <p class="text" style="margin:20px 0 0;color:#475569;font-size:12px;word-break:break-all;">
                 Button not working? Copy this link into your browser:<br/>
                 <a href="${verifyUrl}" style="color:#f97316;">${verifyUrl}</a>
               </p>
@@ -243,7 +269,7 @@ const buildResendHtml = (name, verifyUrl) => `
 
           <!-- Footer -->
           <tr>
-            <td style="padding:20px 40px;border-top:1px solid #334155;">
+            <td class="footer" style="padding:20px 40px;border-top:1px solid #334155;">
               <p style="margin:0;color:#475569;font-size:12px;">
                 &copy; ${new Date().getFullYear()} Rental Management Platform. All rights reserved.
               </p>
