@@ -163,7 +163,7 @@ const RentalDetail = () => {
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary-500/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-4 sm:pt-8 relative z-10">
         <Link to={backPath} className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-100 transition-colors mb-4 sm:mb-6 bg-slate-900/50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl border border-slate-800 backdrop-blur-md w-fit">
           <ArrowLeft className="h-4 w-4" /> Back to {isCustomer ? 'My Rentals' : 'All Rentals'}
         </Link>
@@ -242,7 +242,7 @@ const RentalDetail = () => {
                       <div className="p-1 rounded-lg bg-slate-800"><User className="h-4 w-4 text-primary-400" /></div>
                       <span className="text-sm font-medium">Name</span>
                     </div>
-                    <span className="text-lg font-black text-right text-slate-100">{rental.customer?.name}</span>
+                    <span className="text-sm sm:text-lg font-black text-right text-slate-100">{rental.customer?.name}</span>
                   </div>
 
                   <div className="flex justify-between items-center py-2 border-b border-slate-700/50 group">
@@ -250,7 +250,7 @@ const RentalDetail = () => {
                       <div className="p-1 rounded-lg bg-slate-800"><Mail className="h-4 w-4 text-primary-400" /></div>
                       <span className="text-sm font-medium">Email</span>
                     </div>
-                    <span className="text-lg font-black text-right text-primary-400">{rental.customer?.email}</span>
+                    <span className="text-xs sm:text-lg font-black text-right text-primary-400 break-all ml-2">{rental.customer?.email}</span>
                   </div>
 
                   {rental.contactNumber && (
@@ -259,7 +259,7 @@ const RentalDetail = () => {
                         <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-emerald-400" /></div>
                         <span className="text-sm font-medium">Booking Contact</span>
                       </div>
-                      <span className="text-lg font-black text-right text-slate-200">{rental.contactNumber}</span>
+                      <span className="text-sm sm:text-lg font-black text-right text-slate-200">{rental.contactNumber}</span>
                     </div>
                   )}
 
@@ -267,40 +267,42 @@ const RentalDetail = () => {
               </SectionCard>
             )}
 
-            {/* Contact number for customer view (non-admin) */}
-            {!canManage && rental.contactNumber && (
-              <SectionCard title="Booking Contact" icon={Phone}>
-                <div className="flex justify-between items-center py-2">
-                  <div className="flex items-center gap-2.5 text-slate-400">
-                    <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-emerald-400" /></div>
-                    <span className="text-sm font-medium">Contact Number</span>
+            <div className="flex flex-col-reverse sm:flex-col gap-3 sm:gap-6">
+              {/* Contact number for customer view (non-admin) */}
+              {!canManage && rental.contactNumber && (
+                <SectionCard title="Booking Contact" icon={Phone}>
+                  <div className="flex justify-between items-center py-2">
+                    <div className="flex items-center gap-2.5 text-slate-400">
+                      <div className="p-1 rounded-lg bg-slate-800"><Phone className="h-4 w-4 text-emerald-400" /></div>
+                      <span className="text-sm font-medium">Contact Number</span>
+                    </div>
+                    <span className="text-sm sm:text-lg font-black text-slate-200">{rental.contactNumber}</span>
                   </div>
-                  <span className="text-lg font-black text-slate-200">{rental.contactNumber}</span>
-                </div>
-              </SectionCard>
-            )}
+                </SectionCard>
+              )}
 
-            {/* DELIVERY ADDRESS (moved from sidebar) */}
-            {rental.deliveryAddress && (
-              <SectionCard title="Delivery Address" icon={Home}>
-                <div className="flex items-start gap-2.5 mt-1">
-                  <div className="p-1.5 rounded-lg bg-slate-800 shrink-0 mt-0.5">
-                    <MapPin className="h-4 w-4 text-orange-400" />
+              {/* DELIVERY ADDRESS (moved from sidebar) */}
+              {rental.deliveryAddress && (
+                <SectionCard title="Delivery Address" icon={Home}>
+                  <div className="flex items-start gap-2.5 mt-1">
+                    <div className="p-1.5 rounded-lg bg-slate-800 shrink-0 mt-0.5">
+                      <MapPin className="h-4 w-4 text-orange-400" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-semibold text-slate-200 leading-snug">
+                        {rental.deliveryAddress.street}
+                      </p>
+                      <p className="text-sm text-slate-400">
+                        {rental.deliveryAddress.city}, {rental.deliveryAddress.state} — {rental.deliveryAddress.postalCode}
+                      </p>
+                      <p className="text-xs text-slate-500 font-medium">
+                        {rental.deliveryAddress.country}
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-0.5">
-                    <p className="text-sm font-semibold text-slate-200 leading-snug">
-                      {rental.deliveryAddress.street}
-                    </p>
-                    <p className="text-sm text-slate-400">
-                      {rental.deliveryAddress.city}, {rental.deliveryAddress.state} — {rental.deliveryAddress.postalCode}
-                    </p>
-                    <p className="text-xs text-slate-500 font-medium">
-                      {rental.deliveryAddress.country}
-                    </p>
-                  </div>
-                </div>
-              </SectionCard>
-            )}
+                </SectionCard>
+              )}
+            </div>
 
             {/* ADDITIONAL NOTES */}
             {rental.notes && (

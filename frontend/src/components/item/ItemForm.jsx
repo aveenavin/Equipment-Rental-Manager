@@ -121,7 +121,7 @@ const ItemForm = ({ item, onSuccess, onCancel }) => {
   const totalImagesCount = existingImages.length + newFiles.length - imagesToDelete.length;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4" noValidate>
       
       {errors.root && (
         <div className="px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold flex items-center gap-2">
@@ -130,11 +130,11 @@ const ItemForm = ({ item, onSuccess, onCancel }) => {
       )}
 
       {/* DENSE 2-COLUMN LAYOUT */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
         
         {/* LEFT COLUMN: Main Info */}
-        <div className="md:col-span-8 flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="md:col-span-8 flex flex-col gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div className="col-span-2">
               <Input id="name" label="Item Name" placeholder="e.g. Caterpillar 320" required error={errors.name?.message} {...register('name')} />
             </div>
@@ -150,7 +150,7 @@ const ItemForm = ({ item, onSuccess, onCancel }) => {
           <div>
             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Details <span className="text-red-400">*</span></label>
             <textarea
-              id="description" rows={8} placeholder="Detailed description..."
+              id="description" rows={4} placeholder="Detailed description..."
               className={`w-full px-4 py-2.5 rounded-xl bg-slate-950/50 border text-slate-100 placeholder-slate-600 text-sm resize-none shadow-inner focus:outline-none focus:ring-1 ${errors.description ? 'border-red-500 focus:ring-red-500/50' : 'border-slate-700/50 focus:border-primary-500/50'}`}
               {...register('description')}
             />
@@ -189,14 +189,14 @@ const ItemForm = ({ item, onSuccess, onCancel }) => {
         </div>
 
         {/* RIGHT COLUMN: Financials & Meta */}
-        <div className="md:col-span-4 flex flex-col gap-4">
-          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-700/50 space-y-4">
+        <div className="md:col-span-4 flex flex-col gap-3 sm:gap-4">
+          <div className="p-3 sm:p-4 rounded-2xl bg-slate-900/60 border border-slate-700/50 space-y-3 sm:space-y-4">
             <h3 className="text-xs font-bold text-primary-400 uppercase tracking-widest flex items-center gap-2 mb-2"><DollarSign className="h-3.5 w-3.5" /> Pricing</h3>
             <Input id="dailyRate" label="Daily Rate (₹)" type="number" step="0.01" required error={errors.dailyRate?.message} {...register('dailyRate')} />
             <Input id="securityDeposit" label="Security Deposit (₹)" type="number" step="0.01" required error={errors.securityDeposit?.message} {...register('securityDeposit')} />
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-700/50 space-y-4">
+          <div className="p-3 sm:p-4 rounded-2xl bg-slate-900/60 border border-slate-700/50 space-y-3 sm:space-y-4">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2 mb-2"><Tag className="h-3.5 w-3.5" /> Identity</h3>
             <Input id="serialNumber" label="Serial Number" placeholder="Optional" error={errors.serialNumber?.message} {...register('serialNumber')} />
             {isEdit && (

@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30, scale: 0.98 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
+  visible: {
+    opacity: 1,
+    y: 0,
     scale: 1,
     transition: { type: 'spring', stiffness: 80, damping: 20, mass: 1 }
   }
@@ -27,14 +27,14 @@ const staggerContainer = {
 const TypewriterText = ({ text }) => {
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   useEffect(() => {
     let timeout;
-    
+
     // Smooth, slightly randomized typing speed for an organic feel
     const typingSpeed = Math.floor(Math.random() * 40) + 50; // 50-90ms
     const deletingSpeed = 25; // Fast, consistent delete
-    
+
     if (!isDeleting && displayText.length < text.length) {
       timeout = setTimeout(() => {
         setDisplayText(text.slice(0, displayText.length + 1));
@@ -52,15 +52,15 @@ const TypewriterText = ({ text }) => {
         setIsDeleting(false);
       }, 800);
     }
-    
+
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, text]);
 
   return (
     <span className="inline-flex items-center min-h-[1.5em]">
       {displayText}
-      <motion.span 
-        animate={{ opacity: [1, 0, 1] }} 
+      <motion.span
+        animate={{ opacity: [1, 0, 1] }}
         transition={{ repeat: Infinity, duration: 0.9, ease: "easeInOut" }}
         className="w-[2px] h-[1.1em] bg-orange-500 ml-[4px]"
       />
@@ -83,7 +83,7 @@ const Home = () => {
         <div className="absolute bottom-[-100px] right-[-80px] w-[400px] h-[400px] bg-orange-400/8 rounded-full blur-[110px] pointer-events-none animate-float-rev" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-orange-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-        <motion.div 
+        <motion.div
           className="relative z-10 max-w-4xl lg:max-w-7xl mx-auto"
           variants={staggerContainer}
           initial="hidden"
@@ -102,7 +102,7 @@ const Home = () => {
 
           {/* Sub-headline */}
           <motion.p variants={fadeInUp} className="text-[10px] sm:text-sm text-slate-300 font-light tracking-wide max-w-2xl lg:max-w-4xl mx-auto leading-snug sm:leading-relaxed mb-14 sm:mb-20 px-2 sm:px-0">
-where customers can explore available items, book what they need, and manage their rentals, while businesses can manage inventory, bookings, returns, availability, and payments, all in one place.
+            where customers can explore available items, book what they need, and manage their rentals, while businesses can manage inventory, bookings, returns, availability, and payments, all in one place.
           </motion.p>
 
           {/* Typewriter Text */}
@@ -162,7 +162,7 @@ where customers can explore available items, book what they need, and manage the
         <div className="max-w-5xl mx-auto">
 
           {/* Section header */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } }}
             viewport={{ once: true, amount: 0.2 }}
@@ -218,15 +218,15 @@ where customers can explore available items, book what they need, and manage the
             ].map(({ icon: Icon, gradient, border, iconBg, iconColor, title, desc }, index) => (
               <motion.div
                 key={title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ 
-                  opacity: 1, 
-                  x: 0,
-                  transition: { 
-                    duration: 0.4, 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 0.4,
                     ease: 'easeOut',
-                    delay: index * 0.1 
-                  } 
+                    delay: index * 0.1
+                  }
                 }}
                 viewport={{ once: true, amount: 0.2 }}
                 className={`group relative bg-gradient-to-b ${gradient} to-transparent bg-slate-900/80 border ${border} rounded-2xl p-7 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/50 transition-all duration-300 overflow-hidden backdrop-blur-sm`}

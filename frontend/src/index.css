@@ -164,34 +164,82 @@ body {
 
 /* ── Hero Entrance Animation ── */
 @keyframes hero-enter {
-  0%   { opacity: 0; transform: translateY(32px) scale(0.96); }
-  100% { opacity: 1; transform: translateY(0)     scale(1);   }
-}
-.animate-hero-enter { animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
 
-.delay-100 { animation-delay: 100ms;  }
-.delay-200 { animation-delay: 200ms;  }
-.delay-350 { animation-delay: 350ms;  }
-.delay-500 { animation-delay: 500ms;  }
-.delay-650 { animation-delay: 650ms;  }
-.delay-800 { animation-delay: 800ms;  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-hero-enter {
+  animation: hero-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-350 {
+  animation-delay: 350ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.delay-650 {
+  animation-delay: 650ms;
+}
+
+.delay-800 {
+  animation-delay: 800ms;
+}
 
 /* ── Floating orb ── */
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0px)   scale(1);    }
-  50%       { transform: translateY(-28px) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(-28px) scale(1.05);
+  }
 }
+
 @keyframes float-slow-rev {
-  0%, 100% { transform: translateY(0px)  scale(1);    }
-  50%       { transform: translateY(28px) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(28px) scale(1.05);
+  }
 }
-.animate-float         { animation: float-slow     9s  ease-in-out infinite; }
-.animate-float-rev     { animation: float-slow-rev 11s ease-in-out infinite; }
+
+.animate-float {
+  animation: float-slow 9s ease-in-out infinite;
+}
+
+.animate-float-rev {
+  animation: float-slow-rev 11s ease-in-out infinite;
+}
 
 /* ── Hero grid overlay ── */
 .hero-grid {
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 52px 52px;
 }

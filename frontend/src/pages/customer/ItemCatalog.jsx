@@ -226,7 +226,7 @@ const ItemCatalog = () => {
                 className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
               >
                 {/* Image */}
-                <div className="aspect-[8/5] sm:aspect-[4/3] w-full relative overflow-hidden rounded-t-xl">
+                <div className="aspect-[3/2] w-full relative overflow-hidden rounded-t-xl">
                   {item.images?.[0] ? (
                     <img
                       src={item.images[0].url}
@@ -244,7 +244,7 @@ const ItemCatalog = () => {
                 </div>
 
                 {/* Card body */}
-                <div className="p-1.5 sm:p-4 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950 min-w-0">
+                <div className="p-1.5 sm:p-3.5 flex flex-col flex-1 bg-gradient-to-b from-slate-900 to-slate-950 min-w-0">
 
                   {/* Category */}
                   <div className="mb-1.5 sm:mb-2.5">
@@ -254,12 +254,12 @@ const ItemCatalog = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-slate-100 text-[12px] sm:text-[15px] md:text-[17px] leading-snug line-clamp-1 sm:line-clamp-2 mb-2 sm:mb-4 group-hover:text-orange-500 transition-colors">
+                  <h3 className="font-bold text-slate-100 text-[12px] sm:text-[15px] md:text-[17px] leading-snug line-clamp-2 mb-2 sm:mb-3 group-hover:text-orange-500 transition-colors">
                     {item.name}
                   </h3>
 
                   {/* Pricing Box */}
-                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-lg sm:rounded-xl p-1.5 sm:p-3 mb-2 sm:mb-4 shadow-inner flex items-center justify-between overflow-hidden min-w-0">
+                  <div className="mt-auto bg-slate-900/80 border border-slate-800 rounded-lg sm:rounded-xl p-1.5 sm:p-3 mb-2 sm:mb-3 shadow-inner flex items-center justify-between overflow-hidden min-w-0">
                     <div className="min-w-0 flex-1">
                       <p className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Daily Rate</p>
                       <p className="text-sm sm:text-lg md:text-xl font-black text-orange-500 leading-none truncate">
@@ -276,7 +276,7 @@ const ItemCatalog = () => {
                   {/* Book Button */}
                   <button
                     onClick={(e) => { e.stopPropagation(); handleBook(item); }}
-                    className="w-full relative z-10 group/btn flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[11px] sm:text-sm font-bold rounded-lg sm:rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                    className="mt-1 sm:mt-2 w-full relative z-10 group/btn flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-[11px] sm:text-sm font-bold rounded-lg sm:rounded-xl overflow-hidden shadow-[0_0_15px_rgba(249,115,22,0.2)] hover:shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                     <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4 relative z-10 group-hover/btn:-rotate-12 transition-transform duration-300" />
@@ -373,8 +373,8 @@ const ItemCatalog = () => {
           ].map((f, index) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, x: index < 2 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: index * 0.15, type: 'spring', stiffness: 80, damping: 20 }}
               className={`group relative bg-gradient-to-b ${f.color} bg-slate-900 border rounded-2xl p-6 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/30 transition-all duration-300`}

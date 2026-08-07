@@ -160,8 +160,8 @@ const AdminDashboard = () => {
         {/* ── Item status mini-bar ────────────────────────────────────── */}
         {equipment.total > 0 && (
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             className="bg-white border border-amber-200 rounded-xl p-4 shadow-sm"
@@ -212,8 +212,8 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Revenue Trend — 2/3 width */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             className="xl:col-span-2 bg-white border border-amber-200 rounded-xl px-5 py-3 shadow-sm"
@@ -251,8 +251,8 @@ const AdminDashboard = () => {
 
           {/* Rental Status Donut — 1/3 width */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             className="bg-white border border-amber-200 rounded-xl px-5 py-3 shadow-sm"
@@ -303,8 +303,8 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {/* Rental Trend Line Chart */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             className="bg-white border border-amber-200 rounded-xl px-5 py-3 shadow-sm"
@@ -334,8 +334,8 @@ const AdminDashboard = () => {
 
           {/* Items by Category Bar */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             className="bg-white border border-amber-200 rounded-xl px-5 py-3 shadow-sm"
@@ -374,8 +374,8 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* Recent Rentals */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ type: 'spring', stiffness: 80, damping: 20 }}
             className="xl:col-span-2 bg-white border border-amber-200 rounded-xl p-5 shadow-sm"
@@ -423,8 +423,8 @@ const AdminDashboard = () => {
           <div className="space-y-4">
             {/* Recent Payments */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: 0.1, type: 'spring', stiffness: 80, damping: 20 }}
               className="bg-white border border-amber-200 rounded-xl p-4 shadow-sm"

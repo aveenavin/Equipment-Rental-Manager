@@ -17,7 +17,7 @@ const conditionConfig = {
 export const StatusBadge = ({ status }) => {
   const config = statusConfig[status] || { label: status, cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' };
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${config.cls}`}>
+    <span className={`inline-flex items-center gap-0.5 sm:gap-1.5 px-1.5 sm:px-3 py-[1px] sm:py-1 rounded-full text-[8px] sm:text-[11px] font-extrabold uppercase tracking-wide sm:tracking-wider ${config.cls}`}>
       {config.label}
     </span>
   );
@@ -26,7 +26,7 @@ export const StatusBadge = ({ status }) => {
 export const ConditionBadge = ({ condition }) => {
   const config = conditionConfig[condition] || { label: condition, cls: 'bg-gradient-to-r from-gray-500 to-slate-400 text-white shadow-md shadow-gray-500/20 border border-white/20' };
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${config.cls}`}>
+    <span className={`inline-flex items-center gap-0.5 sm:gap-1.5 px-1.5 sm:px-3 py-[1px] sm:py-1 rounded-full text-[8px] sm:text-[11px] font-extrabold uppercase tracking-wide sm:tracking-wider ${config.cls}`}>
       {config.label}
     </span>
   );

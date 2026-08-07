@@ -123,8 +123,8 @@ const BookingModal = ({ item, onClose, onBooked }) => {
     contactNumber.length === 10;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/70 backdrop-blur-sm p-2 sm:p-4 overflow-y-auto">
+      <div className="w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] my-2 sm:my-0 flex-shrink-0">
 
         {/* Header */}
         <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-slate-800 shrink-0 gap-2">
@@ -143,7 +143,7 @@ const BookingModal = ({ item, onClose, onBooked }) => {
         </div>
 
         {/* Scrollable body */}
-        <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5 overflow-y-auto flex-1">
+        <form onSubmit={handleSubmit} className="px-3 sm:px-6 py-4 sm:py-5 space-y-4 sm:space-y-5 overflow-y-auto flex-1 custom-scrollbar">
 
           {error && (
             <div className="flex items-start gap-2.5 px-4 py-3 rounded-lg bg-red-950/50 border border-red-800 text-red-300 text-sm">

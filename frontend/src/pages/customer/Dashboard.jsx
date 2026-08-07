@@ -279,8 +279,8 @@ const CustomerDashboard = () => {
         {/* ── Quick Action Cards ──────────────────────────────────────────── */}
         <div className="space-y-6">
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 80, damping: 20 }}
           >
@@ -313,8 +313,8 @@ const CustomerDashboard = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ delay: 0.35, type: 'spring', stiffness: 80, damping: 20 }}
           >

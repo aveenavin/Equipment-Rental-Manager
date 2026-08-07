@@ -262,7 +262,7 @@ const RentalCard = ({ rental, onCancel }) => {
               {rental.status === 'pending' && (
                 <button
                   onClick={() => onCancel(rental)}
-                  className="flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13.5px] font-semibold text-slate-400 hover:text-red-400 transition-colors w-full px-2 py-1.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl hover:bg-red-500/10 border border-slate-700 hover:border-red-500/30"
+                  className="flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13.5px] font-semibold text-slate-400 hover:text-red-400 transition-colors w-full px-2 py-2.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl hover:bg-red-500/10 border border-slate-700 hover:border-red-500/30"
                 >
                   <XCircle className="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5 shrink-0" />
                   Cancel
@@ -270,7 +270,7 @@ const RentalCard = ({ rental, onCancel }) => {
               )}
               <Link
                 to={`/my-rentals/${rental._id}`}
-                className="flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13.5px] font-semibold text-blue-500 bg-slate-800 hover:bg-slate-700 transition-all duration-200 w-full px-2 py-1.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl border border-slate-700 hover:border-slate-500 shadow-md group/link"
+                className="flex items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-[13.5px] font-semibold text-blue-500 bg-slate-800 hover:bg-slate-700 transition-all duration-200 w-full px-2 py-2.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl border border-slate-700 hover:border-slate-500 shadow-md group/link"
               >
                 <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400 group-hover/link:text-orange-400 transition-colors shrink-0" />
                 View Details
@@ -573,11 +573,11 @@ const MyRentals = () => {
             <div className="h-1.5 w-full bg-gradient-to-r from-red-500 to-rose-400" />
             <div className="p-7">
               <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 shrink-0 shadow-inner">
+                <button onClick={() => setCancelTarget(null)} className="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 shrink-0 shadow-inner cursor-pointer hover:bg-red-500/20 transition-colors">
                   <XCircle className="h-6 w-6 text-red-400" />
-                </div>
+                </button>
                 <div>
-                  <h3 className="font-extrabold text-slate-50 text-xl tracking-tight">Cancel Booking</h3>
+                  <h3 className="font-extrabold text-red-500 text-xl tracking-tight">Cancel Booking</h3>
                   <p className="text-sm text-slate-400 mt-1">This action cannot be undone.</p>
                 </div>
               </div>
@@ -611,8 +611,8 @@ const MyRentals = () => {
               )}
 
               <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 mb-7">
-                <Shield className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-amber-200/90 leading-relaxed font-medium">
+                <Shield className="h-5 w-5 text-orange-500 shrink-0 mt-0.5" />
+                <p className="text-sm text-orange-400 leading-relaxed font-medium">
                   Cancelling will remove this booking. If a deposit was paid, please contact support for a refund.
                 </p>
               </div>
