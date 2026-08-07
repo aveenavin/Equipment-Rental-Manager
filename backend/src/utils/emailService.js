@@ -121,7 +121,7 @@ const buildVerificationHtml = (name, verifyUrl) => `
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background-color:#ea580c;border-radius:10px;padding:10px 14px;">
-                    <span style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:-0.5px;">Equip</span><span style="color:#fed7aa;font-size:18px;font-weight:800;">Rental</span>
+                    <span style="color:#ffffff;font-size:18px;font-weight:800;letter-spacing:-0.5px;">Rent</span><span style="color:#fed7aa;font-size:18px;font-weight:800;">All</span>
                   </td>
                 </tr>
               </table>
