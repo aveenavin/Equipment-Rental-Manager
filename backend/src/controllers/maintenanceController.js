@@ -3,10 +3,10 @@ const maintenanceService = require('../services/maintenanceService');
 
 // POST /api/v1/maintenance
 const createLog = catchAsync(async (req, res) => {
-  const { equipmentId, description, priority, estimatedCost, scheduledDate } = req.body;
+  const { itemId, description, priority, estimatedCost, scheduledDate } = req.body;
 
   const log = await maintenanceService.createMaintenanceLog({
-    equipmentId,
+    itemId,
     reportedById: req.user._id,
     description,
     priority,
@@ -33,12 +33,12 @@ const completeLog = catchAsync(async (req, res) => {
 
 // GET /api/v1/maintenance
 const getAllLogs = catchAsync(async (req, res) => {
-  const { page, limit, status, equipment, search } = req.query;
+  const { page, limit, status, item, search } = req.query;
   const result = await maintenanceService.listMaintenanceLogs({
     page,
     limit,
     status,
-    equipmentId: equipment,
+    itemId: item,
     search,
   });
 

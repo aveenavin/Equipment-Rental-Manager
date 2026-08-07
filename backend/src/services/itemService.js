@@ -1,11 +1,11 @@
-const Equipment = require('../models/Equipment');
+const Item = require('../models/Item');
 const Rental = require('../models/Rental');
 const AppError = require('../utils/AppError');
 
 /**
- * Build a paginated, filtered, searched query for equipment.
+ * Build a paginated, filtered, searched query for items.
  */
-const listEquipment = async ({ page = 1, limit = 12, category, status, search, sort }) => {
+const listItems = async ({ page = 1, limit = 12, category, status, search, sort }) => {
   const filter = {};
 
   if (category) filter.category = category;
@@ -27,18 +27,18 @@ const listEquipment = async ({ page = 1, limit = 12, category, status, search, s
   const limitNum = parseInt(limit, 10);
   const skip = (pageNum - 1) * limitNum;
 
-  const [equipment, total] = await Promise.all([
-    Equipment.find(filter)
+  const [items, total] = await Promise.all([
+    Item.find(filter)
       .sort(sortBy)
       .skip(skip)
       .limit(limitNum)
       .populate('createdBy', 'name email')
       .lean(),
-    Equipment.countDocuments(filter),
+    Item.countDocuments(filter),
   ]);
 
   return {
-    equipment,
+    items,
     pagination: {
       total,
       page: pageNum,
@@ -49,25 +49,25 @@ const listEquipment = async ({ page = 1, limit = 12, category, status, search, s
 };
 
 /**
- * Get a single equipment item by ID.
+ * Get a single item by ID.
  */
-const getEquipmentById = async (id) => {
-  const equipment = await Equipment.findById(id)
+const getItemById = async (id) => {
+  const item = await Item.findById(id)
     .populate('createdBy', 'name email')
     .lean();
-  if (!equipment) {
-    throw new AppError('Equipment not found.', 404);
+  if (!item) {
+    throw new AppError('Item not found.', 404);
   }
-  return equipment;
+  return item;
 };
 
 /**
- * Create a new equipment item.
+ * Create a new item.
  */
-const createEquipment = async ({ body, uploadedImages, userId }) => {
+const createItem = async ({ body, uploadedImages, userId }) => {
   const { name, description, category, dailyRate, securityDeposit, condition, serialNumber } = body;
 
-  const equipment = await Equipment.create({
+  const item = await Item.create({
     name,
     description,
     category,
@@ -79,17 +79,17 @@ const createEquipment = async ({ body, uploadedImages, userId }) => {
     createdBy: userId,
   });
 
-  return equipment;
+  return item;
 };
 
 /**
- * Update an existing equipment item. Appends new images; does not remove existing ones
+ * Update an existing item. Appends new images; does not remove existing ones
  * unless deleteImageIds is specified.
  */
-const updateEquipment = async ({ id, body, uploadedImages, deleteImageIds }) => {
-  const equipment = await Equipment.findById(id);
-  if (!equipment) {
-    throw new AppError('Equipment not found.', 404);
+const updateItem = async ({ id, body, uploadedImages, deleteImageIds }) => {
+  const item = await Item.findById(id);
+  if (!item) {
+    throw new AppError('Item not found.', 404);
   }
 
   const updatableFields = [
@@ -100,63 +100,63 @@ const updateEquipment = async ({ id, body, uploadedImages, deleteImageIds }) => 
   updatableFields.forEach((field) => {
     if (body[field] !== undefined) {
       if (field === 'dailyRate' || field === 'securityDeposit') {
-        equipment[field] = parseFloat(body[field]);
+        item[field] = parseFloat(body[field]);
       } else {
-        equipment[field] = body[field];
+        item[field] = body[field];
       }
     }
   });
 
   // Remove images flagged for deletion
   if (deleteImageIds && deleteImageIds.length > 0) {
-    equipment.images = equipment.images.filter(
+    item.images = item.images.filter(
       (img) => !deleteImageIds.includes(img.publicId)
     );
   }
 
   // Append newly uploaded images (respect 5-image limit)
   if (uploadedImages && uploadedImages.length > 0) {
-    const remaining = 5 - equipment.images.length;
+    const remaining = 5 - item.images.length;
     if (remaining <= 0) {
       throw new AppError('Maximum of 5 images allowed. Remove existing images first.', 400);
     }
-    equipment.images.push(...uploadedImages.slice(0, remaining));
+    item.images.push(...uploadedImages.slice(0, remaining));
   }
 
-  await equipment.save();
-  return equipment;
+  await item.save();
+  return item;
 };
 
 /**
- * Delete an equipment item by ID. Returns images that need Cloudinary cleanup.
+ * Delete an item by ID. Returns images that need Cloudinary cleanup.
  */
-const deleteEquipment = async (id) => {
-  const equipment = await Equipment.findById(id);
-  if (!equipment) {
-    throw new AppError('Equipment not found.', 404);
+const deleteItem = async (id) => {
+  const item = await Item.findById(id);
+  if (!item) {
+    throw new AppError('Item not found.', 404);
   }
 
   // Prevent deletion if active rentals exist — would orphan rental records
   const activeRentalCount = await Rental.countDocuments({
-    equipment: id,
+    item: id,
     status: { $in: ['pending', 'confirmed', 'checked_out'] },
   });
   if (activeRentalCount > 0) {
     throw new AppError(
-      `Cannot delete equipment with ${activeRentalCount} active rental(s). Resolve all active rentals first.`,
+      `Cannot delete item with ${activeRentalCount} active rental(s). Resolve all active rentals first.`,
       400
     );
   }
 
-  const imagesToDelete = equipment.images.map((img) => img.publicId);
-  await equipment.deleteOne();
+  const imagesToDelete = item.images.map((img) => img.publicId);
+  await item.deleteOne();
   return imagesToDelete;
 };
 
 module.exports = {
-  listEquipment,
-  getEquipmentById,
-  createEquipment,
-  updateEquipment,
-  deleteEquipment,
+  listItems,
+  getItemById,
+  createItem,
+  updateItem,
+  deleteItem,
 };

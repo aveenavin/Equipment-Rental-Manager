@@ -76,7 +76,7 @@ const ReturnDetail = () => {
           </div>
           <div className="flex-1">
             <h1 className="font-bold text-base text-gray-800">
-              {record.isDamaged ? 'Return — Equipment Damaged' : 'Return — Clean Return'}
+              {record.isDamaged ? 'Return — Item Damaged' : 'Return — Clean Return'}
             </h1>
             <p className="text-[11px] text-gray-500 mt-0.5">
               Processed on {fmtTime(record.createdAt)} by <span className="text-gray-700">{record.processedBy?.name}</span>
@@ -87,18 +87,18 @@ const ReturnDetail = () => {
           </span>
         </div>
 
-        {/* Equipment card */}
+        {/* Item card */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-4 flex items-center gap-3">
           <div className="h-16 w-20 rounded-xl bg-slate-800 overflow-hidden shrink-0">
-            {record.equipment?.images?.[0] ? (
-              <img src={record.equipment.images[0].url} alt="" className="w-full h-full object-contain p-2" />
+            {record.item?.images?.[0] ? (
+              <img src={record.item.images[0].url} alt="" className="w-full h-full object-contain p-2" />
             ) : (
               <div className="w-full h-full flex items-center justify-center"><Package className="h-6 w-6 text-slate-600" /></div>
             )}
           </div>
           <div className="flex-1">
-            <h2 className="font-semibold text-slate-100">{record.equipment?.name}</h2>
-            <p className="text-sm text-slate-500 capitalize">{record.equipment?.category?.replace(/-/g, ' ')}</p>
+            <h2 className="font-semibold text-slate-100">{record.item?.name}</h2>
+            <p className="text-sm text-slate-500 capitalize">{record.item?.category?.replace(/-/g, ' ')}</p>
             <div className="flex items-center gap-3 mt-2">
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${conditionClasses[record.conditionAtReturn]}`}>
                 Returned: {record.conditionAtReturn}
@@ -196,7 +196,7 @@ const ReturnDetail = () => {
               <p className="text-[13px] text-gray-700 leading-relaxed">{record.damageDescription}</p>
               <div className="mt-3 flex items-center gap-2 px-2.5 py-1.5 bg-amber-50 border border-amber-200 rounded-lg w-fit">
                 <Wrench className="h-3.5 w-3.5 text-amber-600" />
-                <span className="text-[11px] text-amber-700 font-medium">Equipment sent to maintenance queue</span>
+                <span className="text-[11px] text-amber-700 font-medium">Item sent to maintenance queue</span>
               </div>
             </div>
           )}

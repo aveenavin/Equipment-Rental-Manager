@@ -1,17 +1,17 @@
 const Rental = require('../models/Rental');
 
 /**
- * Returns true if the equipment is available for the requested date range.
+ * Returns true if the item is available for the requested date range.
  * Blocks if any active rental overlaps: (existingStart < requestEnd) AND (existingEnd > requestStart)
  *
- * @param {string} equipmentId
+ * @param {string} itemId
  * @param {Date} startDate
  * @param {Date} endDate
  * @param {string|null} excludeRentalId  — exclude a specific rental ID (for updates)
  */
-const isEquipmentAvailable = async (equipmentId, startDate, endDate, excludeRentalId = null) => {
+const isItemAvailable = async (itemId, startDate, endDate, excludeRentalId = null) => {
   const query = {
-    equipment: equipmentId,
+    item: itemId,
     status: { $in: ['pending', 'confirmed', 'checked_out'] },
     startDate: { $lt: endDate },
     endDate: { $gt: startDate },
@@ -26,12 +26,12 @@ const isEquipmentAvailable = async (equipmentId, startDate, endDate, excludeRent
 };
 
 /**
- * Returns all booked date ranges for a given equipment item.
+ * Returns all booked date ranges for a given item.
  * Used by the frontend calendar to block unavailable dates.
  */
-const getBookedRanges = async (equipmentId) => {
+const getBookedRanges = async (itemId) => {
   const rentals = await Rental.find({
-    equipment: equipmentId,
+    item: itemId,
     status: { $in: ['pending', 'confirmed', 'checked_out'] },
   })
     .select('startDate endDate status')
@@ -53,4 +53,4 @@ const calculateRentalDays = (startDate, endDate) => {
   return Math.max(1, Math.ceil(ms / (1000 * 60 * 60 * 24)));
 };
 
-module.exports = { isEquipmentAvailable, getBookedRanges, calculateRentalDays };
+module.exports = { isItemAvailable, getBookedRanges, calculateRentalDays };

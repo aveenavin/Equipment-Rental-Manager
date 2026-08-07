@@ -43,13 +43,13 @@ const computePaymentSummary = (payments, totalAmount) => {
 
 /**
  * Build full invoice data for a rental.
- * Compiles rental + equipment + customer + payment history + return record.
+ * Compiles rental + item + customer + payment history + return record.
  * Callable by admin/staff (all rentals) and customers (own rentals only).
  */
 const buildInvoice = async (rentalId, requestingUser) => {
   const rental = await Rental.findById(rentalId)
     .populate('customer', 'name email phone')
-    .populate('equipment', 'name category serialNumber images')
+    .populate('item', 'name category serialNumber images')
     .populate('handledBy', 'name role')
     .lean();
 
@@ -77,7 +77,7 @@ const buildInvoice = async (rentalId, requestingUser) => {
   // Build line items
   const lineItems = [
     {
-      description: `Equipment Rental — ${rental.equipment.name}`,
+      description: `Item Rental — ${rental.item.name}`,
       detail: `${rental.totalDays} day${rental.totalDays !== 1 ? 's' : ''} × $${rental.dailyRate}/day`,
       amount: rental.rentalCost,
       type: 'rental',
@@ -94,7 +94,7 @@ const buildInvoice = async (rentalId, requestingUser) => {
   if (returnRecord?.isDamaged && returnRecord.damageCharges > 0) {
     lineItems.push({
       description: 'Damage Charges',
-      detail: returnRecord.damageDescription || 'Equipment returned with damage',
+      detail: returnRecord.damageDescription || 'Item returned with damage',
       amount: returnRecord.damageCharges,
       type: 'damage',
     });
@@ -124,7 +124,7 @@ const buildInvoice = async (rentalId, requestingUser) => {
     status: invoiceStatus,
 
     customer: rental.customer,
-    equipment: rental.equipment,
+    item: rental.item,
 
     rental: {
       id: rental._id,

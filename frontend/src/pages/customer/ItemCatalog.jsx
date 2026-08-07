@@ -4,9 +4,9 @@ import { Search, SlidersHorizontal, X, Package, ShoppingCart, ChevronDown, Truck
 import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
-import { StatusBadge } from '../../components/equipment/EquipmentBadges';
+import { StatusBadge } from '../../components/item/ItemBadges';
 import BookingModal from '../../components/rental/BookingModal';
-import { fetchEquipment } from '../../services/equipmentService';
+import { fetchItems } from '../../services/itemService';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import useRestoredPage from '../../hooks/useRestoredPage';
@@ -39,11 +39,11 @@ const CATEGORIES = [
   { value: 'other', label: 'Other', icon: Wrench },
 ];
 
-const EquipmentCatalog = () => {
+const ItemCatalog = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const [equipment, setEquipment] = useState([]);
+  const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
   const [searchInput, setSearchInput] = useState('');
@@ -65,10 +65,10 @@ const EquipmentCatalog = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const loadEquipment = useCallback(async () => {
+  const loadItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetchEquipment({
+      const res = await fetchItems({
         page,
         limit: 12,
         search,
@@ -76,16 +76,16 @@ const EquipmentCatalog = () => {
         status: 'available',
         sort: 'newest',
       });
-      setEquipment(res.data.data.equipment);
+      setItems(res.data.data.items);
       setPagination(res.data.data.pagination);
     } catch {
-      toast.error('Failed to load equipment.');
+      toast.error('Failed to load items.');
     } finally {
       setIsLoading(false);
     }
   }, [page, search, category]);
 
-  useEffect(() => { loadEquipment(); }, [loadEquipment]);
+  useEffect(() => { loadItems(); }, [loadItems]);
 
   const prevPageRef = useRef(page);
   useEffect(() => {
@@ -105,7 +105,7 @@ const EquipmentCatalog = () => {
 
   const handleBook = (item) => {
     if (!isAuthenticated) {
-      toast.error('Please log in to book equipment.');
+      toast.error('Please log in to book this item.');
       navigate('/login');
       return;
     }
@@ -118,7 +118,7 @@ const EquipmentCatalog = () => {
       {/* Page header */}
       <div className="mb-8 pb-6 border-b border-slate-800/60">
         <h1 className="text-3xl sm:text-4xl tracking-tight drop-shadow-sm pb-1">
-          <span className="font-extrabold text-slate-100">Equipment</span> <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Catalog</span>
+          <span className="font-extrabold text-slate-100">Item</span> <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Catalog</span>
         </h1>
         <p className="text-slate-400 font-medium text-xs sm:text-[15px] mt-1 sm:mt-2 max-w-xl leading-relaxed">
           Browse {pagination.total} available item{pagination.total !== 1 ? 's' : ''} ready to rent
@@ -134,7 +134,7 @@ const EquipmentCatalog = () => {
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search equipment..."
+              placeholder="Search items..."
               className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
             />
             {searchInput && (
@@ -204,18 +204,18 @@ const EquipmentCatalog = () => {
         <div className="flex justify-center items-center py-32">
           <Spinner size="lg" />
         </div>
-      ) : equipment.length === 0 ? (
+      ) : items.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32 text-center">
           <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 mb-4">
             <Package className="h-10 w-10 text-slate-600" />
           </div>
-          <p className="text-slate-400 font-medium">No available equipment found</p>
+          <p className="text-slate-400 font-medium">No available items found</p>
           <p className="text-slate-600 text-sm mt-1">Try adjusting your search or category</p>
         </div>
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5">
-            {equipment.map((item) => (
+            {items.map((item) => (
               <motion.div
                 key={item._id}
                 initial={{ opacity: 0, y: 30 }}
@@ -317,7 +317,7 @@ const EquipmentCatalog = () => {
       {/* Booking modal — all logic unchanged */}
       {bookingTarget && (
         <BookingModal
-          equipment={bookingTarget}
+          item={bookingTarget}
           onClose={() => setBookingTarget(null)}
           onBooked={() => {
             setBookingTarget(null);
@@ -336,7 +336,7 @@ const EquipmentCatalog = () => {
             Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">RentAll Platform?</span>
           </h2>
           <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto">
-            Everything you need for a seamless equipment rental experience.
+            Everything you need for a seamless rental experience.
           </p>
         </div>
 
@@ -344,7 +344,7 @@ const EquipmentCatalog = () => {
           {[
             {
               icon: '🛡️',
-              title: 'Verified Equipment',
+              title: 'Verified Items',
               desc: 'Every item is inspected, certified, and maintained to the highest safety standards.',
               color: 'from-blue-500/10 to-transparent border-blue-800/30',
               accent: 'text-blue-400',
@@ -391,7 +391,7 @@ const EquipmentCatalog = () => {
       <div className="mb-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
         {[
           {
-            end: 500, suffix: '+', label: 'Equipment Available', icon: '🏗️',
+            end: 500, suffix: '+', label: 'Items Available', icon: '🏗️',
             bg: 'from-blue-900/40 via-slate-900 to-slate-900', border: 'border-blue-500/20', text: 'from-blue-400 to-blue-600'
           },
           {
@@ -442,7 +442,7 @@ const EquipmentCatalog = () => {
               <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform</span>
             </div>
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-              Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+              Your trusted partner for professional rentals. Quality gear, reliable service, every time.
             </p>
 
           </div>
@@ -517,4 +517,4 @@ const EquipmentCatalog = () => {
   );
 };
 
-export default EquipmentCatalog;
+export default ItemCatalog;

@@ -25,10 +25,10 @@ router.get('/', listLogsValidation, validate, getAllLogs);
 // Get single maintenance log
 router.get('/:id', getLog);
 
-// Create a new maintenance log (locks equipment to 'maintenance')
+// Create a new maintenance log (locks item to 'maintenance')
 router.post('/', createLogValidation, validate, createLog);
 
-// Complete a maintenance log (releases equipment back to 'available')
+// Complete a maintenance log (releases item back to 'available')
 router.patch('/:id/complete', completeLogValidation, validate, completeLog);
 
 module.exports = router;

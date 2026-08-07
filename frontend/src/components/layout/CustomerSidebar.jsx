@@ -9,7 +9,7 @@ import {
 const CustomerSidebar = ({ mobileOpen, setMobileOpen }) => {
   const navItems = [
     { label: 'Dashboard', href: '/dashboard', icon: Home, exact: true },
-    { label: 'Browse Equipment', href: '/catalog', icon: Package },
+    { label: 'Browse Items', href: '/catalog', icon: Package },
     { label: 'My Rentals', href: '/my-rentals', icon: Calendar },
   ];
 

@@ -10,5 +10,5 @@ export const updateRentalStatus = (id, data) => api.patch(`/rentals/${id}/status
 
 export const cancelRental = (id) => api.patch(`/rentals/${id}/cancel`);
 
-export const fetchEquipmentAvailability = (equipmentId) =>
-  api.get(`/rentals/availability/${equipmentId}`);
+export const fetchItemAvailability = (itemId) =>
+  api.get(`/rentals/availability/${itemId}`);

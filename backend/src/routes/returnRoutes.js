@@ -19,7 +19,7 @@ router.get('/:id', getReturn);
 // Get return record linked to a specific rental
 router.get('/rental/:rentalId', getReturnByRental);
 
-// Process a return (creates Return record + updates Rental + Equipment atomically)
+// Process a return (creates Return record + updates Rental + Item atomically)
 router.post('/', processReturnValidation, validate, processReturn);
 
 module.exports = router;

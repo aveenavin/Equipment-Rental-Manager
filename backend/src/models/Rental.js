@@ -11,10 +11,10 @@ const rentalSchema = new mongoose.Schema(
       required: [true, 'Customer is required'],
       index: true,
     },
-    equipment: {
+    item: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Equipment',
-      required: [true, 'Equipment is required'],
+      ref: 'Item',
+      required: [true, 'Item is required'],
       index: true,
     },
     startDate: {
@@ -118,7 +118,7 @@ const rentalSchema = new mongoose.Schema(
       default: null,
     },
 
-    // Reference to the Return record (set when equipment is returned)
+    // Reference to the Return record (set when item is returned)
     returnRecord: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Return',
@@ -135,7 +135,7 @@ const rentalSchema = new mongoose.Schema(
 );
 
 // Compound index for fast availability queries
-rentalSchema.index({ equipment: 1, status: 1, startDate: 1, endDate: 1 });
+rentalSchema.index({ item: 1, status: 1, startDate: 1, endDate: 1 });
 
 const Rental = mongoose.model('Rental', rentalSchema);
 

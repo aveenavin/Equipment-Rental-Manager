@@ -10,9 +10,9 @@ const returnSchema = new mongoose.Schema(
       unique: true, // One return record per rental
       index: true,
     },
-    equipment: {
+    item: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Equipment',
+      ref: 'Item',
       required: true,
       index: true,
     },
@@ -35,7 +35,7 @@ const returnSchema = new mongoose.Schema(
       default: Date.now,
     },
 
-    // Equipment condition assessment at time of return
+    // Item condition assessment at time of return
     conditionAtReturn: {
       type: String,
       enum: ['excellent', 'good', 'fair', 'poor'],
@@ -71,8 +71,8 @@ const returnSchema = new mongoose.Schema(
       default: 0,
     },
 
-    // Equipment status set after return
-    equipmentStatusAfterReturn: {
+    // Item status set after return
+    itemStatusAfterReturn: {
       type: String,
       enum: ['available', 'maintenance'],
       required: true,

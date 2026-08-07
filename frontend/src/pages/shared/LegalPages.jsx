@@ -45,15 +45,15 @@ export const TermsConditions = () => (
   <LegalPageLayout title="Terms & Conditions" lastUpdated="September 1, 2024">
     <section>
       <h2 className="text-xl font-bold text-slate-200 mb-3">1. Acceptance of Terms</h2>
-      <p>By accessing and using our equipment rental services, you agree to be bound by these Terms and Conditions.</p>
+      <p>By accessing and using our rental services, you agree to be bound by these Terms and Conditions.</p>
     </section>
     <section>
       <h2 className="text-xl font-bold text-slate-200 mb-3">2. Rental Agreement</h2>
-      <p>All equipment rentals are subject to availability and our approval. The renter is responsible for the equipment from the time of delivery/pickup until it is returned and inspected.</p>
+      <p>All rentals are subject to availability and our approval. The renter is responsible for the rented item from the time of delivery/pickup until it is returned and inspected.</p>
     </section>
     <section>
       <h2 className="text-xl font-bold text-slate-200 mb-3">3. Liability and Damages</h2>
-      <p>The renter assumes all risks associated with the use of the equipment. Any damages incurred during the rental period will be charged to the renter's account.</p>
+      <p>The renter assumes all risks associated with the use of the rented item. Any damages incurred during the rental period will be charged to the renter's account.</p>
     </section>
   </LegalPageLayout>
 );
@@ -65,8 +65,8 @@ export const RefundPolicy = () => (
       <p>Cancellations made 48 hours prior to the rental start date are eligible for a full refund. Cancellations made within 48 hours may be subject to a cancellation fee of 20%.</p>
     </section>
     <section>
-      <h2 className="text-xl font-bold text-slate-200 mb-3">2. Defective Equipment</h2>
-      <p>If you receive defective equipment, please notify us immediately. We will arrange a replacement or provide a full refund for the rental period affected.</p>
+      <h2 className="text-xl font-bold text-slate-200 mb-3">2. Defective Items</h2>
+      <p>If you receive a defective item, please notify us immediately. We will arrange a replacement or provide a full refund for the rental period affected.</p>
     </section>
   </LegalPageLayout>
 );

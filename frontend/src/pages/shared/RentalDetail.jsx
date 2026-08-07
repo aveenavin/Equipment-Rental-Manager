@@ -186,18 +186,18 @@ const RentalDetail = () => {
               <div className="p-3 sm:p-8 md:p-10 flex flex-row items-start gap-3 sm:gap-8 relative z-10">
                 
                 {/* Image Box */}
-                {canManage && rental.equipment ? (
-                  <Link to={`/admin/equipment/${rental.equipment._id}`} className="w-20 h-20 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
-                    {rental.equipment.images?.[0] ? (
-                      <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl group-hover:scale-105 transition-transform" />
+                {canManage && rental.item ? (
+                  <Link to={`/admin/items/${rental.item._id}`} className="w-20 h-20 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center hover:bg-slate-700 transition-colors group">
+                    {rental.item.images?.[0] ? (
+                      <img src={rental.item.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl group-hover:scale-105 transition-transform" />
                     ) : (
                       <Package className="h-10 w-10 sm:h-16 sm:w-16 text-slate-600 group-hover:scale-105 transition-transform" />
                     )}
                   </Link>
                 ) : (
                   <div className="w-20 h-20 sm:w-40 sm:h-40 shrink-0 rounded-xl sm:rounded-3xl bg-slate-800/80 p-2 sm:p-3 border border-slate-700/50 shadow-inner flex items-center justify-center">
-                    {rental.equipment?.images?.[0] ? (
-                      <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl" />
+                    {rental.item?.images?.[0] ? (
+                      <img src={rental.item.images[0].url} alt="" className="w-full h-full object-contain drop-shadow-xl" />
                     ) : (
                       <Package className="h-10 w-10 sm:h-16 sm:w-16 text-slate-600" />
                     )}
@@ -213,17 +213,17 @@ const RentalDetail = () => {
                     </span>
                   </div>
                   <h1 className="text-base font-black tracking-tight mb-1 leading-snug">
-                    {canManage && rental.equipment ? (
-                      <Link to={`/admin/equipment/${rental.equipment._id}`} className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-2 group">
-                        {rental.equipment.name}
+                    {canManage && rental.item ? (
+                      <Link to={`/admin/items/${rental.item._id}`} className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-2 group">
+                        {rental.item.name}
                         <ExternalLink className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity text-primary-500" />
                       </Link>
                     ) : (
-                      <span className="text-primary-400">{rental.equipment?.name}</span>
+                      <span className="text-primary-400">{rental.item?.name}</span>
                     )}
                   </h1>
                   <p className="text-primary-400 font-medium capitalize tracking-wide text-xs sm:text-sm mb-2 sm:mb-4">
-                    {rental.equipment?.category?.replace(/-/g, ' ')}
+                    {rental.item?.category?.replace(/-/g, ' ')}
                   </p>
                   <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-medium text-red-500/80 bg-slate-900/50 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-800/80">
                     <Clock className="h-3.5 w-3.5 text-red-400" /> Booked: {fmtTime(rental.createdAt)}

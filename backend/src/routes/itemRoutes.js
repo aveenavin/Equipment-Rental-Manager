@@ -4,23 +4,23 @@ const authorize = require('../middleware/authorize');
 const { upload, uploadToCloudinary } = require('../middleware/upload');
 const validate = require('../utils/validate');
 const {
-  createEquipmentValidation,
-  updateEquipmentValidation,
-  listEquipmentValidation,
-} = require('../validators/equipmentValidator');
+  createItemValidation,
+  updateItemValidation,
+  listItemValidation,
+} = require('../validators/itemValidator');
 const {
-  getAllEquipment,
-  getEquipment,
-  createEquipment,
-  updateEquipment,
-  deleteEquipment,
-} = require('../controllers/equipmentController');
+  getAllItems,
+  getItem,
+  createItem,
+  updateItem,
+  deleteItem,
+} = require('../controllers/itemController');
 
 const router = express.Router();
 
-// Public routes — anyone can browse equipment
-router.get('/', listEquipmentValidation, validate, getAllEquipment);
-router.get('/:id', getEquipment);
+// Public routes — anyone can browse items
+router.get('/', listItemValidation, validate, getAllItems);
+router.get('/:id', getItem);
 
 // Protected routes — Admin and Staff only
 router.use(protect, authorize('admin', 'staff'));
@@ -29,20 +29,20 @@ router.post(
   '/',
   upload.array('images', 5),
   uploadToCloudinary,
-  createEquipmentValidation,
+  createItemValidation,
   validate,
-  createEquipment
+  createItem
 );
 
 router.patch(
   '/:id',
   upload.array('images', 5),
   uploadToCloudinary,
-  updateEquipmentValidation,
+  updateItemValidation,
   validate,
-  updateEquipment
+  updateItem
 );
 
-router.delete('/:id', deleteEquipment);
+router.delete('/:id', deleteItem);
 
 module.exports = router;

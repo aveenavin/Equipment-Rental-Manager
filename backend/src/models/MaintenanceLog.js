@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const maintenanceLogSchema = new mongoose.Schema(
 
   {
-    equipment: {
+    item: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Equipment',
-      required: [true, 'Equipment reference is required'],
+      ref: 'Item',
+      required: [true, 'Item reference is required'],
       index: true,
     },
 
@@ -87,8 +87,8 @@ const maintenanceLogSchema = new mongoose.Schema(
 
 );
 
-// Compound index: fast lookup of open logs for a specific equipment item
-maintenanceLogSchema.index({ equipment: 1, status: 1 });
+// Compound index: fast lookup of open logs for a specific item
+maintenanceLogSchema.index({ item: 1, status: 1 });
 
 // Admin list: sorted by recency, filtered by status
 maintenanceLogSchema.index({ status: 1, createdAt: -1 });

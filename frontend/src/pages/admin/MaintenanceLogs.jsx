@@ -52,11 +52,11 @@ const StatusBadge = ({ status }) => {
 
 // ─── Create Log Modal ──────────────────────────────────────────────────────────
 const CreateLogModal = ({ onClose, onCreated }) => {
-  const [equipmentList, setEquipmentList] = useState([]);
-  const [loadingEquip, setLoadingEquip] = useState(true);
+  const [itemList, setItemList] = useState([]);
+  const [loadingItems, setLoadingItems] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    equipmentId: '',
+    itemId: '',
     description: '',
     priority: 'medium',
     estimatedCost: '',
@@ -66,12 +66,12 @@ const CreateLogModal = ({ onClose, onCreated }) => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await api.get('/equipment', { params: { limit: 100, status: 'available,maintenance,rented' } });
-        setEquipmentList(res.data.data.equipment || []);
+        const res = await api.get('/items', { params: { limit: 100, status: 'available,maintenance,rented' } });
+        setItemList(res.data.data.items || []);
       } catch {
-        toast.error('Failed to load equipment list.');
+        toast.error('Failed to load item list.');
       } finally {
-        setLoadingEquip(false);
+        setLoadingItems(false);
       }
     };
     load();
@@ -81,13 +81,13 @@ const CreateLogModal = ({ onClose, onCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.equipmentId) return toast.error('Please select an equipment item.');
+    if (!form.itemId) return toast.error('Please select an item.');
     if (!form.description.trim()) return toast.error('Description is required.');
 
     setSubmitting(true);
     try {
       await createMaintenanceLog({
-        equipmentId: form.equipmentId,
+        itemId: form.itemId,
         description: form.description,
         priority: form.priority,
         estimatedCost: form.estimatedCost ? parseFloat(form.estimatedCost) : null,
@@ -118,21 +118,21 @@ const CreateLogModal = ({ onClose, onCreated }) => {
 
         {/* Body */}
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-          {/* Equipment select */}
+          {/* Item select */}
           <div>
-            <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Equipment *</label>
-            {loadingEquip ? (
+            <label className="block text-[12px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Item *</label>
+            {loadingItems ? (
               <div className="flex items-center gap-2 text-slate-500 text-sm"><Spinner size="sm" /> Loading…</div>
             ) : (
               <select
-                name="equipmentId"
-                value={form.equipmentId}
+                name="itemId"
+                value={form.itemId}
                 onChange={handleChange}
                 className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
                 required
               >
-                <option value="">Select equipment…</option>
-                {equipmentList.map((eq) => (
+                <option value="">Select item…</option>
+                {itemList.map((eq) => (
                   <option key={eq._id} value={eq._id}>
                     {eq.name} — {eq.status}
                   </option>
@@ -229,7 +229,7 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
         technicianNotes: form.technicianNotes,
         actualCost: form.actualCost ? parseFloat(form.actualCost) : null,
       });
-      toast.success('Maintenance log completed. Equipment is now available.');
+      toast.success('Maintenance log completed. Item is now available.');
       onCompleted();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to complete log.');
@@ -252,10 +252,10 @@ const CompleteLogModal = ({ log, onClose, onCompleted }) => {
           </button>
         </div>
 
-        {/* Equipment summary */}
+        {/* Item summary */}
         <div className="mx-6 mt-4 px-4 py-3 bg-slate-800/60 border border-slate-700 rounded-xl">
-          <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold mb-0.5">Equipment</p>
-          <p className="text-sm font-semibold text-slate-100">{log.equipment?.name}</p>
+          <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold mb-0.5">Item</p>
+          <p className="text-sm font-semibold text-slate-100">{log.item?.name}</p>
           <p className="text-xs text-slate-400 mt-1 line-clamp-2">{log.description}</p>
         </div>
 
@@ -392,7 +392,7 @@ const MaintenanceLogs = () => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search by equipment, description..."
+                placeholder="Search by item, description..."
                 className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
@@ -429,7 +429,7 @@ const MaintenanceLogs = () => {
             </div>
             <p className="text-slate-500 font-medium">No maintenance logs found</p>
             <p className="text-slate-400 text-sm mt-1">
-              Create a log when equipment needs servicing
+              Create a log when an item needs servicing
             </p>
           </div>
         ) : (
@@ -452,7 +452,7 @@ const MaintenanceLogs = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Item</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Status</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Priority</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Description</th>
@@ -465,14 +465,14 @@ const MaintenanceLogs = () => {
                   <tbody className="divide-y divide-slate-800">
                     {logs.map((log) => (
                       <tr key={log._id} className="hover:bg-slate-800/40 transition-colors">
-                        {/* Equipment */}
+                        {/* Item */}
                         <td className="px-3 sm:px-4 py-2 sm:py-3">
                           <div className="flex items-center gap-2">
                             <div className="h-7 w-8 sm:h-8 sm:w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
-                              {log.equipment?.images?.[0] ? (
+                              {log.item?.images?.[0] ? (
                                 <img
-                                  src={log.equipment.images[0].url}
-                                  alt={log.equipment.name}
+                                  src={log.item.images[0].url}
+                                  alt={log.item.name}
                                   className="h-full w-full object-contain p-0.5 sm:p-1"
                                 />
                               ) : (
@@ -482,8 +482,8 @@ const MaintenanceLogs = () => {
                               )}
                             </div>
                             <div>
-                              <p className="text-xs sm:text-sm font-semibold text-slate-100 leading-tight">{log.equipment?.name}</p>
-                              <p className="text-[10px] sm:text-[11px] text-slate-500 capitalize">{log.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-xs sm:text-sm font-semibold text-slate-100 leading-tight">{log.item?.name}</p>
+                              <p className="text-[10px] sm:text-[11px] text-slate-500 capitalize">{log.item?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>

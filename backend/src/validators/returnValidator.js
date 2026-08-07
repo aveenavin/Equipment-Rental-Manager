@@ -17,7 +17,7 @@ const processReturnValidation = [
 
   body('damageDescription')
     .if(body('isDamaged').equals('true'))
-    .notEmpty().withMessage('Damage description is required when equipment is damaged')
+    .notEmpty().withMessage('Damage description is required when item is damaged')
     .isLength({ max: 1000 }).withMessage('Damage description cannot exceed 1000 characters'),
 
   body('damageCharges')

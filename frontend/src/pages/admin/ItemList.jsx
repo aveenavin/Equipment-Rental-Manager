@@ -5,9 +5,9 @@ import { toast } from 'react-hot-toast';
 import { Plus, Search, Filter, Pencil, Trash2, Package, X, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
-import { StatusBadge, ConditionBadge } from '../../components/equipment/EquipmentBadges';
-import EquipmentForm from '../../components/equipment/EquipmentForm';
-import { fetchEquipment, deleteEquipment } from '../../services/equipmentService';
+import { StatusBadge, ConditionBadge } from '../../components/item/ItemBadges';
+import ItemForm from '../../components/item/ItemForm';
+import { fetchItems, deleteItem } from '../../services/itemService';
 import { useAuth } from '../../context/AuthContext';
 import CustomDropdown from '../../components/ui/CustomDropdown';
 import { motion } from 'framer-motion';
@@ -46,12 +46,12 @@ const Modal = ({ title, children, onClose }) => (
   </div>
 );
 
-const EquipmentList = () => {
+const ItemList = () => {
   const { isAdmin, isStaff } = useAuth();
   const canManage = isAdmin || isStaff;
   const navigate = useNavigate();
 
-  const [equipment, setEquipment] = useState([]);
+  const [items, setItems] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, pages: 1 });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -66,20 +66,20 @@ const EquipmentList = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const loadEquipment = useCallback(async () => {
+  const loadItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetchEquipment({ page, limit: 12, search, category, status, sort: 'newest' });
-      setEquipment(res.data.data.equipment);
+      const res = await fetchItems({ page, limit: 12, search, category, status, sort: 'newest' });
+      setItems(res.data.data.items);
       setPagination(res.data.data.pagination);
     } catch {
-      toast.error('Failed to load equipment.');
+      toast.error('Failed to load items.');
     } finally {
       setIsLoading(false);
     }
   }, [page, search, category, status]);
 
-  useEffect(() => { loadEquipment(); }, [loadEquipment]);
+  useEffect(() => { loadItems(); }, [loadItems]);
 
   const prevPageRef = useRef(page);
   useEffect(() => {
@@ -105,10 +105,10 @@ const EquipmentList = () => {
     if (!deleteTarget) return;
     setIsDeleting(true);
     try {
-      await deleteEquipment(deleteTarget._id);
+      await deleteItem(deleteTarget._id);
       toast.success(`"${deleteTarget.name}" deleted.`);
       setDeleteTarget(null);
-      loadEquipment();
+      loadItems();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Delete failed.');
     } finally {
@@ -119,7 +119,7 @@ const EquipmentList = () => {
   const handleFormSuccess = () => {
     setShowCreateModal(false);
     setEditTarget(null);
-    loadEquipment();
+    loadItems();
   };
 
   return (
@@ -129,14 +129,14 @@ const EquipmentList = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 drop-shadow-sm pb-1">Equipment Inventory</h1>
+            <h1 className="text-3xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 drop-shadow-sm pb-1">Item Inventory</h1>
             <p className="text-slate-400 text-xs mt-1">
               {pagination.total} item{pagination.total !== 1 ? 's' : ''} total
             </p>
           </div>
           {canManage && (
             <Button variant="primary" onClick={() => setShowCreateModal(true)} className="flex items-center gap-2">
-              <Plus className="h-4 w-4" /> Add Equipment
+              <Plus className="h-4 w-4" /> Add Item
             </Button>
           )}
         </div>
@@ -188,12 +188,12 @@ const EquipmentList = () => {
           <div className="flex justify-center items-center py-32">
             <Spinner size="lg" />
           </div>
-        ) : equipment.length === 0 ? (
+        ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
             <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 mb-4">
               <Package className="h-10 w-10 text-slate-600" />
             </div>
-            <p className="text-slate-400 font-medium">No equipment found</p>
+            <p className="text-slate-400 font-medium">No items found</p>
             <p className="text-slate-600 text-sm mt-1">Try adjusting your search or filters</p>
           </div>
         ) : (
@@ -204,14 +204,14 @@ const EquipmentList = () => {
               transition={{ type: 'spring', stiffness: 80, damping: 20 }}
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4"
             >
-              {equipment.map((item) => (
+              {items.map((item) => (
                 <motion.div
                   key={item._id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.1 }}
                   transition={{ type: 'spring', stiffness: 80, damping: 20 }}
-                  onClick={() => navigate(`/admin/equipment/${item._id}`)}
+                  onClick={() => navigate(`/admin/items/${item._id}`)}
                   className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col hover:border-orange-700/50 hover:shadow-lg hover:shadow-orange-950/20 transition-all group cursor-pointer"
                 >
                   {/* Image */}
@@ -330,7 +330,7 @@ const EquipmentList = () => {
                 <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform Admin</span>
               </div>
               <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-                Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+                Your trusted partner for professional rentals. Quality gear, reliable service, every time.
               </p>
             </div>
 
@@ -351,7 +351,7 @@ const EquipmentList = () => {
               <ul className="space-y-2 sm:space-y-2.5">
                 {[
                   { label: 'Dashboard', path: '/admin' },
-                  { label: 'Equipment', path: '/admin/equipment' },
+                  { label: 'Items', path: '/admin/items' },
                   { label: 'Rentals', path: '/admin/rentals' },
                   { label: 'Customers', path: '/admin/customers' }
                 ].map((l) => (
@@ -402,15 +402,15 @@ const EquipmentList = () => {
 
       {/* Create Modal */}
       {showCreateModal && (
-        <Modal title="Add New Equipment" onClose={() => setShowCreateModal(false)}>
-          <EquipmentForm onSuccess={handleFormSuccess} onCancel={() => setShowCreateModal(false)} />
+        <Modal title="Add New Item" onClose={() => setShowCreateModal(false)}>
+          <ItemForm onSuccess={handleFormSuccess} onCancel={() => setShowCreateModal(false)} />
         </Modal>
       )}
 
       {/* Edit Modal */}
       {editTarget && (
-        <Modal title="Edit Equipment" onClose={() => setEditTarget(null)}>
-          <EquipmentForm equipment={editTarget} onSuccess={handleFormSuccess} onCancel={() => setEditTarget(null)} />
+        <Modal title="Edit Item" onClose={() => setEditTarget(null)}>
+          <ItemForm item={editTarget} onSuccess={handleFormSuccess} onCancel={() => setEditTarget(null)} />
         </Modal>
       )}
 
@@ -422,7 +422,7 @@ const EquipmentList = () => {
               <div className="p-2 rounded-lg bg-red-900/30 border border-red-800">
                 <Trash2 className="h-5 w-5 text-red-400" />
               </div>
-              <h3 className="font-semibold text-slate-100">Delete Equipment</h3>
+              <h3 className="font-semibold text-slate-100">Delete Item</h3>
             </div>
             <p className="text-slate-400 text-sm mb-6">
               Are you sure you want to delete <span className="text-slate-200 font-medium">"{deleteTarget.name}"</span>? This action cannot be undone.
@@ -438,4 +438,4 @@ const EquipmentList = () => {
   );
 };
 
-export default EquipmentList;
+export default ItemList;

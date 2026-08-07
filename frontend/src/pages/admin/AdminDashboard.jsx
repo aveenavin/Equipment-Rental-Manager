@@ -83,7 +83,7 @@ const AdminDashboard = () => {
   }
 
   const { stats, charts, recentActivity } = data || {};
-  const { equipment = {}, customers = {}, rentals = {}, revenue = {}, returnsToday = 0 } = stats || {};
+  const { items: equipment = {}, customers = {}, rentals = {}, revenue = {}, returnsToday = 0 } = stats || {};
 
   return (
     <div className="min-h-screen bg-[#d8d9e0] text-gray-800 flex flex-col">
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
           className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4"
         >
           <StatCard
-            label="Total Equipment"
+            label="Total Items"
             value={equipment.total || 0}
             icon={Package}
             iconColor="text-teal-600"
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
           />
         </motion.div>
 
-        {/* ── Equipment status mini-bar ────────────────────────────────────── */}
+        {/* ── Item status mini-bar ────────────────────────────────────── */}
         {equipment.total > 0 && (
           <motion.div
             initial={{ opacity: 0, x: 50 }}
@@ -167,7 +167,7 @@ const AdminDashboard = () => {
             className="bg-white border border-amber-200 rounded-xl p-4 shadow-sm"
           >
             <div className="flex items-center justify-between mb-2.5">
-              <p className="text-base font-bold text-gray-800">Equipment Utilization</p>
+              <p className="text-base font-bold text-gray-800">Item Utilization</p>
               <p className="text-[11px] text-gray-400">{equipment.total} total units</p>
             </div>
             <div className="flex h-2.5 rounded-full overflow-hidden gap-0.5">
@@ -332,7 +332,7 @@ const AdminDashboard = () => {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* Equipment by Category Bar */}
+          {/* Items by Category Bar */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -342,10 +342,10 @@ const AdminDashboard = () => {
           >
             <div className="mb-4">
               <h3 className="text-base font-bold text-gray-800">Fleet by Category</h3>
-              <p className="text-[11px] text-gray-400 mt-0.5">Equipment availability across categories</p>
+              <p className="text-[11px] text-gray-400 mt-0.5">Item availability across categories</p>
             </div>
             {(charts?.categoryChart?.length || 0) === 0 ? (
-              <div className="flex items-center justify-center h-[160px] text-gray-400 text-sm">No equipment data yet</div>
+              <div className="flex items-center justify-center h-[160px] text-gray-400 text-sm">No item data yet</div>
             ) : (
               <ResponsiveContainer width="100%" height={160}>
                 <BarChart data={charts.categoryChart} layout="vertical" barSize={10}>
@@ -397,8 +397,8 @@ const AdminDashboard = () => {
                     className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-amber-50 transition-colors group"
                   >
                     <div className="h-8 w-10 rounded-lg bg-amber-100 overflow-hidden shrink-0">
-                      {r.equipment?.images?.[0] ? (
-                        <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
+                      {r.item?.images?.[0] ? (
+                        <img src={r.item.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Package className="h-3.5 w-3.5 text-amber-400" />
@@ -406,7 +406,7 @@ const AdminDashboard = () => {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-medium text-gray-700 truncate">{r.equipment?.name}</p>
+                      <p className="text-[13px] font-medium text-gray-700 truncate">{r.item?.name}</p>
                       <p className="text-[11px] text-gray-400 truncate">{r.customer?.name} · {fmtDate(r.createdAt)}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-2 shrink-0">
@@ -471,8 +471,8 @@ const AdminDashboard = () => {
                   {recentActivity.returns.map((r) => (
                     <div key={r._id} className="flex items-center gap-2.5">
                       <div className="h-6 w-7 rounded-lg bg-amber-100 overflow-hidden shrink-0">
-                        {r.equipment?.images?.[0] ? (
-                          <img src={r.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
+                        {r.item?.images?.[0] ? (
+                          <img src={r.item.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <RotateCcw className="h-3 w-3 text-amber-400" />
@@ -480,7 +480,7 @@ const AdminDashboard = () => {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[12px] font-medium text-gray-700 truncate">{r.equipment?.name}</p>
+                        <p className="text-[12px] font-medium text-gray-700 truncate">{r.item?.name}</p>
                         <p className="text-[11px] text-gray-400">{r.customer?.name}</p>
                       </div>
                       {r.isDamaged ? (
@@ -501,7 +501,7 @@ const AdminDashboard = () => {
           <h2 className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-3">Quick Navigation</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
             {[
-              { label: 'Equipment', href: '/admin/equipment', icon: Package, color: 'text-teal-600', bg: 'bg-white border-teal-200   hover:bg-teal-50' },
+              { label: 'Items', href: '/admin/items', icon: Package, color: 'text-teal-600', bg: 'bg-white border-teal-200   hover:bg-teal-50' },
               { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList, color: 'text-indigo-600', bg: 'bg-white border-indigo-200 hover:bg-indigo-50' },
               { label: 'Returns', href: '/admin/returns', icon: RotateCcw, color: 'text-amber-600', bg: 'bg-white border-amber-300 hover:bg-amber-50' },
               { label: 'Payments', href: '/admin/payments', icon: IndianRupee, color: 'text-emerald-600', bg: 'bg-white border-emerald-200 hover:bg-emerald-50' },
@@ -531,7 +531,7 @@ const AdminDashboard = () => {
                 <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform Admin</span>
               </div>
               <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-                Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+                Your trusted partner for professional rentals. Quality gear, reliable service, every time.
               </p>
             </div>
 
@@ -552,7 +552,7 @@ const AdminDashboard = () => {
               <ul className="space-y-2 sm:space-y-2.5">
                 {[
                   { label: 'Dashboard', path: '/admin' },
-                  { label: 'Equipment', path: '/admin/equipment' },
+                  { label: 'Items', path: '/admin/items' },
                   { label: 'Rentals', path: '/admin/rentals' },
                   { label: 'Customers', path: '/admin/customers' }
                 ].map((l) => (

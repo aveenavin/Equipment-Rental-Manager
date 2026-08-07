@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { fetchRentals } from '../../services/rentalService';
-import { fetchEquipment } from '../../services/equipmentService';
+import { fetchItems } from '../../services/itemService';
 import RentalStatusBadge from '../../components/rental/RentalStatusBadge';
 import Spinner from '../../components/ui/Spinner';
 
@@ -73,8 +73,8 @@ const CustomerDashboard = () => {
     const loadDashboardData = async () => {
       try {
         setIsLoading(true);
-        // Fetch unfiltered equipment to get count
-        const equipRes = await fetchEquipment({ page: 1, limit: 1 });
+        // Fetch unfiltered items to get count
+        const equipRes = await fetchItems({ page: 1, limit: 1 });
         const availableEquip = equipRes.data.data.pagination.total || 0;
 
         // Fetch rentals for the user
@@ -138,7 +138,7 @@ const CustomerDashboard = () => {
             transition={{ delay: 0.28, type: 'spring', stiffness: 80, damping: 20 }}
             className="text-slate-400/90 text-[12px] sm:text-[14px] font-medium tracking-wide mt-[18px] max-w-xl leading-relaxed"
           >
-            Explore available equipment, book what you need, and manage your rentals and active bookings, all in one place.
+            Explore available items, book what you need, and manage your rentals and active bookings, all in one place.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -168,7 +168,7 @@ const CustomerDashboard = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         <StatCard
           icon={Box}
-          label="Available Equipment"
+          label="Available Items"
           value={stats.availableEquip}
           gradient="from-orange-500 to-amber-500"
           shadowColor="shadow-[0_8px_25px_rgba(249,115,22,0.3)] hover:shadow-[0_12px_35px_rgba(249,115,22,0.4)]"
@@ -246,8 +246,8 @@ const CustomerDashboard = () => {
                   >
                     <div className="flex items-center gap-2.5 sm:gap-5">
                       <div className="h-10 w-10 sm:h-14 sm:w-14 rounded-[10px] sm:rounded-xl bg-slate-950 border border-blue-500/20 overflow-hidden shrink-0 relative group-hover:border-blue-500/50 transition-colors duration-300">
-                        {rental.equipment?.images?.[0] ? (
-                          <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1.5 sm:p-2 group-hover:scale-110 transition-transform duration-500" />
+                        {rental.item?.images?.[0] ? (
+                          <img src={rental.item.images[0].url} alt="" className="w-full h-full object-contain p-1.5 sm:p-2 group-hover:scale-110 transition-transform duration-500" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Package className="h-5 w-5 sm:h-6 sm:w-6 text-slate-600" />
@@ -256,7 +256,7 @@ const CustomerDashboard = () => {
                       </div>
                       <div>
                         <h4 className="text-[13px] sm:text-[15.5px] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400 group-hover:from-neutral-800 group-hover:to-neutral-800 transition-all duration-300 truncate max-w-[200px] sm:max-w-xs drop-shadow-sm">
-                          {rental.equipment?.name || 'Unknown Equipment'}
+                          {rental.item?.name || 'Unknown Item'}
                         </h4>
                         <div className="flex items-center gap-1.5 sm:gap-2.5 mt-0.5 sm:mt-1.5 text-[11px] sm:text-[13px] text-slate-400 font-medium">
                           <span className="flex items-center gap-1 sm:gap-1.5"><Calendar className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-slate-500" /> {fmt(rental.startDate)}</span>
@@ -303,7 +303,7 @@ const CustomerDashboard = () => {
                   <span className="font-bold text-slate-300">Browse</span> <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-400">Catalog</span>
                 </h3>
                 <p className="text-[14px] text-slate-400 leading-relaxed mb-6 font-medium">
-                  Explore our extensive inventory of high-quality equipment available for your next project.
+                  Explore our extensive inventory of high-quality items available for your next project.
                 </p>
                 <div className="flex items-center gap-2 text-sm font-bold text-orange-400 group-hover:text-orange-300 transition-colors">
                   Start Exploring <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -357,7 +357,7 @@ const CustomerDashboard = () => {
               <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform</span>
             </div>
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-              Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+              Your trusted partner for professional rentals. Quality gear, reliable service, every time.
             </p>
 
           </div>

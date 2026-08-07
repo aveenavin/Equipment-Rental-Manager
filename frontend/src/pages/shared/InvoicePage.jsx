@@ -115,7 +115,7 @@ const InvoicePage = () => {
               </div>
               <div className="sm:text-right">
                 <h2 className="text-lg sm:text-xl font-bold text-slate-100 tracking-tight print:text-slate-900">RentAll Platform</h2>
-                <p className="text-slate-400 text-xs sm:text-sm print:text-slate-600 font-medium">Premium Equipment Services</p>
+                <p className="text-slate-400 text-xs sm:text-sm print:text-slate-600 font-medium">Premium Rental Services</p>
                 <div className="mt-3 flex sm:justify-end">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider border ${statusCfg.cls} print:border-2 print:shadow-none`}>
                     <StatusIcon className="h-4 w-4" />
@@ -132,7 +132,7 @@ const InvoicePage = () => {
             {/* LEFT COLUMN (Details & Line Items) */}
             <div className="lg:col-span-8 border-b lg:border-b-0 lg:border-r border-slate-800/60 print:border-slate-200">
               
-              {/* Bill To / Equipment */}
+              {/* Bill To / Item */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 px-3 sm:px-8 py-4 sm:py-5 border-b border-slate-800/60 print:border-slate-200">
                 {/* Bill To */}
                 <div className="p-3 sm:p-4 rounded-2xl bg-slate-800/30 border border-slate-700/50 print:p-0 print:bg-transparent print:border-none">
@@ -169,14 +169,14 @@ const InvoicePage = () => {
                   </div>
                 </div>
 
-                {/* Equipment */}
+                {/* Item */}
                 <div className="p-3 sm:p-4 rounded-2xl bg-slate-800/30 border border-slate-700/50 print:p-0 print:bg-transparent print:border-none">
                   <div className="flex items-center gap-2 mb-2">
                     <Package className="h-4 w-4 text-emerald-400 print:hidden" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest print:text-slate-500">Equipment</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest print:text-slate-500">Item</p>
                   </div>
-                  <p className="font-bold text-sm sm:text-base text-slate-100 print:text-slate-900">{invoice.equipment?.name}</p>
-                  <p className="text-xs sm:text-sm font-medium text-primary-400 capitalize print:text-slate-600">{invoice.equipment?.category?.replace(/-/g, ' ')}</p>
+                  <p className="font-bold text-sm sm:text-base text-slate-100 print:text-slate-900">{invoice.item?.name}</p>
+                  <p className="text-xs sm:text-sm font-medium text-primary-400 capitalize print:text-slate-600">{invoice.item?.category?.replace(/-/g, ' ')}</p>
                   <div className="mt-2 pt-2 border-t border-slate-700/50 print:border-slate-200 space-y-1">
                     <p className="text-[10px] sm:text-xs font-mono font-medium text-slate-400 print:text-slate-500">Duration: {fmt(invoice.rental?.startDate)} → {fmt(invoice.rental?.endDate)}</p>
                     <p className="text-[10px] sm:text-xs font-medium text-slate-400 print:text-slate-500">{invoice.rental?.totalDays} day{invoice.rental?.totalDays !== 1 ? 's' : ''} @ ₹{invoice.rental?.dailyRate}/day</p>

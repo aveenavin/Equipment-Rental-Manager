@@ -102,7 +102,7 @@ const AdminRentals = () => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search by equipment, customer..."
+                placeholder="Search by item, customer..."
                 className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
@@ -160,7 +160,7 @@ const AdminRentals = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Item</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Dates</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Amount</th>
@@ -175,18 +175,18 @@ const AdminRentals = () => {
 
                       return (
                         <tr key={rental._id} className="hover:bg-slate-800/40 transition-colors">
-                          {/* Equipment */}
+                          {/* Item */}
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2.5">
                               <div className="h-8 w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
-                                {rental.equipment?.images?.[0] ? (
-                                  <img src={rental.equipment.images[0].url} alt="" className="w-full h-full object-contain p-1" />
+                                {rental.item?.images?.[0] ? (
+                                  <img src={rental.item.images[0].url} alt="" className="w-full h-full object-contain p-1" />
                                 ) : (
                                   <div className="w-full h-full flex items-center justify-center text-slate-600 text-[10px]">N/A</div>
                                 )}
                               </div>
                               <div>
-                                <p className="text-sm font-medium text-slate-200 max-w-[150px] truncate">{rental.equipment?.name}</p>
+                                <p className="text-sm font-medium text-slate-200 max-w-[150px] truncate">{rental.item?.name}</p>
                                 <p className="text-xs text-slate-500 font-mono">#{rental._id.slice(-6).toUpperCase()}</p>
                               </div>
                             </div>

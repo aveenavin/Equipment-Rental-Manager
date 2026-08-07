@@ -7,7 +7,7 @@ import { X, Upload, Image as ImageIcon, Info, DollarSign, Tag } from 'lucide-rea
 import Input from '../ui/Input';
 import Select from '../ui/Select';
 import Button from '../ui/Button';
-import { createEquipment, updateEquipment } from '../../services/equipmentService';
+import { createItem, updateItem } from '../../services/itemService';
 
 const CATEGORIES = [
   { value: 'heavy-machinery', label: 'Heavy Machinery' },
@@ -45,25 +45,25 @@ const schema = z.object({
   serialNumber: z.string().max(100).optional().or(z.literal('')),
 });
 
-const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
-  const isEdit = !!equipment;
+const ItemForm = ({ item, onSuccess, onCancel }) => {
+  const isEdit = !!item;
   const [newFiles, setNewFiles] = useState([]);
   const [newPreviews, setNewPreviews] = useState([]);
-  const existingImages = equipment?.images || [];
+  const existingImages = item?.images || [];
   const [imagesToDelete, setImagesToDelete] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, setError } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: equipment?.name || '',
-      description: equipment?.description || '',
-      category: equipment?.category || '',
-      dailyRate: equipment?.dailyRate?.toString() || '',
-      securityDeposit: equipment?.securityDeposit?.toString() || '',
-      condition: equipment?.condition || 'good',
-      status: equipment?.status || 'available',
-      serialNumber: equipment?.serialNumber || '',
+      name: item?.name || '',
+      description: item?.description || '',
+      category: item?.category || '',
+      dailyRate: item?.dailyRate?.toString() || '',
+      securityDeposit: item?.securityDeposit?.toString() || '',
+      condition: item?.condition || 'good',
+      status: item?.status || 'available',
+      serialNumber: item?.serialNumber || '',
     },
   });
 
@@ -75,7 +75,7 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
     const selected = Array.from(e.target.files);
     const totalImages = existingImages.length + newFiles.length + selected.length - imagesToDelete.length;
     if (totalImages > 5) {
-      toast.error('Maximum 5 images allowed per equipment item.');
+      toast.error('Maximum 5 images allowed per item.');
       return;
     }
     setNewFiles((prev) => [...prev, ...selected]);
@@ -104,11 +104,11 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
       if (isEdit && imagesToDelete.length > 0) formData.append('deleteImageIds', JSON.stringify(imagesToDelete));
 
       if (isEdit) {
-        await updateEquipment(equipment._id, formData);
-        toast.success('Equipment updated successfully.');
+        await updateItem(item._id, formData);
+        toast.success('Item updated successfully.');
       } else {
-        await createEquipment(formData);
-        toast.success('Equipment created successfully.');
+        await createItem(formData);
+        toast.success('Item created successfully.');
       }
       onSuccess();
     } catch (err) {
@@ -136,7 +136,7 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
         <div className="md:col-span-8 flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <Input id="name" label="Equipment Name" placeholder="e.g. Caterpillar 320" required error={errors.name?.message} {...register('name')} />
+              <Input id="name" label="Item Name" placeholder="e.g. Caterpillar 320" required error={errors.name?.message} {...register('name')} />
             </div>
             <Select id="category" label="Category" required error={errors.category?.message} {...register('category')}>
               <option value="">Select category...</option>
@@ -174,7 +174,7 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
               {/* Thumbnails */}
               {existingImages.map((img) => (
                 <div key={img.publicId} className="relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden bg-slate-950/50 border border-slate-700">
-                  <img src={img.url} alt="Equipment" className={`w-full h-full object-cover ${imagesToDelete.includes(img.publicId) ? 'opacity-30 grayscale' : ''}`} />
+                  <img src={img.url} alt="Item" className={`w-full h-full object-cover ${imagesToDelete.includes(img.publicId) ? 'opacity-30 grayscale' : ''}`} />
                   <button type="button" onClick={() => toggleDeleteExisting(img.publicId)} className="absolute top-1 right-1 bg-slate-900/80 rounded-full p-1 border border-white/10 hover:bg-red-500 text-white"><X className="h-3 w-3" /></button>
                 </div>
               ))}
@@ -212,11 +212,11 @@ const EquipmentForm = ({ equipment, onSuccess, onCancel }) => {
       <div className="flex items-center justify-end gap-3 pt-4 mt-2 border-t border-slate-800">
         <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting} className="border border-slate-700 hover:bg-slate-800 px-6 py-2.5 rounded-xl">Cancel</Button>
         <Button type="submit" className="bg-gradient-to-r from-primary-600 to-indigo-600 px-8 py-2.5 rounded-xl font-bold text-white shadow-lg shadow-primary-500/20" isLoading={isSubmitting}>
-          {isEdit ? 'Save Changes' : 'Create Equipment'}
+          {isEdit ? 'Save Changes' : 'Create Item'}
         </Button>
       </div>
     </form>
   );
 };
 
-export default EquipmentForm;
+export default ItemForm;

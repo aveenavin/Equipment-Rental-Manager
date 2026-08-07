@@ -1,10 +1,10 @@
 const { body, query } = require('express-validator');
 
 const createRentalValidation = [
-  body('equipment')
+  body('item')
     .trim()
-    .notEmpty().withMessage('Equipment ID is required')
-    .isMongoId().withMessage('Invalid equipment ID'),
+    .notEmpty().withMessage('Item ID is required')
+    .isMongoId().withMessage('Invalid item ID'),
 
   body('startDate')
     .notEmpty().withMessage('Start date is required')

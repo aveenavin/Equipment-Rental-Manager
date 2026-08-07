@@ -22,7 +22,7 @@ const router = express.Router();
 router.use(protect);
 
 // Availability check — any authenticated user
-router.get('/availability/:equipmentId', getAvailability);
+router.get('/availability/:itemId', getAvailability);
 
 // List rentals — customers see own, admin/staff see all
 router.get('/', listRentalsValidation, validate, getAllRentals);

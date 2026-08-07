@@ -1,7 +1,7 @@
 const express = require('express');
 const AppError = require('../utils/AppError');
 const authRoutes = require('./authRoutes');
-const equipmentRoutes = require('./equipmentRoutes');
+const itemRoutes = require('./itemRoutes');
 const customerRoutes = require('./customerRoutes');
 const rentalRoutes = require('./rentalRoutes');
 const returnRoutes = require('./returnRoutes');
@@ -20,7 +20,7 @@ router.get('/health', (req, res) => {
 });
 
 router.use('/auth', authRoutes);
-router.use('/equipment', equipmentRoutes);
+router.use('/items', itemRoutes);
 router.use('/customers', customerRoutes);
 router.use('/rentals', rentalRoutes);
 router.use('/returns', returnRoutes);

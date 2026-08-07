@@ -3,13 +3,13 @@ const rentalService = require('../services/rentalService');
 
 // GET /api/v1/rentals
 const getAllRentals = catchAsync(async (req, res) => {
-  const { page, limit, status, equipment, search } = req.query;
+  const { page, limit, status, item, search } = req.query;
   const result = await rentalService.listRentals({
     requestingUser: req.user,
     page,
     limit,
     status,
-    equipmentId: equipment,
+    itemId: item,
     search,
   });
 
@@ -58,9 +58,9 @@ const cancelRental = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success', data: { rental } });
 });
 
-// GET /api/v1/rentals/availability/:equipmentId
+// GET /api/v1/rentals/availability/:itemId
 const getAvailability = catchAsync(async (req, res) => {
-  const data = await rentalService.getEquipmentAvailability(req.params.equipmentId);
+  const data = await rentalService.getItemAvailability(req.params.itemId);
   res.status(200).json({ status: 'success', data });
 });
 

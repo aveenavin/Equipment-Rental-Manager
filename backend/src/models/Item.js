@@ -9,12 +9,12 @@ const imageSchema = new mongoose.Schema(
   { _id: false }
 );
 
-const equipmentSchema = new mongoose.Schema(
-  
+const itemSchema = new mongoose.Schema(
+
   {
     name: {
       type: String,
-      required: [true, 'Equipment name is required'],
+      required: [true, 'Item name is required'],
       trim: true,
       minlength: [2, 'Name must be at least 2 characters'],
       maxlength: [100, 'Name cannot exceed 100 characters'],
@@ -76,7 +76,7 @@ const equipmentSchema = new mongoose.Schema(
       default: [],
       validate: {
         validator: (arr) => arr.length <= 5,
-        message: 'A maximum of 5 images are allowed per equipment item',
+        message: 'A maximum of 5 images are allowed per item',
       },
     },
     createdBy: {
@@ -93,7 +93,7 @@ const equipmentSchema = new mongoose.Schema(
 );
 
 // Auto-generate slug from name before saving
-equipmentSchema.pre('save', function (next) {
+itemSchema.pre('save', function (next) {
   if (this.isModified('name')) {
     this.slug = this.name
       .toLowerCase()
@@ -107,11 +107,11 @@ equipmentSchema.pre('save', function (next) {
 });
 
 // Text index for fast full-text search across name, description, serialNumber
-equipmentSchema.index({ name: 'text', description: 'text', serialNumber: 'text' });
+itemSchema.index({ name: 'text', description: 'text', serialNumber: 'text' });
 
 // Sparse unique index — allows multiple null serialNumbers but enforces uniqueness when set
-equipmentSchema.index({ serialNumber: 1 }, { unique: true, sparse: true });
+itemSchema.index({ serialNumber: 1 }, { unique: true, sparse: true });
 
-const Equipment = mongoose.model('Equipment', equipmentSchema);
+const Item = mongoose.model('Item', itemSchema);
 
-module.exports = Equipment;
+module.exports = Item;

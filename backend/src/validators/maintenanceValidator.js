@@ -1,10 +1,10 @@
 const { body, query } = require('express-validator');
 
 const createLogValidation = [
-  body('equipmentId')
+  body('itemId')
     .trim()
-    .notEmpty().withMessage('Equipment ID is required')
-    .isMongoId().withMessage('Invalid equipment ID'),
+    .notEmpty().withMessage('Item ID is required')
+    .isMongoId().withMessage('Invalid item ID'),
 
   body('description')
     .trim()
@@ -40,7 +40,7 @@ const listLogsValidation = [
   query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit').optional().isInt({ min: 1, max: 50 }).withMessage('Limit must be between 1 and 50'),
   query('status').optional().isIn(['open', 'completed']).withMessage('Status must be open or completed'),
-  query('equipment').optional().isMongoId().withMessage('Invalid equipment ID'),
+  query('item').optional().isMongoId().withMessage('Invalid item ID'),
   query('search')
     .optional()
     .trim()

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Rental = require('../models/Rental');
-const Equipment = require('../models/Equipment');
+const Item = require('../models/Item');
 const AppError = require('../utils/AppError');
-const { isEquipmentAvailable, calculateRentalDays, getBookedRanges } = require('../utils/availability');
+const { isItemAvailable, calculateRentalDays, getBookedRanges } = require('../utils/availability');
 
 /**
  * Valid status transitions map.
@@ -17,9 +17,9 @@ const ALLOWED_TRANSITIONS = {
 };
 
 /**
- * Equipment status to sync when rental status changes.
+ * Item status to sync when rental status changes.
  */
-const EQUIPMENT_STATUS_MAP = {
+const ITEM_STATUS_MAP = {
   confirmed: 'available',   // still available until actual checkout
   checked_out: 'rented',
   returned: 'available',
@@ -28,47 +28,47 @@ const EQUIPMENT_STATUS_MAP = {
 
 /**
  * Create a new rental booking.
- * - Verifies equipment exists and is available (not retired/maintenance)
+ * - Verifies item exists and is available (not retired/maintenance)
  * - Checks for date conflicts with existing active rentals
  * - Snapshots pricing at time of booking
  */
 const createRental = async ({ customerId, body }) => {
-  const { equipment: equipmentId, startDate, endDate, notes, deliveryAddress, contactNumber } = body;
+  const { item: itemId, startDate, endDate, notes, deliveryAddress, contactNumber } = body;
 
-  const equipment = await Equipment.findById(equipmentId);
-  if (!equipment) throw new AppError('Equipment not found.', 404);
+  const item = await Item.findById(itemId);
+  if (!item) throw new AppError('Item not found.', 404);
 
-  if (equipment.status === 'retired') {
-    throw new AppError('This equipment has been retired and is no longer available for rental.', 400);
+  if (item.status === 'retired') {
+    throw new AppError('This item has been retired and is no longer available for rental.', 400);
   }
-  if (equipment.status === 'maintenance') {
-    throw new AppError('This equipment is currently under maintenance and cannot be rented.', 400);
+  if (item.status === 'maintenance') {
+    throw new AppError('This item is currently under maintenance and cannot be rented.', 400);
   }
 
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  const available = await isEquipmentAvailable(equipmentId, start, end);
+  const available = await isItemAvailable(itemId, start, end);
   if (!available) {
     throw new AppError(
-      'This equipment is already booked for the selected dates. Please choose different dates.',
+      'This item is already booked for the selected dates. Please choose different dates.',
       409
     );
   }
 
   const totalDays = calculateRentalDays(start, end);
-  const rentalCost = parseFloat((totalDays * equipment.dailyRate).toFixed(2));
-  const totalAmount = parseFloat((rentalCost + equipment.securityDeposit).toFixed(2));
+  const rentalCost = parseFloat((totalDays * item.dailyRate).toFixed(2));
+  const totalAmount = parseFloat((rentalCost + item.securityDeposit).toFixed(2));
 
   const rental = await Rental.create({
     customer: customerId,
-    equipment: equipmentId,
+    item: itemId,
     startDate: start,
     endDate: end,
-    dailyRate: equipment.dailyRate,
+    dailyRate: item.dailyRate,
     totalDays,
     rentalCost,
-    securityDeposit: equipment.securityDeposit,
+    securityDeposit: item.securityDeposit,
     totalAmount,
     deliveryAddress,
     contactNumber,
@@ -77,13 +77,13 @@ const createRental = async ({ customerId, body }) => {
 
   return rental.populate([
     { path: 'customer', select: 'name email' },
-    { path: 'equipment', select: 'name category dailyRate images status' },
+    { path: 'item', select: 'name category dailyRate images status' },
   ]);
 };
 
 /**
  * Update rental status with enforcement of allowed transitions.
- * Automatically syncs equipment availability on relevant transitions.
+ * Automatically syncs item availability on relevant transitions.
  */
 const updateRentalStatus = async ({ rentalId, status, notes, handledById }) => {
   const rental = await Rental.findById(rentalId);
@@ -115,12 +115,12 @@ const updateRentalStatus = async ({ rentalId, status, notes, handledById }) => {
 
     await rental.save({ session });
 
-    // Sync equipment status
-    const newEquipmentStatus = EQUIPMENT_STATUS_MAP[status];
-    if (newEquipmentStatus) {
-      await Equipment.findByIdAndUpdate(
-        rental.equipment,
-        { status: newEquipmentStatus },
+    // Sync item status
+    const newItemStatus = ITEM_STATUS_MAP[status];
+    if (newItemStatus) {
+      await Item.findByIdAndUpdate(
+        rental.item,
+        { status: newItemStatus },
         { session }
       );
     }
@@ -135,7 +135,7 @@ const updateRentalStatus = async ({ rentalId, status, notes, handledById }) => {
 
   return rental.populate([
     { path: 'customer', select: 'name email phone' },
-    { path: 'equipment', select: 'name category dailyRate images status' },
+    { path: 'item', select: 'name category dailyRate images status' },
     { path: 'handledBy', select: 'name role' },
   ]);
 };
@@ -147,7 +147,7 @@ const updateRentalStatus = async ({ rentalId, status, notes, handledById }) => {
 const getRentalById = async ({ rentalId, requestingUser }) => {
   const rental = await Rental.findById(rentalId)
     .populate('customer', 'name email phone')
-    .populate('equipment', 'name category dailyRate securityDeposit images status')
+    .populate('item', 'name category dailyRate securityDeposit images status')
     .populate('handledBy', 'name role')
     .lean();
 
@@ -167,9 +167,9 @@ const getRentalById = async ({ rentalId, requestingUser }) => {
  * List rentals with filtering, search, and pagination.
  * Customers only see their own. Admin/Staff see all.
  *
- * Search: matches equipment name, customer name/email, or rental ID suffix.
+ * Search: matches item name, customer name/email, or rental ID suffix.
  */
-const listRentals = async ({ requestingUser, page = 1, limit = 15, status, equipmentId, search }) => {
+const listRentals = async ({ requestingUser, page = 1, limit = 15, status, itemId, search }) => {
   const filter = {};
 
   if (requestingUser.role === 'customer') {
@@ -177,22 +177,22 @@ const listRentals = async ({ requestingUser, page = 1, limit = 15, status, equip
   }
 
   if (status) filter.status = status;
-  if (equipmentId) filter.equipment = equipmentId;
+  if (itemId) filter.item = itemId;
 
-  // Search across referenced Equipment names, Customer names/emails, and rental ID suffix
+  // Search across referenced Item names, Customer names/emails, and rental ID suffix
   if (search && search.trim()) {
     const regex = new RegExp(search.trim(), 'i');
 
-    const [matchedEquipment, matchedUsers] = await Promise.all([
-      Equipment.find({ name: regex }).select('_id').lean(),
+    const [matchedItems, matchedUsers] = await Promise.all([
+      Item.find({ name: regex }).select('_id').lean(),
       mongoose.model('User').find({
         $or: [{ name: regex }, { email: regex }],
       }).select('_id').lean(),
     ]);
 
     const orConditions = [];
-    if (matchedEquipment.length) {
-      orConditions.push({ equipment: { $in: matchedEquipment.map((e) => e._id) } });
+    if (matchedItems.length) {
+      orConditions.push({ item: { $in: matchedItems.map((e) => e._id) } });
     }
     if (matchedUsers.length) {
       orConditions.push({ customer: { $in: matchedUsers.map((u) => u._id) } });
@@ -224,7 +224,7 @@ const listRentals = async ({ requestingUser, page = 1, limit = 15, status, equip
       .skip(skip)
       .limit(limitNum)
       .populate('customer', 'name email')
-      .populate('equipment', 'name category images status')
+      .populate('item', 'name category images status')
       .lean(),
     Rental.countDocuments(filter),
   ]);
@@ -264,14 +264,14 @@ const cancelRental = async ({ rentalId, requestingUser }) => {
 };
 
 /**
- * Get booked date ranges for a specific equipment item (for calendar display).
+ * Get booked date ranges for a specific item (for calendar display).
  */
-const getEquipmentAvailability = async (equipmentId) => {
-  const equipment = await Equipment.findById(equipmentId).select('status name').lean();
-  if (!equipment) throw new AppError('Equipment not found.', 404);
+const getItemAvailability = async (itemId) => {
+  const item = await Item.findById(itemId).select('status name').lean();
+  if (!item) throw new AppError('Item not found.', 404);
 
-  const bookedRanges = await getBookedRanges(equipmentId);
-  return { equipment, bookedRanges };
+  const bookedRanges = await getBookedRanges(itemId);
+  return { item, bookedRanges };
 };
 
 module.exports = {
@@ -280,5 +280,5 @@ module.exports = {
   getRentalById,
   listRentals,
   cancelRental,
-  getEquipmentAvailability,
+  getItemAvailability,
 };

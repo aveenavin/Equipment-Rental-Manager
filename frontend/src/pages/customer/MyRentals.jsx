@@ -159,13 +159,13 @@ const RentalCard = ({ rental, onCancel }) => {
       </div>
       <div className="flex flex-col md:flex-row h-full relative z-10">
 
-        {/* ── Equipment preview area ──────────────────────────────────────── */}
+        {/* ── Item preview area ───────────────────────────────────────────── */}
         <div className="md:w-[270px] p-2.5 pr-1.5 sm:p-5 sm:pr-3 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-center bg-slate-900/30 shrink-0">
           <div className="relative w-full flex-1 my-1 sm:my-1.5 min-h-[96px] sm:min-h-[180px] rounded-xl overflow-hidden shadow-lg shadow-black/30 border border-slate-700/50">
-            {rental.equipment?.images?.[0] ? (
+            {rental.item?.images?.[0] ? (
               <img
-                src={rental.equipment.images[0].url}
-                alt={rental.equipment?.name}
+                src={rental.item.images[0].url}
+                alt={rental.item?.name}
                 className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
@@ -175,7 +175,7 @@ const RentalCard = ({ rental, onCancel }) => {
             )}
             <div className="absolute top-2 left-2">
               <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-black/60 text-white backdrop-blur-md border border-white/10 shadow-sm">
-                {rental.equipment?.category?.replace(/-/g, ' ')}
+                {rental.item?.category?.replace(/-/g, ' ')}
               </span>
             </div>
           </div>
@@ -188,7 +188,7 @@ const RentalCard = ({ rental, onCancel }) => {
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-3 mb-1.5 sm:mb-3">
             <div className="min-w-0">
               <h3 className="text-sm sm:text-base font-semibold text-slate-200 tracking-tight leading-snug line-clamp-1 mb-0.5 sm:mb-1.5">
-                {rental.equipment?.name}
+                {rental.item?.name}
               </h3>
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <p className="text-xs sm:text-sm font-medium text-slate-400">
@@ -385,7 +385,7 @@ const MyRentals = () => {
             <span className="font-extrabold text-slate-100">My</span> <span className="font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Rentals</span>
           </h1>
           <p className="text-slate-400 font-medium text-xs sm:text-[15px] mt-1 sm:mt-2 max-w-xl leading-relaxed">
-            Track and manage all your equipment bookings. View status, details, and history in one place.
+            Track and manage all your rental bookings. View status, details, and history in one place.
           </p>
         </div>
         <Link to="/catalog" className="w-full sm:w-auto">
@@ -480,12 +480,12 @@ const MyRentals = () => {
           <p className="text-slate-400 text-[15px] mt-3 max-w-md mx-auto leading-relaxed">
             {statusFilter
               ? `You don't have any ${STATUS_FILTERS.find(s => s.value === statusFilter)?.label.toLowerCase()} rentals.`
-              : 'Start by browsing our equipment catalog and make your first booking to see it here.'}
+              : 'Start by browsing our item catalog and make your first booking to see it here.'}
           </p>
           {!statusFilter && (
             <Link to="/catalog" className="mt-8">
               <Button variant="primary" size="lg" className="flex items-center gap-2 rounded-xl shadow-lg shadow-orange-500/20 px-8 py-3">
-                <Package className="h-5 w-5" /> Browse Equipment
+                <Package className="h-5 w-5" /> Browse Items
               </Button>
             </Link>
           )}
@@ -582,13 +582,13 @@ const MyRentals = () => {
                 </div>
               </div>
 
-              {/* Equipment preview in modal */}
-              {cancelTarget.equipment && (
+              {/* Item preview in modal */}
+              {cancelTarget.item && (
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/50 border border-slate-700/60 mb-6 shadow-sm">
                   <div className="h-16 w-16 rounded-xl bg-slate-700 overflow-hidden shrink-0 shadow-inner relative">
-                    {cancelTarget.equipment?.images?.[0] ? (
+                    {cancelTarget.item?.images?.[0] ? (
                       <img
-                        src={cancelTarget.equipment.images[0].url}
+                        src={cancelTarget.item.images[0].url}
                         alt=""
                         className="w-full h-full object-cover"
                       />
@@ -600,7 +600,7 @@ const MyRentals = () => {
                   </div>
                   <div className="min-w-0">
                     <p className="text-base font-bold text-slate-200 truncate leading-tight">
-                      {cancelTarget.equipment?.name}
+                      {cancelTarget.item?.name}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1.5 text-sm text-slate-400">
                       <Calendar className="h-3.5 w-3.5" />

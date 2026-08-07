@@ -95,7 +95,7 @@ const AdminReturns = () => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search by equipment, customer..."
+                placeholder="Search by item, customer..."
                 className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-gradient-to-b from-white to-slate-50/80 border border-white !text-black placeholder-slate-400 text-[16px] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.06),inset_0_1px_3px_rgba(255,255,255,1)] focus:outline-none focus:ring-[3px] focus:ring-[#4558be]/20 focus:border-[#4558be]/30 hover:border-slate-200 transition-all duration-300"
               />
               {searchInput && (
@@ -131,7 +131,7 @@ const AdminReturns = () => {
               <RotateCcw className="h-10 w-10 text-slate-600" />
             </div>
             <p className="text-slate-400 font-medium">No return records found</p>
-            <p className="text-slate-600 text-sm mt-1">Returns will appear here after equipment is returned</p>
+            <p className="text-slate-600 text-sm mt-1">Returns will appear here after items are returned</p>
           </div>
         ) : (
           <>
@@ -153,7 +153,7 @@ const AdminReturns = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-slate-800">
-                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Equipment</th>
+                      <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Item</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Customer</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Return Date</th>
                       <th className="text-left px-4 py-2.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Condition</th>
@@ -165,12 +165,12 @@ const AdminReturns = () => {
                   <tbody className="divide-y divide-slate-800">
                     {returns.map((ret) => (
                       <tr key={ret._id} className="hover:bg-slate-800/40 transition-colors">
-                        {/* Equipment */}
+                        {/* Item */}
                         <td className="px-3 sm:px-4 py-2 sm:py-3">
                           <div className="flex items-center gap-2">
                             <div className="h-7 w-8 sm:h-8 sm:w-10 rounded-lg bg-slate-800 overflow-hidden shrink-0">
-                              {ret.equipment?.images?.[0] ? (
-                                <img src={ret.equipment.images[0].url} alt="" className="w-full h-full object-contain p-0.5 sm:p-1" />
+                              {ret.item?.images?.[0] ? (
+                                <img src={ret.item.images[0].url} alt="" className="w-full h-full object-contain p-0.5 sm:p-1" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
                                   <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-600" />
@@ -178,8 +178,8 @@ const AdminReturns = () => {
                               )}
                             </div>
                             <div>
-                              <p className="text-xs sm:text-sm font-medium text-slate-200 max-w-[150px] truncate">{ret.equipment?.name}</p>
-                              <p className="text-[10px] sm:text-xs text-slate-500 capitalize">{ret.equipment?.category?.replace(/-/g, ' ')}</p>
+                              <p className="text-xs sm:text-sm font-medium text-slate-200 max-w-[150px] truncate">{ret.item?.name}</p>
+                              <p className="text-[10px] sm:text-xs text-slate-500 capitalize">{ret.item?.category?.replace(/-/g, ' ')}</p>
                             </div>
                           </div>
                         </td>

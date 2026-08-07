@@ -14,10 +14,10 @@ const VALID_CATEGORIES = [
 const VALID_STATUSES = ['available', 'rented', 'maintenance', 'retired'];
 const VALID_CONDITIONS = ['excellent', 'good', 'fair', 'poor'];
 
-const createEquipmentValidation = [
+const createItemValidation = [
   body('name')
     .trim()
-    .notEmpty().withMessage('Equipment name is required')
+    .notEmpty().withMessage('Item name is required')
     .isLength({ min: 2, max: 100 }).withMessage('Name must be between 2 and 100 characters'),
 
   body('description')
@@ -48,7 +48,7 @@ const createEquipmentValidation = [
     .isLength({ max: 100 }).withMessage('Serial number cannot exceed 100 characters'),
 ];
 
-const updateEquipmentValidation = [
+const updateItemValidation = [
   body('name')
     .optional()
     .trim()
@@ -86,7 +86,7 @@ const updateEquipmentValidation = [
     .isLength({ max: 100 }).withMessage('Serial number cannot exceed 100 characters'),
 ];
 
-const listEquipmentValidation = [
+const listItemValidation = [
   query('page')
     .optional()
     .isInt({ min: 1 }).withMessage('Page must be a positive integer'),
@@ -105,7 +105,7 @@ const listEquipmentValidation = [
 ];
 
 module.exports = {
-  createEquipmentValidation,
-  updateEquipmentValidation,
-  listEquipmentValidation,
+  createItemValidation,
+  updateItemValidation,
+  listItemValidation,
 };

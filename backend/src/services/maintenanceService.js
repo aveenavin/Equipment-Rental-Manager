@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 const MaintenanceLog = require('../models/MaintenanceLog');
-const Equipment = require('../models/Equipment');
+const Item = require('../models/Item');
 const AppError = require('../utils/AppError');
 
 /**
- * Create a new maintenance log and lock the equipment to 'maintenance' status.
+ * Create a new maintenance log and lock the item to 'maintenance' status.
  *
  * Business rules:
- * - Equipment must exist
- * - Equipment cannot be in 'retired' status
- * - Equipment cannot already have an open maintenance log
- * - Atomically: creates log + sets equipment.status = 'maintenance'
+ * - Item must exist
+ * - Item cannot be in 'retired' status
+ * - Item cannot already have an open maintenance log
+ * - Atomically: creates log + sets item.status = 'maintenance'
  */
 const createMaintenanceLog = async ({
-  equipmentId,
+  itemId,
   reportedById,
   description,
   priority,
@@ -21,21 +21,21 @@ const createMaintenanceLog = async ({
   scheduledDate,
   triggeredByReturn = null,
 }) => {
-  const equipment = await Equipment.findById(equipmentId);
-  if (!equipment) throw new AppError('Equipment not found.', 404);
+  const item = await Item.findById(itemId);
+  if (!item) throw new AppError('Item not found.', 404);
 
-  if (equipment.status === 'retired') {
-    throw new AppError('Cannot create a maintenance log for retired equipment.', 400);
+  if (item.status === 'retired') {
+    throw new AppError('Cannot create a maintenance log for a retired item.', 400);
   }
 
-  // Guard: cannot have two open logs for the same equipment
+  // Guard: cannot have two open logs for the same item
   const existingOpenLog = await MaintenanceLog.findOne({
-    equipment: equipmentId,
+    item: itemId,
     status: 'open',
   });
   if (existingOpenLog) {
     throw new AppError(
-      'This equipment already has an open maintenance log. Complete the existing log before creating a new one.',
+      'This item already has an open maintenance log. Complete the existing log before creating a new one.',
       409
     );
   }
@@ -49,7 +49,7 @@ const createMaintenanceLog = async ({
     [log] = await MaintenanceLog.create(
       [
         {
-          equipment: equipmentId,
+          item: itemId,
           reportedBy: reportedById,
           description: description.trim(),
           priority: priority || 'medium',
@@ -61,8 +61,8 @@ const createMaintenanceLog = async ({
       { session }
     );
 
-    await Equipment.findByIdAndUpdate(
-      equipmentId,
+    await Item.findByIdAndUpdate(
+      itemId,
       { status: 'maintenance' },
       { session }
     );
@@ -76,18 +76,18 @@ const createMaintenanceLog = async ({
   }
 
   return MaintenanceLog.findById(log._id)
-    .populate('equipment', 'name category images condition status')
+    .populate('item', 'name category images condition status')
     .populate('reportedBy', 'name role')
     .lean();
 };
 
 /**
- * Complete an open maintenance log and release the equipment back to 'available'.
+ * Complete an open maintenance log and release the item back to 'available'.
  *
  * Business rules:
  * - Log must exist
  * - Log must be in 'open' status
- * - Atomically: updates log + sets equipment.status = 'available'
+ * - Atomically: updates log + sets item.status = 'available'
  */
 const completeMaintenanceLog = async ({
   logId,
@@ -95,7 +95,7 @@ const completeMaintenanceLog = async ({
   technicianNotes,
   actualCost,
 }) => {
-  const log = await MaintenanceLog.findById(logId).populate('equipment');
+  const log = await MaintenanceLog.findById(logId).populate('item');
   if (!log) throw new AppError('Maintenance log not found.', 404);
 
   if (log.status === 'completed') {
@@ -115,8 +115,8 @@ const completeMaintenanceLog = async ({
     log.actualCost = actualCost != null ? parseFloat(actualCost) : null;
     await log.save({ session });
 
-    await Equipment.findByIdAndUpdate(
-      log.equipment._id,
+    await Item.findByIdAndUpdate(
+      log.item._id,
       { status: 'available' },
       { session }
     );
@@ -130,7 +130,7 @@ const completeMaintenanceLog = async ({
   }
 
   return MaintenanceLog.findById(log._id)
-    .populate('equipment', 'name category images condition status')
+    .populate('item', 'name category images condition status')
     .populate('reportedBy', 'name role')
     .populate('completedBy', 'name role')
     .lean();
@@ -141,7 +141,7 @@ const completeMaintenanceLog = async ({
  */
 const getMaintenanceLogById = async (id) => {
   const log = await MaintenanceLog.findById(id)
-    .populate('equipment', 'name category images condition status serialNumber')
+    .populate('item', 'name category images condition status serialNumber')
     .populate('reportedBy', 'name role')
     .populate('completedBy', 'name role')
     .populate('triggeredByReturn', 'returnDate conditionAtReturn damageDescription damageCharges')
@@ -154,22 +154,22 @@ const getMaintenanceLogById = async (id) => {
 /**
  * List maintenance logs with pagination, filtering, and search.
  *
- * Search: matches equipment name or log description.
+ * Search: matches item name or log description.
  */
-const listMaintenanceLogs = async ({ page = 1, limit = 15, status, equipmentId, search }) => {
+const listMaintenanceLogs = async ({ page = 1, limit = 15, status, itemId, search }) => {
   const filter = {};
   if (status) filter.status = status;
-  if (equipmentId) filter.equipment = equipmentId;
+  if (itemId) filter.item = itemId;
 
-  // Search across referenced Equipment names and log description
+  // Search across referenced Item names and log description
   if (search && search.trim()) {
     const regex = new RegExp(search.trim(), 'i');
 
-    const matchedEquipment = await Equipment.find({ name: regex }).select('_id').lean();
+    const matchedItems = await Item.find({ name: regex }).select('_id').lean();
 
     const orConditions = [{ description: regex }];
-    if (matchedEquipment.length) {
-      orConditions.push({ equipment: { $in: matchedEquipment.map((e) => e._id) } });
+    if (matchedItems.length) {
+      orConditions.push({ item: { $in: matchedItems.map((e) => e._id) } });
     }
 
     filter.$and = [...(filter.$and || []), { $or: orConditions }];
@@ -184,7 +184,7 @@ const listMaintenanceLogs = async ({ page = 1, limit = 15, status, equipmentId, 
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNum)
-      .populate('equipment', 'name category images condition status')
+      .populate('item', 'name category images condition status')
       .populate('reportedBy', 'name role')
       .populate('completedBy', 'name role')
       .lean(),

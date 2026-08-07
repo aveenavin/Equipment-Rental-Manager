@@ -15,7 +15,7 @@ import {
 const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
   const navItems = [
     { label: 'Dashboard', href: '/admin', icon: BarChart3, exact: true },
-    { label: 'Equipment', href: '/admin/equipment', icon: Package },
+    { label: 'Items', href: '/admin/items', icon: Package },
     { label: 'Rentals', href: '/admin/rentals', icon: ClipboardList },
     { label: 'Returns', href: '/admin/returns', icon: RotateCcw },
     { label: 'Maintenance', href: '/admin/maintenance', icon: Wrench },
@@ -68,7 +68,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
 
             <span className={`ml-2.5 font-extrabold text-orange-200 text-[15px] tracking-tight whitespace-nowrap transition-opacity duration-300 ease-in-out ${collapsed ? 'opacity-0' : 'opacity-100'
               }`}>
-              Equip<span className="text-orange-600">Admin</span>
+              Rental<span className="text-orange-600">Admin</span>
             </span>
           </div>
 

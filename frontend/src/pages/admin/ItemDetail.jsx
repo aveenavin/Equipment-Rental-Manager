@@ -5,19 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Pencil, Trash2, Package, ChevronLeft, ChevronRight, X, DollarSign, Tag, FileText, ShoppingCart } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Spinner from '../../components/ui/Spinner';
-import { StatusBadge, ConditionBadge } from '../../components/equipment/EquipmentBadges';
-import EquipmentForm from '../../components/equipment/EquipmentForm';
+import { StatusBadge, ConditionBadge } from '../../components/item/ItemBadges';
+import ItemForm from '../../components/item/ItemForm';
 import BookingModal from '../../components/rental/BookingModal';
-import { fetchEquipmentById, deleteEquipment } from '../../services/equipmentService';
+import { fetchItemById, deleteItem } from '../../services/itemService';
 import { useAuth } from '../../context/AuthContext';
 
-const EquipmentDetail = () => {
+const ItemDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin, isStaff } = useAuth();
   const canManage = isAdmin || isStaff;
 
-  const [equipment, setEquipment] = useState(null);
+  const [item, setItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [imageIndex, setImageIndex] = useState(0);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -25,27 +25,27 @@ const EquipmentDetail = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [bookingTarget, setBookingTarget] = useState(null);
 
-  const loadEquipment = useCallback(async () => {
+  const loadItem = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetchEquipmentById(id);
-      setEquipment(res.data.data.equipment);
+      const res = await fetchItemById(id);
+      setItem(res.data.data.item);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Equipment not found.');
-      navigate('/admin/equipment');
+      toast.error(err.response?.data?.message || 'Item not found.');
+      navigate('/admin/items');
     } finally {
       setIsLoading(false);
     }
   }, [id, navigate]);
 
-  useEffect(() => { loadEquipment(); }, [loadEquipment]);
+  useEffect(() => { loadItem(); }, [loadItem]);
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteEquipment(id);
-      toast.success('Equipment deleted.');
-      navigate('/admin/equipment');
+      await deleteItem(id);
+      toast.success('Item deleted.');
+      navigate('/admin/items');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Delete failed.');
       setIsDeleting(false);
@@ -54,16 +54,16 @@ const EquipmentDetail = () => {
 
   const handleEditSuccess = () => {
     setShowEditModal(false);
-    loadEquipment();
+    loadItem();
   };
 
   const handleBook = () => {
     if (!isAuthenticated) {
-      toast.error('Please log in to book equipment.');
+      toast.error('Please log in to book this item.');
       navigate('/login');
       return;
     }
-    setBookingTarget(equipment);
+    setBookingTarget(item);
   };
 
   if (isLoading) {
@@ -74,9 +74,9 @@ const EquipmentDetail = () => {
     );
   }
 
-  if (!equipment) return null;
+  if (!item) return null;
 
-  const images = equipment.images || [];
+  const images = item.images || [];
 
   return (
     <div className={`min-h-screen ${canManage ? 'bg-slate-950' : 'bg-[#EBE8E1]'} text-slate-100 relative overflow-hidden pb-10`}>
@@ -124,7 +124,7 @@ const EquipmentDetail = () => {
                   <>
                     <img
                       src={images[imageIndex].url}
-                      alt={equipment.name}
+                      alt={item.name}
                       className="absolute inset-0 w-full h-full object-fill transition-transform duration-700 group-hover:scale-110"
                     />
                     {images.length > 1 && (
@@ -156,7 +156,7 @@ const EquipmentDetail = () => {
               {/* ADMIN ACTIONS / NAVIGATION */}
               <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between shrink-0">
                 <Link
-                  to={canManage ? "/admin/equipment" : "/catalog"}
+                  to={canManage ? "/admin/items" : "/catalog"}
                   className="hidden sm:inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-100 transition-colors bg-slate-900/50 px-4 py-2 rounded-xl border border-slate-700/50 backdrop-blur-md hover:bg-slate-800"
                 >
                   <ArrowLeft className="h-4 w-4" /> Back to Inventory
@@ -176,17 +176,17 @@ const EquipmentDetail = () => {
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-5 shadow-xl">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs font-bold text-primary-400 uppercase tracking-widest mb-1.5">{equipment.category?.replace(/-/g, ' ')}</p>
-                    <h1 className="text-base sm:text-3xl font-black text-slate-100 leading-tight mb-3">{equipment.name}</h1>
+                    <p className="text-xs font-bold text-primary-400 uppercase tracking-widest mb-1.5">{item.category?.replace(/-/g, ' ')}</p>
+                    <h1 className="text-base sm:text-3xl font-black text-slate-100 leading-tight mb-3">{item.name}</h1>
                     <div className="flex flex-wrap gap-2">
-                      <StatusBadge status={equipment.status} />
-                      <ConditionBadge condition={equipment.condition} />
+                      <StatusBadge status={item.status} />
+                      <ConditionBadge condition={item.condition} />
                     </div>
                   </div>
-                  {equipment.serialNumber && (
+                  {item.serialNumber && (
                     <div className="text-right">
                       <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Serial</p>
-                      <p className="text-[9px] sm:text-sm font-mono font-bold text-slate-300 bg-slate-950/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-slate-800 truncate max-w-[100px] sm:max-w-none">{equipment.serialNumber}</p>
+                      <p className="text-[9px] sm:text-sm font-mono font-bold text-slate-300 bg-slate-950/50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-slate-800 truncate max-w-[100px] sm:max-w-none">{item.serialNumber}</p>
                     </div>
                   )}
                 </div>
@@ -197,14 +197,14 @@ const EquipmentDetail = () => {
                   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
                   <div>
                     <p className="text-[10px] font-bold text-emerald-600/90 uppercase tracking-widest mb-0.5">Daily Rate</p>
-                    <p className="text-2xl font-black text-emerald-500">₹{equipment.dailyRate}</p>
+                    <p className="text-2xl font-black text-emerald-500">₹{item.dailyRate}</p>
                   </div>
                   <Tag className="w-8 h-8 text-emerald-600/30 group-hover:scale-110 transition-transform" />
                 </div>
                 <div className="p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 relative overflow-hidden flex items-center justify-between">
                   <div>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Security Deposit</p>
-                    <p className="text-2xl font-black text-slate-200">₹{equipment.securityDeposit}</p>
+                    <p className="text-2xl font-black text-slate-200">₹{item.securityDeposit}</p>
                   </div>
                   <DollarSign className="w-8 h-8 text-slate-600/30" />
                 </div>
@@ -215,20 +215,20 @@ const EquipmentDetail = () => {
                 <div>
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Added By</p>
                   <p className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px]">{equipment.createdBy?.name?.[0]?.toUpperCase() || '?'}</span>
-                    {equipment.createdBy?.name || 'N/A'}
+                    <span className="w-6 h-6 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px]">{item.createdBy?.name?.[0]?.toUpperCase() || '?'}</span>
+                    {item.createdBy?.name || 'N/A'}
                   </p>
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Date Added</p>
                   <p className="text-sm font-bold text-slate-200 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800 inline-block">
-                    {new Date(equipment.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    {new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
                   </p>
                 </div>
               </motion.div>
 
               {/* Book Now Button (customer-facing) */}
-              {!canManage && equipment.status === 'available' && (
+              {!canManage && item.status === 'available' && (
                 <div className="mt-1 mb-1 shrink-0 relative z-10">
                   <button
                     onClick={handleBook}
@@ -258,7 +258,7 @@ const EquipmentDetail = () => {
             <Package className="absolute -bottom-12 -right-8 w-64 h-64 text-slate-800/20 -rotate-12 pointer-events-none z-0" />
 
             <div className="overflow-y-auto custom-scrollbar flex-1 pr-4 relative z-10">
-              <p className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">{equipment.description || "No description provided."}</p>
+              <p className="text-base text-slate-300 leading-relaxed whitespace-pre-wrap">{item.description || "No description provided."}</p>
             </div>
           </motion.div>
 
@@ -275,7 +275,7 @@ const EquipmentDetail = () => {
                 <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">RentAll Platform Admin</span>
               </div>
               <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
-                Your trusted partner for professional equipment rentals. Quality gear, reliable service, every time.
+                Your trusted partner for professional rentals. Quality gear, reliable service, every time.
               </p>
             </div>
 
@@ -347,7 +347,7 @@ const EquipmentDetail = () => {
       {/* Booking Modal */}
       {bookingTarget && (
         <BookingModal
-          equipment={bookingTarget}
+          item={bookingTarget}
           onClose={() => setBookingTarget(null)}
           onBooked={() => {
             setBookingTarget(null);
@@ -361,11 +361,11 @@ const EquipmentDetail = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative w-full max-w-5xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl my-4 overflow-hidden">
               <div className="flex items-center justify-between px-8 py-5 border-b border-slate-800 bg-slate-950/50">
-                <h2 className="text-xl font-bold text-slate-100 tracking-tight">Edit Equipment</h2>
+                <h2 className="text-xl font-bold text-slate-100 tracking-tight">Edit Item</h2>
                 <button onClick={() => setShowEditModal(false)} className="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"><X className="h-5 w-5" /></button>
               </div>
               <div className="p-8">
-                <EquipmentForm equipment={equipment} onSuccess={handleEditSuccess} onCancel={() => setShowEditModal(false)} />
+                <ItemForm item={item} onSuccess={handleEditSuccess} onCancel={() => setShowEditModal(false)} />
               </div>
             </motion.div>
           </motion.div>
@@ -379,8 +379,8 @@ const EquipmentDetail = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent pointer-events-none" />
               <div className="flex flex-col items-center text-center relative z-10">
                 <div className="p-4 rounded-full bg-red-500/20 border border-red-500/30 mb-5"><Trash2 className="h-8 w-8 text-red-400" /></div>
-                <h3 className="text-2xl font-black text-slate-100 mb-3 tracking-tight">Delete Equipment?</h3>
-                <p className="text-slate-400 text-sm mb-8 leading-relaxed">Are you absolutely sure you want to delete <span className="text-white font-bold">{equipment.name}</span>? This action cannot be undone.</p>
+                <h3 className="text-2xl font-black text-slate-100 mb-3 tracking-tight">Delete Item?</h3>
+                <p className="text-slate-400 text-sm mb-8 leading-relaxed">Are you absolutely sure you want to delete <span className="text-white font-bold">{item.name}</span>? This action cannot be undone.</p>
                 <div className="flex gap-3 w-full">
                   <Button variant="secondary" className="flex-1 py-3 rounded-xl font-bold" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>Cancel</Button>
                   <Button variant="danger" className="flex-1 py-3 rounded-xl font-bold shadow-lg shadow-red-500/20" isLoading={isDeleting} onClick={handleDelete}>Delete</Button>
@@ -394,4 +394,4 @@ const EquipmentDetail = () => {
   );
 };
 
-export default EquipmentDetail;
+export default ItemDetail;

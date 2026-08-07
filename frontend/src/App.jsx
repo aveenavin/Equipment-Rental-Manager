@@ -16,13 +16,13 @@ import VerifyEmail from './pages/public/VerifyEmail';
 
 // Customer pages
 import CustomerDashboard from './pages/customer/Dashboard';
-import EquipmentCatalog from './pages/customer/EquipmentCatalog';
+import ItemCatalog from './pages/customer/ItemCatalog';
 import MyRentals from './pages/customer/MyRentals';
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard';
-import EquipmentList from './pages/admin/EquipmentList';
-import EquipmentDetail from './pages/admin/EquipmentDetail';
+import ItemList from './pages/admin/ItemList';
+import ItemDetail from './pages/admin/ItemDetail';
 import CustomerList from './pages/admin/CustomerList';
 import CustomerDetail from './pages/admin/CustomerDetail';
 import AdminRentals from './pages/admin/AdminRentals';
@@ -95,8 +95,8 @@ function App() {
           >
             <Route element={<CustomerLayout />}>
               <Route path="/dashboard" element={<CustomerDashboard />} />
-              <Route path="/catalog"   element={<EquipmentCatalog />} />
-              <Route path="/catalog/:id" element={<EquipmentDetail />} />
+              <Route path="/catalog"   element={<ItemCatalog />} />
+              <Route path="/catalog/:id" element={<ItemDetail />} />
               <Route path="/my-rentals"      element={<MyRentals />} />
               <Route path="/my-rentals/:id"  element={<RentalDetail />} />
             </Route>
@@ -109,8 +109,8 @@ function App() {
           >
             <Route element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
-              <Route path="equipment" element={<EquipmentList />} />
-              <Route path="equipment/:id" element={<EquipmentDetail />} />
+              <Route path="items" element={<ItemList />} />
+              <Route path="items/:id" element={<ItemDetail />} />
               <Route path="customers" element={<CustomerList />} />
               <Route path="customers/:id" element={<CustomerDetail />} />
               <Route path="rentals" element={<AdminRentals />} />

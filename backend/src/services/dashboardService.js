@@ -1,4 +1,4 @@
-const Equipment = require('../models/Equipment');
+const Item = require('../models/Item');
 const User = require('../models/User');
 const Rental = require('../models/Rental');
 const Return = require('../models/Return');
@@ -47,8 +47,8 @@ const getDashboardData = async () => {
   const { start: trendStart } = getMonthRange(12);
 
   const [
-    // Equipment stats
-    equipmentStats,
+    // Item stats
+    itemStats,
 
     // Customer count
     totalCustomers,
@@ -64,8 +64,8 @@ const getDashboardData = async () => {
     // Returns today
     returnsToday,
 
-    // Equipment utilization by category
-    equipmentByCategory,
+    // Item utilization by category
+    itemsByCategory,
 
     // Revenue trend (last 12 months)
     revenueTrend,
@@ -78,8 +78,8 @@ const getDashboardData = async () => {
     recentPayments,
     recentReturns,
   ] = await Promise.all([
-    // Equipment: total + by status breakdown
-    Equipment.aggregate([
+    // Items: total + by status breakdown
+    Item.aggregate([
       {
         $group: {
           _id: '$status',
@@ -136,8 +136,8 @@ const getDashboardData = async () => {
     // Returns today
     Return.countDocuments({ returnDate: { $gte: startOfToday } }),
 
-    // Equipment utilization: rented count per category
-    Equipment.aggregate([
+    // Item utilization: rented count per category
+    Item.aggregate([
       {
         $group: {
           _id: '$category',
@@ -201,7 +201,7 @@ const getDashboardData = async () => {
       .sort({ createdAt: -1 })
       .limit(8)
       .populate('customer', 'name email')
-      .populate('equipment', 'name category images')
+      .populate('item', 'name category images')
       .lean(),
 
     // Recent payments (last 6)
@@ -216,17 +216,17 @@ const getDashboardData = async () => {
     Return.find()
       .sort({ createdAt: -1 })
       .limit(6)
-      .populate('equipment', 'name images')
+      .populate('item', 'name images')
       .populate('customer', 'name')
       .lean(),
   ]);
 
-  // ── Process equipment stats ──────────────────────────────────────────────
-  const equipmentStatusMap = equipmentStats.reduce(
+  // ── Process item stats ──────────────────────────────────────────────────
+  const itemStatusMap = itemStats.reduce(
     (acc, { _id, count }) => ({ ...acc, [_id]: count }),
     {}
   );
-  const totalEquipment = Object.values(equipmentStatusMap).reduce((s, c) => s + c, 0);
+  const totalItems = Object.values(itemStatusMap).reduce((s, c) => s + c, 0);
 
   // ── Process rental counts ────────────────────────────────────────────────
   const rentalStatusMap = rentalStatusCounts.reduce(
@@ -259,8 +259,8 @@ const getDashboardData = async () => {
     { name: 'Cancelled', value: rentalStatusMap.cancelled || 0, color: '#6b7280' },
   ].filter((s) => s.value > 0);
 
-  // ── Equipment by category for bar chart ─────────────────────────────────
-  const categoryChart = equipmentByCategory.map((c) => ({
+  // ── Items by category for bar chart ─────────────────────────────────────
+  const categoryChart = itemsByCategory.map((c) => ({
     name: c._id.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
     total: c.total,
     rented: c.rented,
@@ -270,11 +270,11 @@ const getDashboardData = async () => {
 
   return {
     stats: {
-      equipment: {
-        total: totalEquipment,
-        available: equipmentStatusMap.available || 0,
-        rented: equipmentStatusMap.rented || 0,
-        maintenance: equipmentStatusMap.maintenance || 0,
+      items: {
+        total: totalItems,
+        available: itemStatusMap.available || 0,
+        rented: itemStatusMap.rented || 0,
+        maintenance: itemStatusMap.maintenance || 0,
       },
       customers: { total: totalCustomers },
       rentals: {

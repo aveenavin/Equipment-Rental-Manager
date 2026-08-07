@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { X, Calendar, IndianRupee, AlertCircle, Package, MapPin, Phone } from 'lucide-react';
 import Button from '../ui/Button';
-import { createRental, fetchEquipmentAvailability } from '../../services/rentalService';
+import { createRental, fetchItemAvailability } from '../../services/rentalService';
 
 const toDateInputValue = (date) => date.toISOString().split('T')[0];
 
@@ -18,7 +18,7 @@ const isDateRangeBlocked = (start, end, bookedRanges) => {
 
 const EMPTY_ADDRESS = { street: '', city: '', state: '', postalCode: '', country: 'India' };
 
-const BookingModal = ({ equipment, onClose, onBooked }) => {
+const BookingModal = ({ item, onClose, onBooked }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -35,7 +35,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
   useEffect(() => {
     const loadAvailability = async () => {
       try {
-        const res = await fetchEquipmentAvailability(equipment._id);
+        const res = await fetchItemAvailability(item._id);
         setBookedRanges(res.data.data.bookedRanges);
       } catch {
         // Non-critical — still allow booking
@@ -44,15 +44,15 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
       }
     };
     loadAvailability();
-  }, [equipment._id]);
+  }, [item._id]);
 
   const totalDays =
     startDate && endDate
       ? Math.max(1, Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)))
       : 0;
 
-  const rentalCost = totalDays * equipment.dailyRate;
-  const totalAmount = rentalCost + equipment.securityDeposit;
+  const rentalCost = totalDays * item.dailyRate;
+  const totalAmount = rentalCost + item.securityDeposit;
 
   const isConflict =
     startDate && endDate && isDateRangeBlocked(startDate, endDate, bookedRanges);
@@ -85,7 +85,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
     setIsSubmitting(true);
     try {
       await createRental({
-        equipment: equipment._id,
+        item: item._id,
         startDate,
         endDate,
         notes: notes || undefined,
@@ -133,8 +133,8 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
               <Package className="h-4 w-4 sm:h-5 sm:w-5 text-primary-400" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-sm sm:text-base font-semibold text-slate-100">Book Equipment</h2>
-              <p className="text-[10px] sm:text-xs text-slate-400 truncate max-w-[150px] sm:max-w-[250px]">{equipment.name}</p>
+              <h2 className="text-sm sm:text-base font-semibold text-slate-100">Book Item</h2>
+              <p className="text-[10px] sm:text-xs text-slate-400 truncate max-w-[150px] sm:max-w-[250px]">{item.name}</p>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-200 transition-colors shrink-0 p-1">
@@ -201,7 +201,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
             <div className="flex items-center gap-2 mb-3">
               <MapPin className="h-4 w-4 text-orange-400 shrink-0" />
               <span className="text-sm font-semibold text-slate-200">Delivery Address</span>
-              <span className="text-xs text-slate-500 font-medium">— where equipment will be delivered</span>
+              <span className="text-xs text-slate-500 font-medium">— where item will be delivered</span>
             </div>
 
             <div className="space-y-3 p-4 rounded-xl bg-slate-800/40 border border-slate-700/60">
@@ -330,7 +330,7 @@ const BookingModal = ({ equipment, onClose, onBooked }) => {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-slate-400">Security Deposit</span>
-                <span className="text-slate-200">₹{equipment.securityDeposit.toFixed(2)}</span>
+                <span className="text-slate-200">₹{item.securityDeposit.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm font-semibold pt-2 border-t border-slate-700">
                 <span className="text-slate-300 flex items-center gap-1">

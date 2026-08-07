@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
-const Equipment = require('../models/Equipment');
+const Item = require('../models/Item');
 const Rental = require('../models/Rental');
 const Return = require('../models/Return');
 const MaintenanceLog = require('../models/MaintenanceLog');
@@ -22,7 +22,7 @@ const addDays = (base, days) => {
   return d;
 };
 
-// ─── Slug generator (mirrors Equipment model pre-save hook) ─────────────────
+// ─── Slug generator (mirrors Item model pre-save hook) ──────────────────────
 const makeSlug = (name) =>
   name
     .toLowerCase()
@@ -45,8 +45,8 @@ const seedData = async () => {
       return;
     }
 
-    const existingEquipmentCount = await Equipment.countDocuments();
-    if (existingEquipmentCount > 0) {
+    const existingItemCount = await Item.countDocuments();
+    if (existingItemCount > 0) {
       console.log('Development data already exists — skipping seed.');
       return;
     }
@@ -93,8 +93,8 @@ const seedData = async () => {
     }).lean();
     console.log(`  ✔ ${customers.length} customers available`);
 
-    // ── 3. Equipment ──────────────────────────────────────────────────────────
-    const equipmentDefs = [
+    // ── 3. Items ──────────────────────────────────────────────────────────────
+    const itemDefs = [
       // Heavy Machinery
       {
         name: 'CAT 320 Hydraulic Excavator',
@@ -223,19 +223,19 @@ const seedData = async () => {
       },
     ];
 
-    const equipmentDocs = equipmentDefs.map((def) => ({
+    const itemDocs = itemDefs.map((def) => ({
       ...def,
       slug: makeSlug(def.name),
       images: [],
       createdBy: admin._id,
     }));
 
-    const equipmentList = await Equipment.insertMany(equipmentDocs);
-    console.log(`  ✔ ${equipmentList.length} equipment items created`);
+    const itemList = await Item.insertMany(itemDocs);
+    console.log(`  ✔ ${itemList.length} items created`);
 
     // Build lookup: serialNumber → document
     const eqMap = {};
-    equipmentList.forEach((eq) => { eqMap[eq.serialNumber] = eq; });
+    itemList.forEach((eq) => { eqMap[eq.serialNumber] = eq; });
 
     // ── 4. Rentals ────────────────────────────────────────────────────────────
     const rentalDefs = [
@@ -282,7 +282,7 @@ const seedData = async () => {
 
       const doc = {
         customer: customer._id,
-        equipment: eq._id,
+        item: eq._id,
         startDate: start,
         endDate: end,
         dailyRate: eq.dailyRate,
@@ -333,7 +333,7 @@ const seedData = async () => {
 
       return {
         rental: rental._id,
-        equipment: rental.equipment,
+        item: rental.item,
         customer: rental.customer,
         processedBy: admin._id,
         returnDate: rental.returnedAt || rental.endDate,
@@ -343,8 +343,8 @@ const seedData = async () => {
         damageCharges,
         depositRefunded,
         depositDeducted,
-        equipmentStatusAfterReturn: isDamaged ? 'maintenance' : 'available',
-        notes: isDamaged ? 'Sent to maintenance workshop for repair.' : 'Equipment returned in satisfactory condition.',
+        itemStatusAfterReturn: isDamaged ? 'maintenance' : 'available',
+        notes: isDamaged ? 'Sent to maintenance workshop for repair.' : 'Item returned in satisfactory condition.',
       };
     });
 
@@ -364,7 +364,7 @@ const seedData = async () => {
     const maintenanceDocs = [
       // Auto-generated from damaged returns
       ...damagedReturns.map((ret) => ({
-        equipment: ret.equipment,
+        item: ret.item,
         reportedBy: admin._id,
         completedBy: null,
         status: 'open',
@@ -378,7 +378,7 @@ const seedData = async () => {
       })),
       // Scheduled preventive maintenance (completed)
       {
-        equipment: eqMap['JLG-SSL-009']._id,
+        item: eqMap['JLG-SSL-009']._id,
         reportedBy: admin._id,
         completedBy: admin._id,
         status: 'completed',
@@ -392,7 +392,7 @@ const seedData = async () => {
         triggeredByReturn: null,
       },
       {
-        equipment: eqMap['CAT-EXC-001']._id,
+        item: eqMap['CAT-EXC-001']._id,
         reportedBy: admin._id,
         completedBy: admin._id,
         status: 'completed',
@@ -406,7 +406,7 @@ const seedData = async () => {
         triggeredByReturn: null,
       },
       {
-        equipment: eqMap['KOM-BDZ-002']._id,
+        item: eqMap['KOM-BDZ-002']._id,
         reportedBy: admin._id,
         completedBy: admin._id,
         status: 'completed',
@@ -420,7 +420,7 @@ const seedData = async () => {
         triggeredByReturn: null,
       },
       {
-        equipment: eqMap['MNT-CRN-007']._id,
+        item: eqMap['MNT-CRN-007']._id,
         reportedBy: admin._id,
         completedBy: null,
         status: 'open',
@@ -525,7 +525,7 @@ const seedData = async () => {
         transactionId: `TXN-CO-${i}-${Date.now()}`,
         recordedBy: admin._id,
         paidAt: rental.checkedOutAt || rental.startDate,
-        notes: 'Security deposit collected at equipment checkout.',
+        notes: 'Security deposit collected at item checkout.',
       });
     });
 

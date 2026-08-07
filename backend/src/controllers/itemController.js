@@ -1,11 +1,11 @@
 const catchAsync = require('../utils/catchAsync');
-const equipmentService = require('../services/equipmentService');
+const itemService = require('../services/itemService');
 const { deleteFromCloudinary } = require('../middleware/upload');
 
-// GET /api/v1/equipment
-const getAllEquipment = catchAsync(async (req, res) => {
+// GET /api/v1/items
+const getAllItems = catchAsync(async (req, res) => {
   const { page, limit, category, status, search, sort } = req.query;
-  const result = await equipmentService.listEquipment({ page, limit, category, status, search, sort });
+  const result = await itemService.listItems({ page, limit, category, status, search, sort });
 
   res.status(200).json({
     status: 'success',
@@ -13,19 +13,19 @@ const getAllEquipment = catchAsync(async (req, res) => {
   });
 });
 
-// GET /api/v1/equipment/:id
-const getEquipment = catchAsync(async (req, res) => {
-  const equipment = await equipmentService.getEquipmentById(req.params.id);
+// GET /api/v1/items/:id
+const getItem = catchAsync(async (req, res) => {
+  const item = await itemService.getItemById(req.params.id);
 
   res.status(200).json({
     status: 'success',
-    data: { equipment },
+    data: { item },
   });
 });
 
-// POST /api/v1/equipment
-const createEquipment = catchAsync(async (req, res) => {
-  const equipment = await equipmentService.createEquipment({
+// POST /api/v1/items
+const createItem = catchAsync(async (req, res) => {
+  const item = await itemService.createItem({
     body: req.body,
     uploadedImages: req.uploadedImages,
     userId: req.user._id,
@@ -33,12 +33,12 @@ const createEquipment = catchAsync(async (req, res) => {
 
   res.status(201).json({
     status: 'success',
-    data: { equipment },
+    data: { item },
   });
 });
 
-// PATCH /api/v1/equipment/:id
-const updateEquipment = catchAsync(async (req, res) => {
+// PATCH /api/v1/items/:id
+const updateItem = catchAsync(async (req, res) => {
   // deleteImageIds may be sent as a JSON string from multipart form data
   let deleteImageIds = [];
   if (req.body.deleteImageIds) {
@@ -56,7 +56,7 @@ const updateEquipment = catchAsync(async (req, res) => {
     await Promise.all(deleteImageIds.map((id) => deleteFromCloudinary(id)));
   }
 
-  const equipment = await equipmentService.updateEquipment({
+  const item = await itemService.updateItem({
     id: req.params.id,
     body: req.body,
     uploadedImages: req.uploadedImages,
@@ -65,13 +65,13 @@ const updateEquipment = catchAsync(async (req, res) => {
 
   res.status(200).json({
     status: 'success',
-    data: { equipment },
+    data: { item },
   });
 });
 
-// DELETE /api/v1/equipment/:id
-const deleteEquipment = catchAsync(async (req, res) => {
-  const imagesToDelete = await equipmentService.deleteEquipment(req.params.id);
+// DELETE /api/v1/items/:id
+const deleteItem = catchAsync(async (req, res) => {
+  const imagesToDelete = await itemService.deleteItem(req.params.id);
 
   // Clean up Cloudinary images after DB deletion succeeds
   if (imagesToDelete.length > 0) {
@@ -82,9 +82,9 @@ const deleteEquipment = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  getAllEquipment,
-  getEquipment,
-  createEquipment,
-  updateEquipment,
-  deleteEquipment,
+  getAllItems,
+  getItem,
+  createItem,
+  updateItem,
+  deleteItem,
 };

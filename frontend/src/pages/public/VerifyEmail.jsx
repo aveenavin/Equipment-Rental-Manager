@@ -119,7 +119,7 @@ const VerifyEmail = () => {
 
             <h1 className="text-2xl font-bold text-slate-100 mb-2">Email verified!</h1>
             <p className="text-slate-400 text-sm leading-relaxed mb-8">
-              Your account is now active. You can sign in and start managing equipment rentals.
+              Your account is now active. You can sign in and start managing your rentals.
             </p>
 
             <Link to="/login">

@@ -76,7 +76,7 @@ const Register = () => {
           
           {/* Subtitle */}
           <p className="animate-hero-enter delay-300 text-slate-400 text-sm md:text-base font-medium text-center">
-            Start managing equipment rentals today
+            Start managing your rentals today
           </p>
         </div>
 

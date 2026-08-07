@@ -29,14 +29,14 @@ const ProcessReturnModal = ({ rental, onClose, onProcessed }) => {
   const charges = isDamaged ? parseFloat(damageCharges || 0) : 0;
   const depositDeducted = Math.min(charges, securityDeposit);
   const depositRefunded = Math.max(0, securityDeposit - depositDeducted);
-  const equipmentStatusAfterReturn = isDamaged ? 'maintenance' : 'available';
+  const itemStatusAfterReturn = isDamaged ? 'maintenance' : 'available';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!conditionAtReturn) return setError('Please select the equipment condition.');
-    if (isDamaged && !damageDescription.trim()) return setError('Damage description is required when equipment is damaged.');
+    if (!conditionAtReturn) return setError('Please select the item condition.');
+    if (isDamaged && !damageDescription.trim()) return setError('Damage description is required when item is damaged.');
 
     setIsSubmitting(true);
     try {
@@ -93,9 +93,9 @@ const ProcessReturnModal = ({ rental, onClose, onProcessed }) => {
                 <ShieldCheck className="h-6 w-6 text-emerald-400" />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-200 via-slate-400 to-slate-600 tracking-tight drop-shadow-sm uppercase">Equipment Return</h2>
+                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-200 via-slate-400 to-slate-600 tracking-tight drop-shadow-sm uppercase">Item Return</h2>
                 <p className="text-sm font-medium text-emerald-400 mt-0.5 flex items-center gap-1.5">
-                  <Package className="h-3.5 w-3.5" /> {rental.equipment?.name}
+                  <Package className="h-3.5 w-3.5" /> {rental.item?.name}
                 </p>
               </div>
             </div>
@@ -153,7 +153,7 @@ const ProcessReturnModal = ({ rental, onClose, onProcessed }) => {
               {/* Condition Selector */}
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
-                  Equipment Condition <span className="text-red-400">*</span>
+                  Item Condition <span className="text-red-400">*</span>
                 </label>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                   {CONDITIONS.map((c) => {
@@ -280,8 +280,8 @@ const ProcessReturnModal = ({ rental, onClose, onProcessed }) => {
 
                     <div className="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-slate-500 bg-slate-950/50 px-3 py-2 rounded-lg">
                       Next Status:
-                      <span className={`flex items-center gap-1.5 ${equipmentStatusAfterReturn === 'maintenance' ? 'text-yellow-500' : 'text-emerald-500'}`}>
-                        {equipmentStatusAfterReturn === 'maintenance' ? <><Wrench className="h-3 w-3" /> Maintenance</> : <><CheckCircle className="h-3 w-3" /> Available</>}
+                      <span className={`flex items-center gap-1.5 ${itemStatusAfterReturn === 'maintenance' ? 'text-yellow-500' : 'text-emerald-500'}`}>
+                        {itemStatusAfterReturn === 'maintenance' ? <><Wrench className="h-3 w-3" /> Maintenance</> : <><CheckCircle className="h-3 w-3" /> Available</>}
                       </span>
                     </div>
                   </div>

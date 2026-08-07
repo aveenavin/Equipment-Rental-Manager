@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
 const Return = require('../models/Return');
 const Rental = require('../models/Rental');
-const Equipment = require('../models/Equipment');
+const Item = require('../models/Item');
 const MaintenanceLog = require('../models/MaintenanceLog');
 const AppError = require('../utils/AppError');
 
 /**
- * Process a physical equipment return.
+ * Process a physical item return.
  *
  * Business rules:
  * - Rental must be in 'checked_out' status
  * - Creates a Return record
- * - Atomically updates: Rental (→ returned, links returnRecord), Equipment (status + condition)
+ * - Atomically updates: Rental (→ returned, links returnRecord), Item (status + condition)
  * - Deposit logic: damageCharges are deducted from securityDeposit; remainder is refunded
- * - If damaged: equipment → maintenance; otherwise → available
- * - Equipment condition is updated to reflect the returned condition
+ * - If damaged: item → maintenance; otherwise → available
+ * - Item condition is updated to reflect the returned condition
  */
 const processReturn = async ({
   rentalId,
@@ -27,7 +27,7 @@ const processReturn = async ({
   returnDate,
 }) => {
   // Validate rental exists and is in checked_out status
-  const rental = await Rental.findById(rentalId).populate('equipment');
+  const rental = await Rental.findById(rentalId).populate('item');
   if (!rental) throw new AppError('Rental not found.', 404);
   if (rental.status !== 'checked_out') {
     throw new AppError(
@@ -44,7 +44,7 @@ const processReturn = async ({
   const charges = damaged ? parseFloat(damageCharges || 0) : 0;
   const depositDeducted = Math.min(charges, rental.securityDeposit);
   const depositRefunded = Math.max(0, rental.securityDeposit - depositDeducted);
-  const equipmentStatusAfterReturn = damaged ? 'maintenance' : 'available';
+  const itemStatusAfterReturn = damaged ? 'maintenance' : 'available';
   const actualReturnDate = returnDate ? new Date(returnDate) : new Date();
 
   const session = await mongoose.startSession();
@@ -58,7 +58,7 @@ const processReturn = async ({
       [
         {
           rental: rental._id,
-          equipment: rental.equipment._id,
+          item: rental.item._id,
           customer: rental.customer,
           processedBy: processedById,
           returnDate: actualReturnDate,
@@ -68,7 +68,7 @@ const processReturn = async ({
           damageCharges: charges,
           depositRefunded,
           depositDeducted,
-          equipmentStatusAfterReturn,
+          itemStatusAfterReturn,
           notes: notes ? notes.trim() : null,
         },
       ],
@@ -82,11 +82,11 @@ const processReturn = async ({
     rental.returnRecord = returnRecord._id;
     await rental.save({ session });
 
-    // 3. Update equipment: status + condition
-    await Equipment.findByIdAndUpdate(
-      rental.equipment._id,
+    // 3. Update item: status + condition
+    await Item.findByIdAndUpdate(
+      rental.item._id,
       {
-        status: equipmentStatusAfterReturn,
+        status: itemStatusAfterReturn,
         condition: conditionAtReturn,
       },
       { session }
@@ -94,12 +94,12 @@ const processReturn = async ({
 
     // 4. If damaged: automatically create a MaintenanceLog so the
     //    maintenance list stays the single source of truth for all
-    //    equipment currently in 'maintenance' status.
+    //    items currently in 'maintenance' status.
     if (damaged) {
       await MaintenanceLog.create(
         [
           {
-            equipment: rental.equipment._id,
+            item: rental.item._id,
             reportedBy: processedById,
             description: damageDescription
               ? `Post-return damage: ${damageDescription.trim()}`
@@ -123,7 +123,7 @@ const processReturn = async ({
   // Return populated record
   return Return.findById(returnRecord._id)
     .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount notes')
-    .populate('equipment', 'name category images condition status')
+    .populate('item', 'name category images condition status')
     .populate('customer', 'name email phone')
     .populate('processedBy', 'name role')
     .lean();
@@ -135,7 +135,7 @@ const processReturn = async ({
 const getReturnById = async (id) => {
   const record = await Return.findById(id)
     .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount status notes contactNumber')
-    .populate('equipment', 'name category images condition status')
+    .populate('item', 'name category images condition status')
     .populate('customer', 'name email phone')
     .populate('processedBy', 'name role')
     .lean();
@@ -150,7 +150,7 @@ const getReturnById = async (id) => {
 const getReturnByRentalId = async (rentalId) => {
   const record = await Return.findOne({ rental: rentalId })
     .populate('rental', 'startDate endDate totalDays rentalCost securityDeposit totalAmount status notes contactNumber')
-    .populate('equipment', 'name category images condition status')
+    .populate('item', 'name category images condition status')
     .populate('customer', 'name email phone')
     .populate('processedBy', 'name role')
     .lean();
@@ -162,29 +162,29 @@ const getReturnByRentalId = async (rentalId) => {
 /**
  * List all return records with pagination, filterable by damage status.
  *
- * Search: matches equipment name or customer name/email.
+ * Search: matches item name or customer name/email.
  */
-const listReturns = async ({ page = 1, limit = 15, isDamaged, equipmentId, search }) => {
+const listReturns = async ({ page = 1, limit = 15, isDamaged, itemId, search }) => {
   const filter = {};
   if (isDamaged !== undefined && isDamaged !== '') {
     filter.isDamaged = isDamaged === 'true' || isDamaged === true;
   }
-  if (equipmentId) filter.equipment = equipmentId;
+  if (itemId) filter.item = itemId;
 
-  // Search across referenced Equipment names and Customer names/emails
+  // Search across referenced Item names and Customer names/emails
   if (search && search.trim()) {
     const regex = new RegExp(search.trim(), 'i');
 
-    const [matchedEquipment, matchedUsers] = await Promise.all([
-      Equipment.find({ name: regex }).select('_id').lean(),
+    const [matchedItems, matchedUsers] = await Promise.all([
+      Item.find({ name: regex }).select('_id').lean(),
       mongoose.model('User').find({
         $or: [{ name: regex }, { email: regex }],
       }).select('_id').lean(),
     ]);
 
     const orConditions = [];
-    if (matchedEquipment.length) {
-      orConditions.push({ equipment: { $in: matchedEquipment.map((e) => e._id) } });
+    if (matchedItems.length) {
+      orConditions.push({ item: { $in: matchedItems.map((e) => e._id) } });
     }
     if (matchedUsers.length) {
       orConditions.push({ customer: { $in: matchedUsers.map((u) => u._id) } });
@@ -209,7 +209,7 @@ const listReturns = async ({ page = 1, limit = 15, isDamaged, equipmentId, searc
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNum)
-      .populate('equipment', 'name category images')
+      .populate('item', 'name category images')
       .populate('customer', 'name email')
       .populate('processedBy', 'name role')
       .lean(),

@@ -12,7 +12,7 @@ const AdminLayout = () => {
 
   // Deduce title from location
   let title = 'Dashboard';
-  if (location.pathname.includes('/admin/equipment')) title = 'Equipment';
+  if (location.pathname.includes('/admin/items')) title = 'Items';
   else if (location.pathname.includes('/admin/rentals')) title = 'Rentals';
   else if (location.pathname.includes('/admin/returns')) title = 'Returns';
   else if (location.pathname.includes('/admin/maintenance')) title = 'Maintenance';

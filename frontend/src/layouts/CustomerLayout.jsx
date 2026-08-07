@@ -10,7 +10,7 @@ const CustomerLayout = () => {
 
   // Derive page title from the current route
   let title = 'Dashboard';
-  if (location.pathname.startsWith('/catalog'))    title = 'Equipment Catalog';
+  if (location.pathname.startsWith('/catalog'))    title = 'Item Catalog';
   else if (location.pathname.startsWith('/my-rentals')) title = 'My Rentals';
 
   return (
