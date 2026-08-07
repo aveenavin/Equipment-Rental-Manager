@@ -84,7 +84,7 @@ const Home = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-orange-500/5 rounded-full blur-[100px] pointer-events-none" />
 
         <motion.div 
-          className="relative z-10 max-w-4xl mx-auto"
+          className="relative z-10 max-w-4xl lg:max-w-7xl mx-auto"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
@@ -101,19 +101,19 @@ const Home = () => {
           </motion.h1>
 
           {/* Sub-headline */}
-          <motion.p variants={fadeInUp} className="text-[10px] sm:text-sm text-slate-300 font-light tracking-wide max-w-2xl mx-auto leading-snug sm:leading-relaxed mb-6 sm:mb-10 px-2 sm:px-0">
+          <motion.p variants={fadeInUp} className="text-[10px] sm:text-sm text-slate-300 font-light tracking-wide max-w-2xl lg:max-w-4xl mx-auto leading-snug sm:leading-relaxed mb-14 sm:mb-20 px-2 sm:px-0">
 where customers can explore available items, book what they need, and manage their rentals, while businesses can manage inventory, bookings, returns, availability, and payments, all in one place.
           </motion.p>
 
           {/* Typewriter Text */}
-          <motion.div variants={fadeInUp} className="mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-5 text-[10px] sm:text-sm font-bold uppercase tracking-widest sm:tracking-[0.15em] text-slate-300 whitespace-nowrap overflow-hidden w-full max-w-full px-2">
+          <motion.div variants={fadeInUp} className="mt-4 sm:mt-6 mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-5 text-[10px] sm:text-sm font-bold uppercase tracking-widest sm:tracking-[0.15em] text-slate-300 whitespace-nowrap overflow-hidden w-full max-w-full px-2">
             <span className="w-3 sm:w-16 h-[1px] bg-gradient-to-r from-transparent to-orange-500/50 shrink-0"></span>
             <span className="shrink-0"><TypewriterText text="Rent Anything. Manage Everything." /></span>
             <span className="w-3 sm:w-16 h-[1px] bg-gradient-to-l from-transparent to-orange-500/50 shrink-0"></span>
           </motion.div>
 
           {/* CTA Buttons */}
-          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-28 sm:mb-40">
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2 sm:gap-4 mb-[107px]">
             {/* Primary CTA */}
             <div className="relative group shrink-0">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-xl blur opacity-50 group-hover:opacity-80 transition-all duration-500" />
@@ -158,7 +158,7 @@ where customers can explore available items, book what they need, and manage the
       </section>
 
       {/* ── FEATURE SECTION ──────────────────────────────────────────────── */}
-      <section className="relative pt-4 pb-24 px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-[26px] pb-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
 
           {/* Section header */}

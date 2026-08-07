@@ -82,11 +82,11 @@ const PublicLayout = () => {
 
       {/* ── Footer Wrapper (Matches Customer Dashboard) ── */}
       <div className="w-full px-2 sm:px-4 lg:px-6 max-w-[1600px] mx-auto">
-        <footer className="border-t border-slate-300/20 pt-8 sm:pt-12 pb-6 sm:pb-8 mt-10 sm:mt-16">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 sm:mb-10">
+        <footer className="border-t border-slate-300/20 pt-4 sm:pt-6 pb-3 sm:pb-4 mt-[25px] sm:mt-16">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 sm:mb-5">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <Wrench className="h-4 w-4 text-accent-500" />
-              <span className="font-black text-slate-100 text-sm sm:text-lg tracking-tight">Rental Management Platform</span>
+              <span className="font-black text-slate-400 text-sm sm:text-lg tracking-tight">Rental Management Platform</span>
             </div>
           </div>
           <div className="border-t border-slate-300/20 pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-[10px] sm:text-xs text-slate-600 text-center sm:text-left">
